@@ -7,5 +7,6 @@
     <dimen name="count_spacing">5dp</dimen>
     <dimen name="tweet_divider_height">1dp</dimen>
     <dimen name="profiler_header_text_spacing">5dp</dimen>
+    <dimen name="login_button_layout_margin">20dp</dimen>
 
 </resources>
