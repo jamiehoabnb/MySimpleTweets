@@ -35,6 +35,17 @@
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:id="@+id/tvCreatedAt"
+        android:layout_alignBaseline="@+id/tvScreenName"
+        android:layout_toRightOf="@+id/tvScreenName"
+        android:layout_alignParentRight="true"
+        android:gravity="right"
+        android:layout_marginRight="10dp"
+        style="@style/TweetCreatedAt"/>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:id="@+id/tvBody"
         android:layout_below="@+id/tvUserName"
         android:layout_toRightOf="@+id/ivProfileImage"

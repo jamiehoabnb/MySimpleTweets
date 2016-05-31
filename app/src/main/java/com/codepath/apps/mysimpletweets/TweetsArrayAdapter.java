@@ -27,6 +27,9 @@ public class TweetsArrayAdapter extends ArrayAdapter<Tweet> {
         @BindView(R.id.tvScreenName)
         TextView tvScreenName;
 
+        @BindView(R.id.tvCreatedAt)
+        TextView tvCreatedAt;
+
         @BindView(R.id.tvBody)
         TextView tvBody;
 
@@ -59,6 +62,7 @@ public class TweetsArrayAdapter extends ArrayAdapter<Tweet> {
 
         viewHolder.tvUserName.setText(tweet.getUser().getName());
         viewHolder.tvScreenName.setText("@" + tweet.getUser().getScreenName());
+        viewHolder.tvCreatedAt.setText(tweet.getCreateAt());
         viewHolder.tvBody.setText(tweet.getText());
 
         //Clear our recycled image.

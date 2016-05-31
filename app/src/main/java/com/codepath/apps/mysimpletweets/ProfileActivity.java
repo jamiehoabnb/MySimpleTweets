@@ -47,9 +47,6 @@ public class ProfileActivity extends AppCompatActivity {
 
             FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
             ft.replace(R.id.flHeaderContainer, fragmentProfileHeader);
-            ft.commit();
-
-            ft = getSupportFragmentManager().beginTransaction();
             ft.replace(R.id.flUserTimeLineContainer, fragmentUserTimeline);
             ft.commit();
         }
@@ -61,7 +58,8 @@ public class ProfileActivity extends AppCompatActivity {
                 User user = User.fromJSON(response);
                 toolbar.setTitle("@" + user.getScreenName());
 
-                ProfileHeaderFragment fragmentProfileHeader = (ProfileHeaderFragment) getSupportFragmentManager().findFragmentById(R.id.flHeaderContainer);
+                ProfileHeaderFragment fragmentProfileHeader = (ProfileHeaderFragment)
+                        getSupportFragmentManager().findFragmentById(R.id.flHeaderContainer);
                 fragmentProfileHeader.populateProfileHeader(user);
             }
         });
