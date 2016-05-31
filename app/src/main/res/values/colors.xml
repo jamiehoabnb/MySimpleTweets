@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="colorPrimary">#0084B4</color>
+    <color name="colorPrimaryDark">#0084B4</color>
+    <color name="tabsScrollColor">#FF4081</color>
+    <color name="colorAccent">#FF4081</color>
+
+    <color name="colorPrimaryLight">#3AADF4</color>
+    <color name="black">#000000</color>
+    <color name="white">#FFFFFF</color>
+    <color name="gull_grey">#A1AEB9</color>
+    <color name="colorDivider">#D0D0D0</color>
+    <color name="tweetText">#43484C</color>
+</resources>

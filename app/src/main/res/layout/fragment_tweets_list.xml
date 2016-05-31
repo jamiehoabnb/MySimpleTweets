@@ -6,5 +6,8 @@
     <ListView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:id="@+id/lvTweets"/>
+        android:id="@+id/lvTweets"
+        android:divider="@color/colorDivider"
+        android:dividerHeight="@dimen/tweet_divider_height"/>
+
 </LinearLayout>

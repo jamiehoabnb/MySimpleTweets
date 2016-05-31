@@ -27,6 +27,9 @@ public class ProfileHeaderFragment extends Fragment {
     @BindView(R.id.tvTagLine)
     TextView tvTagLine;
 
+    @BindView(R.id.tvLocation)
+    TextView tvLocation;
+
     @BindView(R.id.tvFollowers)
     TextView tvFollowers;
 
@@ -44,8 +47,9 @@ public class ProfileHeaderFragment extends Fragment {
     public void populateProfileHeader(User user) {
         tvFullName.setText(user.getName());
         tvTagLine.setText(user.getTagline());
-        tvFollowers.setText(user.getFollowersCount() + " Followers");
-        tvFollowing.setText(user.getFriendsCount() + " Following");
+        tvLocation.setText(user.getLocation());
+        tvFollowers.setText(String.valueOf(user.getFollowersCount()));
+        tvFollowing.setText(String.valueOf(user.getFriendsCount()));
         Picasso.with(getContext()).load(user.getProfileImageUrl()).into(ivProfileImage);
     }
 }

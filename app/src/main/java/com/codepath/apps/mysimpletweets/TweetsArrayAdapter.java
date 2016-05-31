@@ -58,7 +58,7 @@ public class TweetsArrayAdapter extends ArrayAdapter<Tweet> {
         }
 
         viewHolder.tvUserName.setText(tweet.getUser().getName());
-        viewHolder.tvScreenName.setText(tweet.getUser().getScreenName());
+        viewHolder.tvScreenName.setText("@" + tweet.getUser().getScreenName());
         viewHolder.tvBody.setText(tweet.getText());
 
         //Clear our recycled image.

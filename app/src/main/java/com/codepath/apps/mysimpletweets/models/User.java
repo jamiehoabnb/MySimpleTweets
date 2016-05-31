@@ -10,6 +10,7 @@ public class User {
     private String screenName;
     private String profileImageUrl;
     private String tagline;
+    private String location;
     private int followersCount;
     private int friendsCount;
 
@@ -20,6 +21,7 @@ public class User {
             user.name = json.getString("name");
             user.uid = json.getLong("id");
             user.screenName = json.getString("screen_name");
+            user.location = json.getString("location");
             user.profileImageUrl = json.getString("profile_image_url");
             user.tagline = json.getString("description");
             user.followersCount = json.getInt("followers_count");
@@ -49,6 +51,10 @@ public class User {
 
     public String getTagline() {
         return tagline;
+    }
+
+    public String getLocation() {
+        return location;
     }
 
     public int getFollowersCount() {

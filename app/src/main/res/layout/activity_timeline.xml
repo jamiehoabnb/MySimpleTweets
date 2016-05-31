@@ -24,7 +24,13 @@
             app:pstsShouldExpand="true"
             app:pstsTextAllCaps="true"
             android:layout_width="match_parent"
-            android:layout_height="48dp" />
+            android:layout_height="48dp"
+            android:textSize="14sp"
+            android:textColor="@color/colorPrimaryLight"
+            android:background="@color/white"
+            app:pstsDividerColor="@color/white"
+            app:pstsIndicatorColor="@color/colorPrimaryLight"
+            app:pstsTabPaddingLeftRight="14dp" />
 
     </android.support.design.widget.AppBarLayout>
 
