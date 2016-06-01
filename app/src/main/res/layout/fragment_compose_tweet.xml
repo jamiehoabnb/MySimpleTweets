@@ -47,12 +47,29 @@
         android:layout_height="fill_parent"
         android:hint="@string/tweet_hint"
         android:textColorHint="@color/gull_grey"
+        android:background="@null"
+        android:textCursorDrawable="@null"
         android:inputType="text|textMultiLine"
         android:gravity="top"
         android:layout_below="@id/ivProfileImage"
         android:layout_above="@id/btTweet"
         android:layout_alignParentLeft="true"
         android:layout_alignParentRight="true"
-        android:maxLength="140"/>
+        android:layout_marginRight="@dimen/word_spacing"
+        android:layout_marginLeft="@dimen/word_spacing"
+        android:maxLength="140">
+        <requestFocus />
+    </EditText>
+
+    <View
+        android:id="@+id/UnderLine"
+        android:layout_width="match_parent"
+        android:layout_height="2dp"
+        android:layout_below="@+id/etTweet"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="2dp"
+        android:layout_marginRight="@dimen/word_spacing"
+        android:layout_marginLeft="@dimen/word_spacing"
+        android:background="@color/gull_grey" />
 
 </RelativeLayout>
