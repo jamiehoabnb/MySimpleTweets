@@ -3,6 +3,7 @@ package com.codepath.apps.mysimpletweets.fragments;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -34,6 +35,9 @@ public abstract class TweetsListFragment extends Fragment {
     @BindView(R.id.lvTweets)
     ListView lvTweets;
 
+    @BindView(R.id.swipeContainer)
+    SwipeRefreshLayout swipeContainer;
+
     protected TwitterClient twitterClient;
 
     protected abstract void populateTimeLine();
@@ -43,12 +47,17 @@ public abstract class TweetsListFragment extends Fragment {
             @Override
             public void onSuccess(int statusCode, Header[] headers, JSONArray response) {
                 super.onSuccess(statusCode, headers, response);
-                addAll(Tweet.fromJSONArray(response));
+                swipeContainer.setRefreshing(false);
+
+                adapter.clear();
+                adapter.addAll(Tweet.fromJSONArray(response));
+                adapter.notifyDataSetChanged();
             }
 
             @Override
             public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONObject errorResponse) {
                 super.onFailure(statusCode, headers, throwable, errorResponse);
+                swipeContainer.setRefreshing(false);
                 Log.e("ERROR", errorResponse.toString(), throwable);
             }
         };
@@ -60,6 +69,14 @@ public abstract class TweetsListFragment extends Fragment {
         View v = inflater.inflate(R.layout.fragment_tweets_list, parent, false);
         ButterKnife.bind(this, v);
         lvTweets.setAdapter(adapter);
+
+        swipeContainer.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                populateTimeLine();
+            }
+        });
+
         return v;
     }
 
@@ -71,9 +88,5 @@ public abstract class TweetsListFragment extends Fragment {
         adapter = new TweetsArrayAdapter(getActivity(), list);
         twitterClient = TwitterApplication.getRestClient();
         populateTimeLine();
-    }
-
-    public void addAll(List<Tweet> tweets) {
-        adapter.addAll(tweets);
     }
 }
