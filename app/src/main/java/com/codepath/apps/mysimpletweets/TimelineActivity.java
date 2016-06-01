@@ -12,15 +12,29 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
+import android.widget.Toast;
 
 import com.astuetz.PagerSlidingTabStrip;
+import com.codepath.apps.mysimpletweets.fragments.ComposeTweetFragment;
 import com.codepath.apps.mysimpletweets.fragments.HomeTimelineFragment;
 import com.codepath.apps.mysimpletweets.fragments.MentionsTimelineFragment;
+import com.codepath.apps.mysimpletweets.models.Tweet;
+import com.codepath.apps.mysimpletweets.models.User;
+import com.codepath.apps.mysimpletweets.util.SmartFragmentStatePagerAdapter;
+import com.loopj.android.http.JsonHttpResponseHandler;
+
+import org.json.JSONArray;
+import org.json.JSONObject;
+import org.parceler.Parcels;
+
+import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import cz.msebera.android.httpclient.Header;
 
-public class TimelineActivity extends AppCompatActivity {
+public class TimelineActivity extends AppCompatActivity implements
+        ComposeTweetFragment.ComposeTweetDialogListener {
 
     @BindView(R.id.toolbar)
     Toolbar toolbar;
@@ -31,6 +45,12 @@ public class TimelineActivity extends AppCompatActivity {
     @BindView(R.id.viewPager)
     ViewPager viewPager;
 
+    TwitterClient client;
+
+    User user;
+
+    TweetsPagerAdapter adapter;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -38,8 +58,17 @@ public class TimelineActivity extends AppCompatActivity {
         ButterKnife.bind(this);
         setSupportActionBar(toolbar);
 
-        viewPager.setAdapter(new TweetsPagerAdapter(getSupportFragmentManager()));
+        adapter = new TweetsPagerAdapter(getSupportFragmentManager());
+        viewPager.setAdapter(adapter);
         tabs.setViewPager(viewPager);
+
+        client = TwitterApplication.getRestClient();
+        client.getUserInfo(new JsonHttpResponseHandler() {
+            @Override
+            public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
+                user = User.fromJSON(response);
+            }
+        });
     }
 
     @Override
@@ -51,11 +80,39 @@ public class TimelineActivity extends AppCompatActivity {
 
     public void onProfileView(MenuItem mi) {
         Intent intent = new Intent(this, ProfileActivity.class);
+        intent.putExtra(ProfileActivity.ARG_USER, Parcels.wrap(user));
         startActivity(intent);
-        Log.d("DEBUG", "Started Profile Activity");
     }
 
-    class TweetsPagerAdapter extends FragmentPagerAdapter {
+    public void onComposeView(MenuItem mi) {
+        android.app.FragmentManager fm = getFragmentManager();
+        ComposeTweetFragment fragment = new ComposeTweetFragment();
+        Bundle args = new Bundle();
+        args.putParcelable(ComposeTweetFragment.ARG_USER, Parcels.wrap(user));
+        fragment.setArguments(args);
+        fragment.show(fm, "fragment_compose_tweet");
+    }
+
+    @Override
+    public void onFinishDialog(String tweet) {
+        client.postStatusUpdate(tweet, new JsonHttpResponseHandler() {
+            @Override
+            public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
+                super.onSuccess(statusCode, headers, response);
+                Tweet newTweet = Tweet.fromJSON(response);
+                HomeTimelineFragment fragment = (HomeTimelineFragment) adapter.getRegisteredFragment(0);
+                fragment.add(newTweet);
+            }
+
+            @Override
+            public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONObject errorResponse) {
+                super.onFailure(statusCode, headers, throwable, errorResponse);
+                Log.e("ERROR", errorResponse.toString(), throwable);
+            }
+        });
+    }
+
+    class TweetsPagerAdapter extends SmartFragmentStatePagerAdapter {
 
         private String[] tabTitles = new String[] {getString(R.string.home), getString(R.string.mentions)};
 

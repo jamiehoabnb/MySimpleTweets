@@ -7,6 +7,7 @@ import org.scribe.model.Request;
 
 import android.content.Context;
 
+import com.codepath.apps.mysimpletweets.models.Tweet;
 import com.codepath.oauth.OAuthBaseClient;
 import com.loopj.android.http.AsyncHttpResponseHandler;
 import com.loopj.android.http.JsonHttpResponseHandler;
@@ -33,16 +34,6 @@ public class TwitterClient extends OAuthBaseClient {
 
 	public TwitterClient(Context context) {
 		super(context, REST_API_CLASS, REST_URL, REST_CONSUMER_KEY, REST_CONSUMER_SECRET, REST_CALLBACK_URL);
-	}
-
-	// CHANGE THIS
-	// DEFINE METHODS for different API endpoints here
-	public void getInterestingnessList(AsyncHttpResponseHandler handler) {
-		String apiUrl = getApiUrl("?nojsoncallback=1&method=flickr.interestingness.getList");
-		// Can specify query string params directly or through RequestParams.
-		RequestParams params = new RequestParams();
-		params.put("format", "json");
-		client.get(apiUrl, params, handler);
 	}
 
 	public void getHomeTimeLine(AsyncHttpResponseHandler handler, long maxId) {
@@ -83,6 +74,13 @@ public class TwitterClient extends OAuthBaseClient {
 			params.put("since_id", 1);
 		}
 		getClient().get(apiUrl, params, handler);
+	}
+
+	public void postStatusUpdate(String status, JsonHttpResponseHandler handler) {
+		String apiUrl = getApiUrl("statuses/update.json");
+		RequestParams params = new RequestParams();
+		params.put("status", status);
+		getClient().post(apiUrl, params, handler);
 	}
 
 	public void getUserInfo(JsonHttpResponseHandler handler) {

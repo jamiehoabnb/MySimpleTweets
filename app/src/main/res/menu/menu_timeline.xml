@@ -10,4 +10,12 @@
         android:onClick="onProfileView"
         />
 
+    <item
+        android:id="@+id/miCompose"
+        app:showAsAction="ifRoom"
+        android:icon="@drawable/pen"
+        android:title="@string/tweet"
+        android:onClick="onComposeView"
+        />
+
 </menu>

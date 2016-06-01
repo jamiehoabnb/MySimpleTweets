@@ -106,4 +106,9 @@ public abstract class TweetsListFragment extends Fragment {
         twitterClient = TwitterApplication.getRestClient();
         populateTimeLine(false, Long.MAX_VALUE);
     }
+
+    public void add(Tweet tweet) {
+        list.add(0, tweet);
+        adapter.notifyDataSetChanged();
+    }
 }

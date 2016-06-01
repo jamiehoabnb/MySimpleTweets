@@ -8,5 +8,8 @@
     <dimen name="tweet_divider_height">1dp</dimen>
     <dimen name="profiler_header_text_spacing">5dp</dimen>
     <dimen name="login_button_layout_margin">20dp</dimen>
+    <dimen name="profile_image_height_width">50dp</dimen>
+    <dimen name="profile_image_margin">10dp</dimen>
+    <dimen name="profile_tweet_image_height_width">25dp</dimen>
 
 </resources>

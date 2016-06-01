@@ -13,6 +13,8 @@ import com.codepath.apps.mysimpletweets.R;
 import com.codepath.apps.mysimpletweets.models.User;
 import com.squareup.picasso.Picasso;
 
+import org.parceler.Parcels;
+
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
@@ -36,15 +38,21 @@ public class ProfileHeaderFragment extends Fragment {
     @BindView(R.id.tvFollowing)
     TextView tvFollowing;
 
+    public static final String ARG_USER = "user";
+
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup parent, @Nullable Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.fragment_profile_header, parent, false);
         ButterKnife.bind(this, v);
+
+        User user = (User) Parcels.unwrap(getArguments().getParcelable(ARG_USER));
+        populateProfileHeader(user);
+
         return v;
     }
 
-    public void populateProfileHeader(User user) {
+    private void populateProfileHeader(User user) {
         tvFullName.setText(user.getName());
         tvTagLine.setText(user.getTagline());
         tvLocation.setText(user.getLocation());

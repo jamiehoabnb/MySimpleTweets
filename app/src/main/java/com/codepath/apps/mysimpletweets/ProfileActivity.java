@@ -19,6 +19,7 @@ import com.loopj.android.http.JsonHttpResponseHandler;
 import com.squareup.picasso.Picasso;
 
 import org.json.JSONObject;
+import org.parceler.Parcels;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -26,12 +27,11 @@ import cz.msebera.android.httpclient.Header;
 
 public class ProfileActivity extends AppCompatActivity {
 
-    TwitterClient client;
-
     @BindView(R.id.toolbar)
     Toolbar toolbar;
 
     public static final String PARAM_SCREEN_NAME = "screenName";
+    public static final String ARG_USER = "user";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -40,29 +40,22 @@ public class ProfileActivity extends AppCompatActivity {
         ButterKnife.bind(this);
         setSupportActionBar(toolbar);
 
+        User user = Parcels.unwrap(getIntent().getParcelableExtra("user"));
+        toolbar.setTitle("@" + user.getScreenName());
+
         if (savedInstanceState == null) {
             String screenName = getIntent().getStringExtra(PARAM_SCREEN_NAME);
             UserTimelineFragment fragmentUserTimeline = UserTimelineFragment.newInstance(screenName);
             ProfileHeaderFragment fragmentProfileHeader = new ProfileHeaderFragment();
+            Bundle args = new Bundle();
+            args.putParcelable(ProfileHeaderFragment.ARG_USER, Parcels.wrap(user));
+            fragmentProfileHeader.setArguments(args);
 
             FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
             ft.replace(R.id.flHeaderContainer, fragmentProfileHeader);
             ft.replace(R.id.flUserTimeLineContainer, fragmentUserTimeline);
             ft.commit();
         }
-
-        client = TwitterApplication.getRestClient();
-        client.getUserInfo(new JsonHttpResponseHandler() {
-            @Override
-            public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
-                User user = User.fromJSON(response);
-                toolbar.setTitle("@" + user.getScreenName());
-
-                ProfileHeaderFragment fragmentProfileHeader = (ProfileHeaderFragment)
-                        getSupportFragmentManager().findFragmentById(R.id.flHeaderContainer);
-                fragmentProfileHeader.populateProfileHeader(user);
-            }
-        });
     }
 
     @Override
