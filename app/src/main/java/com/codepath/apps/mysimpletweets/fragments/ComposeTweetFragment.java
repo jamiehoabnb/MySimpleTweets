@@ -38,6 +38,8 @@ public class ComposeTweetFragment extends DialogFragment {
     @BindView(R.id.tvTweetLength)
     TextView tvTweetLength;
 
+    private static final int TWEET_MAX_LENGTH = 140;
+
     public interface ComposeTweetDialogListener {
         void onFinishDialog(String tweet);
     }
@@ -72,7 +74,7 @@ public class ComposeTweetFragment extends DialogFragment {
 
             @Override
             public void afterTextChanged(Editable s) {
-                tvTweetLength.setText(String.valueOf(etTweet.getText().toString().length()));
+                tvTweetLength.setText(String.valueOf(TWEET_MAX_LENGTH - etTweet.getText().toString().length()));
             }
 
             @Override
