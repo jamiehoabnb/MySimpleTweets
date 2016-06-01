@@ -30,8 +30,19 @@
         android:text="@string/tweet"
         style="@style/TweetButton"/>
 
+    <TextView
+        android:id="@+id/tvTweetLength"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_toLeftOf="@+id/btTweet"
+        android:layout_marginRight="@dimen/word_spacing"
+        android:layout_alignBaseline="@+id/btTweet"
+        android:text="@string/default_tweet_length"
+        style="@style/TweetCountText"/>
+
     <EditText
-        android:id="@+id/tvTweet"
+        android:id="@+id/etTweet"
         android:layout_width="match_parent"
         android:layout_height="fill_parent"
         android:hint="@string/tweet_hint"
@@ -41,6 +52,7 @@
         android:layout_below="@id/ivProfileImage"
         android:layout_above="@id/btTweet"
         android:layout_alignParentLeft="true"
-        android:layout_alignParentRight="true"/>
+        android:layout_alignParentRight="true"
+        android:maxLength="140"/>
 
 </RelativeLayout>

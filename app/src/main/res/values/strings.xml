@@ -12,5 +12,6 @@
     <string name="followers">FOLLOWERS</string>
     <string name="tweet">Tweet</string>
     <string name="tweet_hint">What\'s happening?</string>
+    <string name="default_tweet_length">0</string>
 
 </resources>

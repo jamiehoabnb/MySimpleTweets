@@ -11,5 +11,7 @@
     <dimen name="profile_image_height_width">50dp</dimen>
     <dimen name="profile_image_margin">10dp</dimen>
     <dimen name="profile_tweet_image_height_width">25dp</dimen>
+    <dimen name="default_margin">10dp</dimen>
+    <dimen name="word_spacing">5dp</dimen>
 
 </resources>

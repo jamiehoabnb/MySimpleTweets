@@ -3,9 +3,12 @@ package com.codepath.apps.mysimpletweets.fragments;
 import android.app.DialogFragment;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -29,8 +32,11 @@ public class ComposeTweetFragment extends DialogFragment {
     @BindView(R.id.ivProfileImage)
     ImageView ivProfileImage;
 
-    @BindView(R.id.tvTweet)
-    TextView tvTweet;
+    @BindView(R.id.etTweet)
+    EditText etTweet;
+
+    @BindView(R.id.tvTweetLength)
+    TextView tvTweetLength;
 
     public interface ComposeTweetDialogListener {
         void onFinishDialog(String tweet);
@@ -61,13 +67,32 @@ public class ComposeTweetFragment extends DialogFragment {
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_compose_tweet, container, false);
         ButterKnife.bind(this, view);
+
+        etTweet.addTextChangedListener(new TextWatcher(){
+
+            @Override
+            public void afterTextChanged(Editable s) {
+                tvTweetLength.setText(String.valueOf(etTweet.getText().toString().length()));
+            }
+
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+            }
+        });
+
         Picasso.with(getActivity()).load(user.getProfileImageUrl()).into(ivProfileImage);
         return view;
     }
 
     @OnClick(R.id.btTweet)
     public void save(View view) {
-        ((ComposeTweetDialogListener) getActivity()).onFinishDialog(tvTweet.getText().toString());
+        ((ComposeTweetDialogListener) getActivity()).onFinishDialog(etTweet.getText().toString());
         dismiss();
     }
 

@@ -87,4 +87,8 @@
         <item name="android:minWidth">70dp</item>
     </style>
 
+    <style name="TweetCountText">
+        <item name="android:textColor">@color/gull_grey</item>
+    </style>
+
 </resources>

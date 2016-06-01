@@ -27,7 +27,7 @@
         android:layout_height="wrap_content"
         android:id="@+id/tvScreenName"
         android:layout_alignBaseline="@+id/tvUserName"
-        android:layout_marginLeft="5dp"
+        android:layout_marginLeft="@dimen/word_spacing"
         android:layout_toRightOf="@+id/tvUserName"
         style="@style/TweetScreenName"/>
 
@@ -39,7 +39,7 @@
         android:layout_toRightOf="@+id/tvScreenName"
         android:layout_alignParentRight="true"
         android:gravity="right"
-        android:layout_marginRight="10dp"
+        android:layout_marginRight="@dimen/default_margin"
         style="@style/TweetCreatedAt"/>
 
     <TextView
@@ -48,8 +48,8 @@
         android:id="@+id/tvBody"
         android:layout_below="@+id/tvUserName"
         android:layout_toRightOf="@+id/ivProfileImage"
-        android:layout_marginTop="10dp"
-        android:layout_marginRight="10dp"
-        android:layout_marginBottom="10dp"
+        android:layout_marginTop="@dimen/default_margin"
+        android:layout_marginRight="@dimen/default_margin"
+        android:layout_marginBottom="@dimen/default_margin"
         style="@style/TweetText"/>
 </RelativeLayout>
