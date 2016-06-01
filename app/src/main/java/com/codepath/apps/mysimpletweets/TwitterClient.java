@@ -45,26 +45,43 @@ public class TwitterClient extends OAuthBaseClient {
 		client.get(apiUrl, params, handler);
 	}
 
-	public void getHomeTimeLine(AsyncHttpResponseHandler handler) {
+	public void getHomeTimeLine(AsyncHttpResponseHandler handler, long maxId) {
 		String apiUrl = getApiUrl("statuses/home_timeline.json");
 		RequestParams params = new RequestParams();
 		params.put("count", 25);
-		params.put("since_id", 1);
+
+		if (maxId < Long.MAX_VALUE) {
+			params.put("max_id", maxId);
+		} else {
+			params.put("since_id", 1);
+		}
 		getClient().get(apiUrl, params, handler);
 	}
 
-	public void getMentionsTimeline(JsonHttpResponseHandler handler) {
+	public void getMentionsTimeline(JsonHttpResponseHandler handler, long maxId) {
 		String apiUrl = getApiUrl("statuses/mentions_timeline.json");
 		RequestParams params = new RequestParams();
 		params.put("count", 25);
+
+		if (maxId < Long.MAX_VALUE) {
+			params.put("max_id", maxId);
+		} else {
+			params.put("since_id", 1);
+		}
 		getClient().get(apiUrl, params, handler);
 	}
 
-	public void getUserTimeline(String screenName, JsonHttpResponseHandler handler) {
+	public void getUserTimeline(String screenName, JsonHttpResponseHandler handler, long maxId) {
 		String apiUrl = getApiUrl("statuses/user_timeline.json");
 		RequestParams params = new RequestParams();
 		params.put("count", 25);
 		params.put("screen_name", screenName);
+
+		if (maxId < Long.MAX_VALUE) {
+			params.put("max_id", maxId);
+		} else {
+			params.put("since_id", 1);
+		}
 		getClient().get(apiUrl, params, handler);
 	}
 

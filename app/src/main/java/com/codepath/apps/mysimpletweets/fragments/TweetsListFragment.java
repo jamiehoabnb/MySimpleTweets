@@ -15,6 +15,7 @@ import com.codepath.apps.mysimpletweets.TweetsArrayAdapter;
 import com.codepath.apps.mysimpletweets.TwitterApplication;
 import com.codepath.apps.mysimpletweets.TwitterClient;
 import com.codepath.apps.mysimpletweets.models.Tweet;
+import com.codepath.apps.mysimpletweets.util.EndlessScrollListener;
 import com.loopj.android.http.JsonHttpResponseHandler;
 
 import org.json.JSONArray;
@@ -40,16 +41,18 @@ public abstract class TweetsListFragment extends Fragment {
 
     protected TwitterClient twitterClient;
 
-    protected abstract void populateTimeLine();
+    protected abstract void populateTimeLine(final boolean nextPage, final long maxId);
 
-    protected JsonHttpResponseHandler getResponseHandler() {
+    protected JsonHttpResponseHandler getResponseHandler(final boolean nextPage) {
         return new JsonHttpResponseHandler() {
             @Override
             public void onSuccess(int statusCode, Header[] headers, JSONArray response) {
                 super.onSuccess(statusCode, headers, response);
                 swipeContainer.setRefreshing(false);
 
-                adapter.clear();
+                if (! nextPage) {
+                    adapter.clear();
+                }
                 adapter.addAll(Tweet.fromJSONArray(response));
                 adapter.notifyDataSetChanged();
             }
@@ -73,7 +76,21 @@ public abstract class TweetsListFragment extends Fragment {
         swipeContainer.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
-                populateTimeLine();
+                populateTimeLine(false, Long.MAX_VALUE);
+            }
+        });
+
+        lvTweets.setOnScrollListener(new EndlessScrollListener() {
+            @Override
+            public boolean onLoadMore(int page, int totalItemsCount) {
+                long sinceId = list.isEmpty() ? Long.MAX_VALUE : list.get(list.size()-1).getUid()-1;
+                populateTimeLine(true, sinceId);
+                return true;
+            }
+
+            @Override
+            public int getFooterViewType() {
+                return -1;
             }
         });
 
@@ -87,6 +104,6 @@ public abstract class TweetsListFragment extends Fragment {
         list = new ArrayList<>();
         adapter = new TweetsArrayAdapter(getActivity(), list);
         twitterClient = TwitterApplication.getRestClient();
-        populateTimeLine();
+        populateTimeLine(false, Long.MAX_VALUE);
     }
 }

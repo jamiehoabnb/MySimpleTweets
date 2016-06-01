@@ -14,8 +14,8 @@ public class UserTimelineFragment extends TweetsListFragment {
         return fragment;
     }
 
-    protected void populateTimeLine() {
+    protected void populateTimeLine(final boolean nextPage, final long maxId) {
         String screenName = getArguments().getString(PARAM_SCREEN_NAME);
-        twitterClient.getUserTimeline(screenName, getResponseHandler());
+        twitterClient.getUserTimeline(screenName, getResponseHandler(nextPage), maxId);
     }
 }
