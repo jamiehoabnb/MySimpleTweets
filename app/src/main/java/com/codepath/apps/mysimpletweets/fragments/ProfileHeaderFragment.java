@@ -17,6 +17,7 @@ import org.parceler.Parcels;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import jp.wasabeef.picasso.transformations.RoundedCornersTransformation;
 
 public class ProfileHeaderFragment extends Fragment {
 
@@ -40,6 +41,8 @@ public class ProfileHeaderFragment extends Fragment {
 
     public static final String ARG_USER = "user";
 
+    private static final int ROUNDED_CORNER_CONST = 3;
+
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup parent, @Nullable Bundle savedInstanceState) {
@@ -58,6 +61,10 @@ public class ProfileHeaderFragment extends Fragment {
         tvLocation.setText(user.getLocation());
         tvFollowers.setText(String.valueOf(user.getFollowersCount()));
         tvFollowing.setText(String.valueOf(user.getFriendsCount()));
-        Picasso.with(getContext()).load(user.getProfileImageUrl()).into(ivProfileImage);
+        Picasso.with(getContext())
+                .load(user.getBiggerProfileImageUrl())
+                .transform(
+                        new RoundedCornersTransformation(ROUNDED_CORNER_CONST, ROUNDED_CORNER_CONST))
+                .into(ivProfileImage);
     }
 }

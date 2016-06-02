@@ -10,6 +10,7 @@
     <color name="black">#000000</color>
     <color name="white">#FFFFFF</color>
     <color name="gull_grey">#A1AEB9</color>
-    <color name="colorDivider">#D0D0D0</color>
+    <color name="colorDivider">#F5F8FA</color>
+    <color name="colorDividerBorder">#E1E8ED</color>
     <color name="tweetText">#43484C</color>
 </resources>

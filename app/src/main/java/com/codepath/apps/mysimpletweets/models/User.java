@@ -51,6 +51,10 @@ public class User {
         return profileImageUrl;
     }
 
+    public String getBiggerProfileImageUrl() {
+        return profileImageUrl.replace("normal", "bigger");
+    }
+
     public String getTagline() {
         return tagline;
     }

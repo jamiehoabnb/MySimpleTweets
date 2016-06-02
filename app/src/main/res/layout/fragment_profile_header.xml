@@ -8,8 +8,8 @@
 
     <ImageView
         android:id="@+id/ivProfileImage"
-        android:layout_width="75dp"
-        android:layout_height="75dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:layout_alignParentLeft="true"
         android:layout_alignParentTop="true"
         android:layout_margin="10dp"
@@ -35,13 +35,20 @@
         android:layout_marginBottom="@dimen/profiler_header_text_spacing"
         style="@style/ProfileTagLineText" />
 
+    <ImageView
+        android:id="@+id/ivLocationMarker"
+        android:src="@drawable/map_marker"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_toRightOf="@+id/ivProfileImage"
+        android:layout_alignBottom="@+id/tvLocation"/>
+
     <TextView
         android:id="@+id/tvLocation"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@+id/tvTagLine"
-        android:layout_toEndOf="@+id/ivProfileImage"
-        android:layout_toRightOf="@+id/ivProfileImage"
+        android:layout_toRightOf="@+id/ivLocationMarker"
         android:layout_marginBottom="@dimen/profiler_header_text_spacing"
         style="@style/ProfileLocationText" />
 

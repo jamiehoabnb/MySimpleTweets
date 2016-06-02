@@ -10,6 +10,10 @@
         <item name="android:dialogTheme">@style/AppDialogTheme</item>
     </style>
 
+    <style name="Toolbar.TitleText" parent="TextAppearance.Widget.AppCompat.Toolbar.Title">
+
+    </style>
+
     <!-- Define your custom dialog theme here extending from base -->
     <style name="AppDialogTheme" parent="Theme.AppCompat.Light.Dialog">
         <item name="android:windowNoTitle">true</item>
@@ -69,8 +73,14 @@
 
     <style name="Divider">
         <item name="android:layout_width">match_parent</item>
-        <item name="android:layout_height">5dp</item>
+        <item name="android:layout_height">3dp</item>
         <item name="android:background">@color/colorDivider</item>
+    </style>
+
+    <style name="DividerBorder">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">1dp</item>
+        <item name="android:background">@color/colorDividerBorder</item>
     </style>
 
     <style name="LoginButton">

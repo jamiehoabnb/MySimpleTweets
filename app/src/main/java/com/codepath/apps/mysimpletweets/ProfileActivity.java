@@ -40,7 +40,7 @@ public class ProfileActivity extends AppCompatActivity {
         setSupportActionBar(toolbar);
 
         User user = Parcels.unwrap(getIntent().getParcelableExtra("user"));
-        toolbar.setTitle("@" + user.getScreenName());
+        getSupportActionBar().setTitle("@" + user.getScreenName());
 
         if (savedInstanceState == null) {
             UserTimelineFragment fragmentUserTimeline = UserTimelineFragment.newInstance(user.getScreenName(), null);

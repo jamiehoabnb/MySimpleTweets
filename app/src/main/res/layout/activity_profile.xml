@@ -30,9 +30,19 @@
         android:layout_below="@+id/appBar"/>
 
     <View
+        android:id="@+id/dividerTopBorder"
+        style="@style/DividerBorder"
+        android:layout_below="@+id/flHeaderContainer"/>
+
+    <View
         android:id="@+id/divider"
         style="@style/Divider"
-        android:layout_below="@+id/flHeaderContainer"/>
+        android:layout_below="@+id/dividerTopBorder"/>
+
+    <View
+        android:id="@+id/dividerBottomBorder"
+        style="@style/DividerBorder"
+        android:layout_below="@+id/divider"/>
 
     <FrameLayout
         android:id="@+id/flUserTimeLineContainer"
@@ -40,5 +50,5 @@
         android:layout_height="fill_parent"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
-        android:layout_below="@+id/divider"/>
+        android:layout_below="@+id/dividerBottomBorder"/>
 </RelativeLayout>

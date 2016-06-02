@@ -18,10 +18,12 @@ import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import jp.wasabeef.picasso.transformations.RoundedCornersTransformation;
 
 public class TweetsArrayAdapter extends ArrayAdapter<Tweet> {
 
     private OnProfileImageClickListener profileImageClickListener;
+    private static final int ROUNDED_CORNER_CONST = 3;
 
     public interface OnProfileImageClickListener {
         public void onClickProfileImage(User user);
@@ -76,7 +78,11 @@ public class TweetsArrayAdapter extends ArrayAdapter<Tweet> {
         //Clear our recycled image.
         viewHolder.ivProfileImage.setImageResource(android.R.color.transparent);
 
-        Picasso.with(getContext()).load(tweet.getUser().getProfileImageUrl()).into(viewHolder.ivProfileImage);
+        Picasso.with(getContext())
+                .load(tweet.getUser().getProfileImageUrl())
+                .transform(
+                        new RoundedCornersTransformation(ROUNDED_CORNER_CONST, ROUNDED_CORNER_CONST))
+                .into(viewHolder.ivProfileImage);
 
         if (profileImageClickListener != null) {
             viewHolder.ivProfileImage.setOnClickListener(new View.OnClickListener() {
