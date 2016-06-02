@@ -21,6 +21,7 @@ import com.codepath.apps.mysimpletweets.util.ListProgressBar;
 import com.loopj.android.http.JsonHttpResponseHandler;
 
 import org.json.JSONArray;
+import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
@@ -45,6 +46,8 @@ public abstract class TweetsListFragment extends Fragment {
     protected TwitterClient twitterClient;
 
     private boolean cacheTweets = true;
+
+    private boolean endlessScroll = true;
 
     //If we don't want the profile image to be clickable, set this to null.  Use case is profile page.
     public TweetsArrayAdapter.OnProfileImageClickListener listener;
@@ -110,6 +113,8 @@ public abstract class TweetsListFragment extends Fragment {
         this.cacheTweets = false;
     }
 
+    public void disableEndlessScroll() {this.endlessScroll = false;}
+
     protected abstract void populateTimeLineWithREST(final boolean nextPage, final long maxId, long minId);
 
     protected abstract Tweet.Type getTweetType();
@@ -147,6 +152,17 @@ public abstract class TweetsListFragment extends Fragment {
             }
 
             @Override
+            public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
+                super.onSuccess(statusCode, headers, response);
+                try {
+                    JSONArray arrayResponse = response.getJSONArray("statuses");
+                    onSuccess(statusCode, headers, arrayResponse);
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+
+            @Override
             public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONObject errorResponse) {
                 super.onFailure(statusCode, headers, throwable, errorResponse);
                 swipeContainer.setRefreshing(false);
@@ -172,20 +188,22 @@ public abstract class TweetsListFragment extends Fragment {
             }
         });
 
-        lvTweets.setOnScrollListener(new EndlessScrollListener() {
-            @Override
-            public boolean onLoadMore(int page, int totalItemsCount) {
-                //Query for older tweets because user is scrolling down.
-                long maxId = list.isEmpty() ? Long.MAX_VALUE : list.get(list.size()-1).getUid()-1;
-                populateTimeLineWithREST(true, maxId, 1);
-                return true;
-            }
+        if (endlessScroll) {
+            lvTweets.setOnScrollListener(new EndlessScrollListener() {
+                @Override
+                public boolean onLoadMore(int page, int totalItemsCount) {
+                    //Query for older tweets because user is scrolling down.
+                    long maxId = list.isEmpty() ? Long.MAX_VALUE : list.get(list.size() - 1).getUid() - 1;
+                    populateTimeLineWithREST(true, maxId, 1);
+                    return true;
+                }
 
-            @Override
-            public int getFooterViewType() {
-                return -1;
-            }
-        });
+                @Override
+                public int getFooterViewType() {
+                    return -1;
+                }
+            });
+        }
 
         return v;
     }

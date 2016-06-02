@@ -19,11 +19,13 @@ public class UserTimelineFragment extends TweetsListFragment {
         return fragment;
     }
 
-    protected void populateTimeLineWithREST(final boolean nextPage, final long maxId, long minId) {
+    @Override
+    protected void populateTimeLineWithREST(final boolean nextPage, long maxId, long minId) {
         String screenName = getArguments().getString(PARAM_SCREEN_NAME);
         twitterClient.getUserTimeline(screenName, getResponseHandler(nextPage), maxId, minId);
     }
 
+    @Override
     protected Tweet.Type getTweetType() {
         return Tweet.Type.PROFILE;
     }

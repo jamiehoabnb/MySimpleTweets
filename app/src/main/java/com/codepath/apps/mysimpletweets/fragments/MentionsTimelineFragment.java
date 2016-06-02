@@ -11,10 +11,12 @@ public class MentionsTimelineFragment extends TweetsListFragment {
         return fragment;
     }
 
+    @Override
     protected void populateTimeLineWithREST(final boolean nextPage, final long maxId, long minId) {
         twitterClient.getMentionsTimeline(getResponseHandler(nextPage), maxId, minId);
     }
 
+    @Override
     protected Tweet.Type getTweetType() {
         return Tweet.Type.MENTIONS;
     }

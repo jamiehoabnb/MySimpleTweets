@@ -5,8 +5,10 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
+import android.support.v4.view.MenuItemCompat;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.SearchView;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.Menu;
@@ -16,7 +18,6 @@ import android.view.MenuItem;
 import com.astuetz.PagerSlidingTabStrip;
 import com.codepath.apps.mysimpletweets.fragments.ComposeTweetFragment;
 import com.codepath.apps.mysimpletweets.fragments.HomeTimelineFragment;
-import com.codepath.apps.mysimpletweets.fragments.MentionsTimelineFragment;
 import com.codepath.apps.mysimpletweets.models.Tweet;
 import com.codepath.apps.mysimpletweets.models.User;
 import com.codepath.apps.mysimpletweets.util.ListProgressBar;
@@ -30,7 +31,7 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import cz.msebera.android.httpclient.Header;
 
-public class TimelineActivity extends AppCompatActivity implements
+public abstract class BaseTimeLineActivity extends AppCompatActivity implements
         ComposeTweetFragment.ComposeTweetDialogListener,
         TweetsArrayAdapter.OnProfileImageClickListener {
 
@@ -46,6 +47,8 @@ public class TimelineActivity extends AppCompatActivity implements
     TwitterClient client;
 
     User user;
+
+    SearchView searchView;
 
     TweetsPagerAdapter adapter;
 
@@ -67,7 +70,7 @@ public class TimelineActivity extends AppCompatActivity implements
         ButterKnife.bind(this);
         setSupportActionBar(toolbar);
 
-        adapter = new TweetsPagerAdapter(getSupportFragmentManager(), this);
+        adapter = new TweetsPagerAdapter(getSupportFragmentManager(), getOnFragmentCreateListener(), getTabTitles());
         viewPager.setAdapter(adapter);
         tabs.setViewPager(viewPager);
 
@@ -78,20 +81,6 @@ public class TimelineActivity extends AppCompatActivity implements
                 user = User.fromJSON(response);
             }
         });
-    }
-
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        MenuInflater inflater = getMenuInflater();
-        inflater.inflate(R.menu.menu_timeline, menu);
-        return true;
-    }
-
-    @Override
-    public boolean onPrepareOptionsMenu(Menu menu) {
-        MenuItem actionProgressItem = menu.findItem(R.id.miActionProgress);
-        ListProgressBar.setInstance(actionProgressItem);
-        return super.onPrepareOptionsMenu(menu);
     }
 
     public void onProfileView(MenuItem mi) {
@@ -128,21 +117,31 @@ public class TimelineActivity extends AppCompatActivity implements
         });
     }
 
+    public abstract String[] getTabTitles();
+
+    public abstract OnFragmentCreateListener getOnFragmentCreateListener();
+
+    protected interface OnFragmentCreateListener {
+        public Fragment getItem(int position);
+    }
+
     class TweetsPagerAdapter extends SmartFragmentStatePagerAdapter {
 
-        private String[] tabTitles = new String[] {getString(R.string.home), getString(R.string.mentions)};
+        private String[] tabTitles;
 
-        private TweetsArrayAdapter.OnProfileImageClickListener listener;
+        private OnFragmentCreateListener fragmentCreateListener;
 
-        public TweetsPagerAdapter(FragmentManager fm, TweetsArrayAdapter.OnProfileImageClickListener listener) {
+        public TweetsPagerAdapter(FragmentManager fm,
+                                  OnFragmentCreateListener fragmentCreateListener,
+                                  String[] tabTitles) {
             super(fm);
-            this.listener = listener;
+            this.fragmentCreateListener = fragmentCreateListener;
+            this.tabTitles = tabTitles;
         }
 
         @Override
         public Fragment getItem(int position) {
-            return position == 0 ?
-                    HomeTimelineFragment.newInstance(listener) : MentionsTimelineFragment.newInstance(listener);
+            return fragmentCreateListener.getItem(position);
         }
 
         @Override

@@ -44,8 +44,11 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".TimelineActivity"
-            android:label="@string/title_activity_timeline"
+            android:name=".HomeActivity"
+            android:theme="@style/AppTheme" />
+        <activity
+            android:name=".SearchActivity"
+            android:label="@string/search_twitter"
             android:theme="@style/AppTheme" />
         <activity android:name=".ProfileActivity"
             android:label="@string/profile"

@@ -11,10 +11,12 @@ public class HomeTimelineFragment extends TweetsListFragment {
         return fragment;
     }
 
+    @Override
     protected void populateTimeLineWithREST(final boolean nextPage, long maxId, long minId) {
         twitterClient.getHomeTimeLine(getResponseHandler(nextPage), maxId, minId);
     }
 
+    @Override
     protected Tweet.Type getTweetType() {
         return Tweet.Type.HOME;
     }

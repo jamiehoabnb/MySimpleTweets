@@ -32,14 +32,42 @@ public class TwitterClient extends OAuthBaseClient {
 	public static final String REST_CONSUMER_SECRET = "q6jwEKEYkwBTnElz7s2QG53E5zIoMgCW8Km7PiknTfnXK9hnX4";
 	public static final String REST_CALLBACK_URL = "oauth://cpsimpletweets";
 
+	private int PAGE_SIZE = 25;
+
+    private int POPULARITY_SEARCH_PAGE_SIZE = 100;
+
+	public enum SearchResultType {
+		mixed, recent, popular;
+	}
+
 	public TwitterClient(Context context) {
 		super(context, REST_API_CLASS, REST_URL, REST_CONSUMER_KEY, REST_CONSUMER_SECRET, REST_CALLBACK_URL);
+	}
+
+	public void getSearchResults(AsyncHttpResponseHandler handler,
+								 String query,
+								 SearchResultType resultType,
+								 long maxId,
+								 long minId) {
+		String apiUrl = getApiUrl("search/tweets.json");
+		RequestParams params = new RequestParams();
+		params.put("count", resultType == SearchResultType.popular ?
+                POPULARITY_SEARCH_PAGE_SIZE : PAGE_SIZE);
+		params.put("q", query);
+		params.put("result_type", resultType.name());
+
+		if (maxId < Long.MAX_VALUE) {
+			params.put("max_id", maxId);
+		} else {
+			params.put("since_id", minId);
+		}
+		getClient().get(apiUrl, params, handler);
 	}
 
 	public void getHomeTimeLine(AsyncHttpResponseHandler handler, long maxId, long minId) {
 		String apiUrl = getApiUrl("statuses/home_timeline.json");
 		RequestParams params = new RequestParams();
-		params.put("count", 25);
+		params.put("count", PAGE_SIZE);
 
         if (maxId < Long.MAX_VALUE) {
             params.put("max_id", maxId);
@@ -52,7 +80,7 @@ public class TwitterClient extends OAuthBaseClient {
 	public void getMentionsTimeline(JsonHttpResponseHandler handler, long maxId, long minId) {
 		String apiUrl = getApiUrl("statuses/mentions_timeline.json");
 		RequestParams params = new RequestParams();
-		params.put("count", 25);
+		params.put("count", PAGE_SIZE);
 
         if (maxId < Long.MAX_VALUE) {
             params.put("max_id", maxId);
@@ -65,7 +93,7 @@ public class TwitterClient extends OAuthBaseClient {
 	public void getUserTimeline(String screenName, JsonHttpResponseHandler handler, long maxId, long minId) {
 		String apiUrl = getApiUrl("statuses/user_timeline.json");
 		RequestParams params = new RequestParams();
-		params.put("count", 25);
+		params.put("count", PAGE_SIZE);
 		params.put("screen_name", screenName);
 
 		if (maxId < Long.MAX_VALUE) {
