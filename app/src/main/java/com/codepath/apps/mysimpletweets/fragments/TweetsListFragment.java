@@ -60,7 +60,7 @@ public abstract class TweetsListFragment extends Fragment {
         }
 
         protected void onPostExecute(List<Tweet> tweets) {
-            //Add old tweets cached in DB.
+            //Add old tweets cached from DB.
             adapter.addAll(tweets);
 
             //Get new tweets from twitter.
@@ -96,6 +96,7 @@ public abstract class TweetsListFragment extends Fragment {
             //Read from DB asynchronously.
             new DBReadAsyncTask().execute();
         } else {
+            //No tweets are cached so we are querying for fresh new list of tweets from twitter.
             populateTimeLineWithREST(false, Long.MAX_VALUE, 1);
         }
     }
@@ -157,6 +158,7 @@ public abstract class TweetsListFragment extends Fragment {
         swipeContainer.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
+                //Query for new tweets because user swiped to refresh.
                 long minId = list.isEmpty() ? 1 : list.get(0).getUid();
                 populateTimeLineWithREST(false, Long.MAX_VALUE, minId);
             }
@@ -165,8 +167,9 @@ public abstract class TweetsListFragment extends Fragment {
         lvTweets.setOnScrollListener(new EndlessScrollListener() {
             @Override
             public boolean onLoadMore(int page, int totalItemsCount) {
-                long sinceId = list.isEmpty() ? Long.MAX_VALUE : list.get(list.size()-1).getUid()-1;
-                populateTimeLineWithREST(true, sinceId, 1);
+                //Query for older tweets because user is scrolling down.
+                long maxId = list.isEmpty() ? Long.MAX_VALUE : list.get(list.size()-1).getUid()-1;
+                populateTimeLineWithREST(true, maxId, 1);
                 return true;
             }
 
