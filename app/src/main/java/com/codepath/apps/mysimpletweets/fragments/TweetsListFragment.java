@@ -20,6 +20,7 @@ import com.loopj.android.http.JsonHttpResponseHandler;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
+import org.parceler.Parcels;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -40,6 +41,9 @@ public abstract class TweetsListFragment extends Fragment {
     SwipeRefreshLayout swipeContainer;
 
     protected TwitterClient twitterClient;
+
+    //If we don't want the profile image to be clickable, set this to null.  Use case is profile page.
+    public TweetsArrayAdapter.OnProfileImageClickListener listener;
 
     protected abstract void populateTimeLine(final boolean nextPage, final long maxId);
 
@@ -97,12 +101,16 @@ public abstract class TweetsListFragment extends Fragment {
         return v;
     }
 
+    public void setListener(TweetsArrayAdapter.OnProfileImageClickListener listener) {
+        this.listener = listener;
+    }
+
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
         list = new ArrayList<>();
-        adapter = new TweetsArrayAdapter(getActivity(), list);
+        adapter = new TweetsArrayAdapter(getActivity(), list, listener);
         twitterClient = TwitterApplication.getRestClient();
         populateTimeLine(false, Long.MAX_VALUE);
     }

@@ -9,7 +9,10 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.codepath.apps.mysimpletweets.models.Tweet;
+import com.codepath.apps.mysimpletweets.models.User;
 import com.squareup.picasso.Picasso;
+
+import org.parceler.Parcel;
 
 import java.util.List;
 
@@ -18,7 +21,11 @@ import butterknife.ButterKnife;
 
 public class TweetsArrayAdapter extends ArrayAdapter<Tweet> {
 
+    private OnProfileImageClickListener profileImageClickListener;
 
+    public interface OnProfileImageClickListener {
+        public void onClickProfileImage(User user);
+    }
 
     static class ViewHolder {
         @BindView(R.id.tvUserName)
@@ -41,13 +48,14 @@ public class TweetsArrayAdapter extends ArrayAdapter<Tweet> {
         }
     }
 
-    public TweetsArrayAdapter(Context context, List<Tweet> objects) {
+    public TweetsArrayAdapter(Context context, List<Tweet> objects, OnProfileImageClickListener profileImageClickListener) {
         super(context, android.R.layout.simple_list_item_1, objects);
+        this.profileImageClickListener = profileImageClickListener;
     }
 
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
-        Tweet tweet = getItem(position);
+        final Tweet tweet = getItem(position);
 
         ViewHolder viewHolder;
         if (convertView == null) {
@@ -69,6 +77,16 @@ public class TweetsArrayAdapter extends ArrayAdapter<Tweet> {
         viewHolder.ivProfileImage.setImageResource(android.R.color.transparent);
 
         Picasso.with(getContext()).load(tweet.getUser().getProfileImageUrl()).into(viewHolder.ivProfileImage);
+
+        if (profileImageClickListener != null) {
+            viewHolder.ivProfileImage.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    profileImageClickListener.onClickProfileImage(tweet.getUser());
+                }
+            });
+        }
+
         return convertView;
     }
 

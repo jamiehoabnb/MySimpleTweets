@@ -1,5 +1,6 @@
 package com.codepath.apps.mysimpletweets;
 
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -25,6 +26,7 @@ import com.loopj.android.http.JsonHttpResponseHandler;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
+import org.parceler.Parcel;
 import org.parceler.Parcels;
 
 import java.util.List;
@@ -34,7 +36,8 @@ import butterknife.ButterKnife;
 import cz.msebera.android.httpclient.Header;
 
 public class TimelineActivity extends AppCompatActivity implements
-        ComposeTweetFragment.ComposeTweetDialogListener {
+        ComposeTweetFragment.ComposeTweetDialogListener,
+        TweetsArrayAdapter.OnProfileImageClickListener {
 
     @BindView(R.id.toolbar)
     Toolbar toolbar;
@@ -51,6 +54,15 @@ public class TimelineActivity extends AppCompatActivity implements
 
     TweetsPagerAdapter adapter;
 
+    private Context context = this;
+
+    @Override
+    public void onClickProfileImage(User profileUser) {
+        Intent intent = new Intent(context, ProfileActivity.class);
+        intent.putExtra(ProfileActivity.ARG_USER, Parcels.wrap(profileUser));
+        context.startActivity(intent);
+    }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -58,7 +70,7 @@ public class TimelineActivity extends AppCompatActivity implements
         ButterKnife.bind(this);
         setSupportActionBar(toolbar);
 
-        adapter = new TweetsPagerAdapter(getSupportFragmentManager());
+        adapter = new TweetsPagerAdapter(getSupportFragmentManager(), this);
         viewPager.setAdapter(adapter);
         tabs.setViewPager(viewPager);
 
@@ -116,15 +128,17 @@ public class TimelineActivity extends AppCompatActivity implements
 
         private String[] tabTitles = new String[] {getString(R.string.home), getString(R.string.mentions)};
 
-        public TweetsPagerAdapter(FragmentManager fm) {
-            super(fm);
+        private TweetsArrayAdapter.OnProfileImageClickListener listener;
 
+        public TweetsPagerAdapter(FragmentManager fm, TweetsArrayAdapter.OnProfileImageClickListener listener) {
+            super(fm);
+            this.listener = listener;
         }
 
         @Override
         public Fragment getItem(int position) {
             return position == 0 ?
-                    new HomeTimelineFragment() : new MentionsTimelineFragment();
+                    HomeTimelineFragment.newInstance(listener) : MentionsTimelineFragment.newInstance(listener);
         }
 
         @Override

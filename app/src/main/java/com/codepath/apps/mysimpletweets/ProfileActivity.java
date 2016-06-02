@@ -30,7 +30,6 @@ public class ProfileActivity extends AppCompatActivity {
     @BindView(R.id.toolbar)
     Toolbar toolbar;
 
-    public static final String PARAM_SCREEN_NAME = "screenName";
     public static final String ARG_USER = "user";
 
     @Override
@@ -44,8 +43,7 @@ public class ProfileActivity extends AppCompatActivity {
         toolbar.setTitle("@" + user.getScreenName());
 
         if (savedInstanceState == null) {
-            String screenName = getIntent().getStringExtra(PARAM_SCREEN_NAME);
-            UserTimelineFragment fragmentUserTimeline = UserTimelineFragment.newInstance(screenName);
+            UserTimelineFragment fragmentUserTimeline = UserTimelineFragment.newInstance(user.getScreenName(), null);
             ProfileHeaderFragment fragmentProfileHeader = new ProfileHeaderFragment();
             Bundle args = new Bundle();
             args.putParcelable(ProfileHeaderFragment.ARG_USER, Parcels.wrap(user));
