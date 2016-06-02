@@ -10,6 +10,7 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -60,19 +61,7 @@ public class Tweet extends Model {
             tweet.uid = json.getLong("id");
             tweet.user = User.fromJSON(json.getJSONObject("user"));
             tweet.type = type;
-            Date createDate = inputFormat.parse(json.getString("created_at"));
-            long diff = System.currentTimeMillis() - createDate.getTime();
-
-            if (diff < MINUTE) {
-                tweet.createAt = String.valueOf(Math.round(diff/SECOND)) + "s";
-            } else if (diff < HOUR) {
-                tweet.createAt = String.valueOf(Math.round(diff/MINUTE)) + "m";
-            } else if (diff < DAY) {
-                tweet.createAt = String.valueOf(Math.round(diff/HOUR)) + "h";
-            } else {
-                tweet.createAt = outputFormat.format(createDate);
-            }
-
+            tweet.createAt = json.getString("created_at");
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -108,6 +97,26 @@ public class Tweet extends Model {
 
     public String getCreateAt() {
         return createAt;
+    }
+
+    public String getRelativeCreateAt() {
+        try {
+            Date createDate = inputFormat.parse(createAt);
+            long diff = System.currentTimeMillis() - createDate.getTime();
+
+            if (diff < MINUTE) {
+                return String.valueOf(Math.round(diff / SECOND)) + "s";
+            } else if (diff < HOUR) {
+                return String.valueOf(Math.round(diff / MINUTE)) + "m";
+            } else if (diff < DAY) {
+                return String.valueOf(Math.round(diff / HOUR)) + "h";
+            } else {
+                return outputFormat.format(createDate);
+            }
+        } catch (ParseException e) {
+            e.printStackTrace();
+            return null;
+        }
     }
 
     public Type getType() {
