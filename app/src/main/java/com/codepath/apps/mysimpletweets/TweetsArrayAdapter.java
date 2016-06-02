@@ -25,6 +25,8 @@ public class TweetsArrayAdapter extends ArrayAdapter<Tweet> {
     private OnProfileImageClickListener profileImageClickListener;
     private static final int ROUNDED_CORNER_CONST = 3;
 
+    private List<Tweet> objects;
+
     public interface OnProfileImageClickListener {
         public void onClickProfileImage(User user);
     }
@@ -53,6 +55,7 @@ public class TweetsArrayAdapter extends ArrayAdapter<Tweet> {
     public TweetsArrayAdapter(Context context, List<Tweet> objects, OnProfileImageClickListener profileImageClickListener) {
         super(context, android.R.layout.simple_list_item_1, objects);
         this.profileImageClickListener = profileImageClickListener;
+        this.objects = objects;
     }
 
     @Override
@@ -98,5 +101,10 @@ public class TweetsArrayAdapter extends ArrayAdapter<Tweet> {
 
     private View getInflatedLayoutForType(int type, ViewGroup parent) {
         return LayoutInflater.from(getContext()).inflate(R.layout.item_tweet, parent, false);
+    }
+
+    public void add(int position, Tweet tweet) {
+        objects.add(position, tweet);
+        notifyDataSetChanged();
     }
 }

@@ -31,6 +31,7 @@ public class ProfileActivity extends AppCompatActivity {
     Toolbar toolbar;
 
     public static final String ARG_USER = "user";
+    public static final String ARG_DISABLE_CACHE = "disable_cache";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -40,11 +41,17 @@ public class ProfileActivity extends AppCompatActivity {
         setSupportActionBar(toolbar);
 
         User user = Parcels.unwrap(getIntent().getParcelableExtra("user"));
+        boolean disableCache = getIntent().getBooleanExtra(ARG_DISABLE_CACHE, false);
         getSupportActionBar().setTitle("@" + user.getScreenName());
 
         if (savedInstanceState == null) {
             UserTimelineFragment fragmentUserTimeline = UserTimelineFragment.newInstance(user.getScreenName(), null);
             ProfileHeaderFragment fragmentProfileHeader = new ProfileHeaderFragment();
+
+            if (disableCache) {
+                fragmentUserTimeline.disableCache();
+            }
+
             Bundle args = new Bundle();
             args.putParcelable(ProfileHeaderFragment.ARG_USER, Parcels.wrap(user));
             fragmentProfileHeader.setArguments(args);

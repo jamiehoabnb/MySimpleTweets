@@ -1,19 +1,39 @@
 package com.codepath.apps.mysimpletweets.models;
 
+import com.activeandroid.Model;
+import com.activeandroid.annotation.Column;
+import com.activeandroid.annotation.Table;
+
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.parceler.Parcel;
 
-@Parcel
-public class User {
+@Table(name = "users")
+@Parcel(analyze={User.class})
+public class User extends Model {
 
+    @Column(name = "name")
     String name;
+
+    @Column(name = "uid")
     long uid;
+
+    @Column(name = "screen_name")
     String screenName;
+
+    @Column(name = "profile_image_url")
     String profileImageUrl;
+
+    @Column(name = "tagline")
     String tagline;
+
+    @Column(name = "location")
     String location;
+
+    @Column(name = "followers_count")
     int followersCount;
+
+    @Column(name = "friends_count")
     int friendsCount;
 
     public static User fromJSON(JSONObject json) {

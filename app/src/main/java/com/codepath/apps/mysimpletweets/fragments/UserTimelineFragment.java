@@ -3,6 +3,7 @@ package com.codepath.apps.mysimpletweets.fragments;
 import android.os.Bundle;
 
 import com.codepath.apps.mysimpletweets.TweetsArrayAdapter;
+import com.codepath.apps.mysimpletweets.models.Tweet;
 
 public class UserTimelineFragment extends TweetsListFragment {
 
@@ -18,8 +19,12 @@ public class UserTimelineFragment extends TweetsListFragment {
         return fragment;
     }
 
-    protected void populateTimeLine(final boolean nextPage, final long maxId) {
+    protected void populateTimeLineWithREST(final boolean nextPage, final long maxId, long minId) {
         String screenName = getArguments().getString(PARAM_SCREEN_NAME);
-        twitterClient.getUserTimeline(screenName, getResponseHandler(nextPage), maxId);
+        twitterClient.getUserTimeline(screenName, getResponseHandler(nextPage), maxId, minId);
+    }
+
+    protected Tweet.Type getTweetType() {
+        return Tweet.Type.PROFILE;
     }
 }

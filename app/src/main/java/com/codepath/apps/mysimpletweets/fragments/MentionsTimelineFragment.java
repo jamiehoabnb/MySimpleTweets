@@ -1,6 +1,7 @@
 package com.codepath.apps.mysimpletweets.fragments;
 
 import com.codepath.apps.mysimpletweets.TweetsArrayAdapter;
+import com.codepath.apps.mysimpletweets.models.Tweet;
 
 public class MentionsTimelineFragment extends TweetsListFragment {
 
@@ -10,7 +11,11 @@ public class MentionsTimelineFragment extends TweetsListFragment {
         return fragment;
     }
 
-    protected void populateTimeLine(final boolean nextPage, final long maxId) {
-        twitterClient.getMentionsTimeline(getResponseHandler(nextPage), maxId);
+    protected void populateTimeLineWithREST(final boolean nextPage, final long maxId, long minId) {
+        twitterClient.getMentionsTimeline(getResponseHandler(nextPage), maxId, minId);
+    }
+
+    protected Tweet.Type getTweetType() {
+        return Tweet.Type.MENTIONS;
     }
 }

@@ -5,7 +5,6 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
@@ -13,7 +12,6 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
-import android.widget.Toast;
 
 import com.astuetz.PagerSlidingTabStrip;
 import com.codepath.apps.mysimpletweets.fragments.ComposeTweetFragment;
@@ -24,12 +22,8 @@ import com.codepath.apps.mysimpletweets.models.User;
 import com.codepath.apps.mysimpletweets.util.SmartFragmentStatePagerAdapter;
 import com.loopj.android.http.JsonHttpResponseHandler;
 
-import org.json.JSONArray;
 import org.json.JSONObject;
-import org.parceler.Parcel;
 import org.parceler.Parcels;
-
-import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -60,6 +54,8 @@ public class TimelineActivity extends AppCompatActivity implements
     public void onClickProfileImage(User profileUser) {
         Intent intent = new Intent(context, ProfileActivity.class);
         intent.putExtra(ProfileActivity.ARG_USER, Parcels.wrap(profileUser));
+        //We don't cache tweet's for profile page of other users.
+        intent.putExtra(ProfileActivity.ARG_DISABLE_CACHE, true);
         context.startActivity(intent);
     }
 
@@ -111,7 +107,7 @@ public class TimelineActivity extends AppCompatActivity implements
             @Override
             public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
                 super.onSuccess(statusCode, headers, response);
-                Tweet newTweet = Tweet.fromJSON(response);
+                Tweet newTweet = Tweet.fromJSON(response, Tweet.Type.HOME);
                 HomeTimelineFragment fragment = (HomeTimelineFragment) adapter.getRegisteredFragment(0);
                 fragment.add(newTweet);
             }

@@ -1,6 +1,7 @@
 package com.codepath.apps.mysimpletweets.fragments;
 
 import com.codepath.apps.mysimpletweets.TweetsArrayAdapter;
+import com.codepath.apps.mysimpletweets.models.Tweet;
 
 public class HomeTimelineFragment extends TweetsListFragment {
 
@@ -10,7 +11,11 @@ public class HomeTimelineFragment extends TweetsListFragment {
         return fragment;
     }
 
-    protected void populateTimeLine(final boolean nextPage, long maxId) {
-        twitterClient.getHomeTimeLine(getResponseHandler(nextPage), maxId);
+    protected void populateTimeLineWithREST(final boolean nextPage, long maxId, long minId) {
+        twitterClient.getHomeTimeLine(getResponseHandler(nextPage), maxId, minId);
+    }
+
+    protected Tweet.Type getTweetType() {
+        return Tweet.Type.HOME;
     }
 }

@@ -1,5 +1,6 @@
 package com.codepath.apps.mysimpletweets.fragments;
 
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -20,9 +21,9 @@ import com.loopj.android.http.JsonHttpResponseHandler;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
-import org.parceler.Parcels;
 
 import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.List;
 
 import butterknife.BindView;
@@ -42,10 +43,70 @@ public abstract class TweetsListFragment extends Fragment {
 
     protected TwitterClient twitterClient;
 
+    private boolean cacheTweets = true;
+
     //If we don't want the profile image to be clickable, set this to null.  Use case is profile page.
     public TweetsArrayAdapter.OnProfileImageClickListener listener;
 
-    protected abstract void populateTimeLine(final boolean nextPage, final long maxId);
+    private class DBReadAsyncTask extends AsyncTask<String, Void, List<Tweet>> {
+        protected void onPreExecute() {
+        }
+
+        protected List<Tweet> doInBackground(String... strings) {
+            return Tweet.recentItems(getTweetType());
+        }
+
+        protected void onProgressUpdate() {
+        }
+
+        protected void onPostExecute(List<Tweet> tweets) {
+            //Add old tweets cached in DB.
+            adapter.addAll(tweets);
+
+            //Get new tweets from twitter.
+            populateTimeLineWithREST(false, Long.MAX_VALUE,
+                    tweets.isEmpty() ? 1 : tweets.get(0).getUid());
+        }
+    }
+
+    private class DBWriteAsyncTask extends AsyncTask<List<Tweet>, Void, Void> {
+        protected void onPreExecute() {
+        }
+
+        protected Void doInBackground(List<Tweet>... tweets) {
+            for (List<Tweet> tweetList: tweets) {
+                for (Tweet tweet: tweetList) {
+                    tweet.getUser().save();
+                    tweet.save();
+                }
+            }
+            return null;
+        }
+
+        protected void onProgressUpdate() {
+        }
+
+        protected void onPostExecute() {
+        }
+    }
+
+    protected void populateTimeLine(final boolean nextPage, final long maxId, long minId) {
+
+        if (cacheTweets) {
+            //Read from DB asynchronously.
+            new DBReadAsyncTask().execute();
+        } else {
+            populateTimeLineWithREST(false, Long.MAX_VALUE, 1);
+        }
+    }
+
+    public void disableCache() {
+        this.cacheTweets = false;
+    }
+
+    protected abstract void populateTimeLineWithREST(final boolean nextPage, final long maxId, long minId);
+
+    protected abstract Tweet.Type getTweetType();
 
     protected JsonHttpResponseHandler getResponseHandler(final boolean nextPage) {
         return new JsonHttpResponseHandler() {
@@ -54,11 +115,27 @@ public abstract class TweetsListFragment extends Fragment {
                 super.onSuccess(statusCode, headers, response);
                 swipeContainer.setRefreshing(false);
 
-                if (! nextPage) {
-                    adapter.clear();
+                if (nextPage) {
+                    adapter.addAll(Tweet.fromJSONArray(response, getTweetType()));
+                } else {
+                    //Add to top of list and save to DB
+                    List<Tweet> newTweets = Tweet.fromJSONArray(response, getTweetType());
+                    for(int i = newTweets.size()-1; i >= 0; i--) {
+                        Tweet newTweet = newTweets.get(i);
+
+                        //Add new tweet at beginning of list.
+                        adapter.add(0, newTweet);
+                    }
+
+                    if (cacheTweets) {
+                        new DBWriteAsyncTask().execute(newTweets);
+                    }
+
+                    //Delete old tweets if table is too big.
+                    if (adapter.getCount() > Tweet.TABLE_MAX_SIZE) {
+                        Tweet.deleteOldTweets(getTweetType(), adapter.getItem(Tweet.TABLE_MAX_SIZE-1).getUid());
+                    }
                 }
-                adapter.addAll(Tweet.fromJSONArray(response));
-                adapter.notifyDataSetChanged();
             }
 
             @Override
@@ -80,7 +157,8 @@ public abstract class TweetsListFragment extends Fragment {
         swipeContainer.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
-                populateTimeLine(false, Long.MAX_VALUE);
+                long minId = list.isEmpty() ? 1 : list.get(0).getUid();
+                populateTimeLineWithREST(false, Long.MAX_VALUE, minId);
             }
         });
 
@@ -88,7 +166,7 @@ public abstract class TweetsListFragment extends Fragment {
             @Override
             public boolean onLoadMore(int page, int totalItemsCount) {
                 long sinceId = list.isEmpty() ? Long.MAX_VALUE : list.get(list.size()-1).getUid()-1;
-                populateTimeLine(true, sinceId);
+                populateTimeLineWithREST(true, sinceId, 1);
                 return true;
             }
 
@@ -112,11 +190,15 @@ public abstract class TweetsListFragment extends Fragment {
         list = new ArrayList<>();
         adapter = new TweetsArrayAdapter(getActivity(), list, listener);
         twitterClient = TwitterApplication.getRestClient();
-        populateTimeLine(false, Long.MAX_VALUE);
+        populateTimeLine(false, Long.MAX_VALUE, 1);
     }
 
     public void add(Tweet tweet) {
         list.add(0, tweet);
         adapter.notifyDataSetChanged();
+
+        //Save the new tweet that was just composed.
+        List<Tweet> newTweets = new LinkedList<>();
+        new DBWriteAsyncTask().execute(newTweets);
     }
 }

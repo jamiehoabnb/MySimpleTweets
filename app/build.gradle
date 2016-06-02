@@ -42,4 +42,5 @@ dependencies {
     compile 'com.astuetz:pagerslidingtabstrip:1.0.1'
     compile 'org.parceler:parceler-api:1.1.5'
     apt 'org.parceler:parceler:1.1.5'
+    compile 'com.michaelpardo:activeandroid:3.1.0-SNAPSHOT'
 }
