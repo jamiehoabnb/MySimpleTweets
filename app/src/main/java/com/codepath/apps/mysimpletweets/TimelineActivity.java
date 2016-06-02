@@ -19,6 +19,7 @@ import com.codepath.apps.mysimpletweets.fragments.HomeTimelineFragment;
 import com.codepath.apps.mysimpletweets.fragments.MentionsTimelineFragment;
 import com.codepath.apps.mysimpletweets.models.Tweet;
 import com.codepath.apps.mysimpletweets.models.User;
+import com.codepath.apps.mysimpletweets.util.ListProgressBar;
 import com.codepath.apps.mysimpletweets.util.SmartFragmentStatePagerAdapter;
 import com.loopj.android.http.JsonHttpResponseHandler;
 
@@ -84,6 +85,13 @@ public class TimelineActivity extends AppCompatActivity implements
         MenuInflater inflater = getMenuInflater();
         inflater.inflate(R.menu.menu_timeline, menu);
         return true;
+    }
+
+    @Override
+    public boolean onPrepareOptionsMenu(Menu menu) {
+        MenuItem actionProgressItem = menu.findItem(R.id.miActionProgress);
+        ListProgressBar.setInstance(actionProgressItem);
+        return super.onPrepareOptionsMenu(menu);
     }
 
     public void onProfileView(MenuItem mi) {

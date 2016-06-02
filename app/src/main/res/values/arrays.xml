@@ -1,0 +1,7 @@
+<resources>
+    <string-array name="progress_colors">
+        <item>@color/malibu_blue</item>
+        <item>@color/colorPrimaryLight</item>
+        <item>@color/colorPrimaryDark</item>
+    </string-array>
+</resources>

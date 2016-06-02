@@ -17,6 +17,7 @@ import com.codepath.apps.mysimpletweets.TwitterApplication;
 import com.codepath.apps.mysimpletweets.TwitterClient;
 import com.codepath.apps.mysimpletweets.models.Tweet;
 import com.codepath.apps.mysimpletweets.util.EndlessScrollListener;
+import com.codepath.apps.mysimpletweets.util.ListProgressBar;
 import com.loopj.android.http.JsonHttpResponseHandler;
 
 import org.json.JSONArray;
@@ -50,6 +51,7 @@ public abstract class TweetsListFragment extends Fragment {
 
     private class DBReadAsyncTask extends AsyncTask<String, Void, List<Tweet>> {
         protected void onPreExecute() {
+            ListProgressBar.showProgressBar();
         }
 
         protected List<Tweet> doInBackground(String... strings) {
@@ -60,6 +62,7 @@ public abstract class TweetsListFragment extends Fragment {
         }
 
         protected void onPostExecute(List<Tweet> tweets) {
+            ListProgressBar.hideProgressBar();
             //Add old tweets cached from DB.
             adapter.addAll(tweets);
 
@@ -71,6 +74,7 @@ public abstract class TweetsListFragment extends Fragment {
 
     private class DBWriteAsyncTask extends AsyncTask<List<Tweet>, Void, Void> {
         protected void onPreExecute() {
+            ListProgressBar.showProgressBar();
         }
 
         protected Void doInBackground(List<Tweet>... tweets) {
@@ -87,6 +91,7 @@ public abstract class TweetsListFragment extends Fragment {
         }
 
         protected void onPostExecute() {
+            ListProgressBar.hideProgressBar();
         }
     }
 
@@ -110,10 +115,12 @@ public abstract class TweetsListFragment extends Fragment {
     protected abstract Tweet.Type getTweetType();
 
     protected JsonHttpResponseHandler getResponseHandler(final boolean nextPage) {
+        ListProgressBar.showProgressBar();
         return new JsonHttpResponseHandler() {
             @Override
             public void onSuccess(int statusCode, Header[] headers, JSONArray response) {
                 super.onSuccess(statusCode, headers, response);
+                ListProgressBar.hideProgressBar();
                 swipeContainer.setRefreshing(false);
 
                 if (nextPage) {
@@ -128,7 +135,7 @@ public abstract class TweetsListFragment extends Fragment {
                         adapter.add(0, newTweet);
                     }
 
-                    if (cacheTweets) {
+                    if (cacheTweets && ! newTweets.isEmpty()) {
                         new DBWriteAsyncTask().execute(newTweets);
                     }
 
@@ -143,6 +150,7 @@ public abstract class TweetsListFragment extends Fragment {
             public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONObject errorResponse) {
                 super.onFailure(statusCode, headers, throwable, errorResponse);
                 swipeContainer.setRefreshing(false);
+                ListProgressBar.hideProgressBar();
                 Log.e("ERROR", errorResponse.toString(), throwable);
             }
         };
