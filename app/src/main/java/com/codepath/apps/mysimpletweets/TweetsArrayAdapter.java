@@ -10,6 +10,7 @@ import android.widget.TextView;
 
 import com.codepath.apps.mysimpletweets.models.Tweet;
 import com.codepath.apps.mysimpletweets.models.User;
+import com.codepath.apps.mysimpletweets.util.DeviceDimensionsHelper;
 import com.squareup.picasso.Picasso;
 
 import org.parceler.Parcel;
@@ -47,6 +48,9 @@ public class TweetsArrayAdapter extends ArrayAdapter<Tweet> {
         @BindView(R.id.ivProfileImage)
         ImageView ivProfileImage;
 
+        @BindView(R.id.ivTweetImage)
+        ImageView ivTweetImage;
+
         public ViewHolder(View view) {
             ButterKnife.bind(this, view);
         }
@@ -80,12 +84,25 @@ public class TweetsArrayAdapter extends ArrayAdapter<Tweet> {
 
         //Clear our recycled image.
         viewHolder.ivProfileImage.setImageResource(android.R.color.transparent);
+        viewHolder.ivTweetImage.setImageResource(android.R.color.transparent);
 
         Picasso.with(getContext())
                 .load(tweet.getUser().getProfileImageUrl())
                 .transform(
                         new RoundedCornersTransformation(ROUNDED_CORNER_CONST, ROUNDED_CORNER_CONST))
                 .into(viewHolder.ivProfileImage);
+
+        if ("photo".equals(tweet.getMediaType())) {
+            int width = DeviceDimensionsHelper.getDisplayWidth(getContext());
+            Picasso.with(getContext())
+                    .load(tweet.getMediaUrl())
+                    .resize(width, 0)
+                    .transform(
+                            new RoundedCornersTransformation(ROUNDED_CORNER_CONST, ROUNDED_CORNER_CONST))
+                    .into(viewHolder.ivTweetImage);
+        } else {
+            int i = 0;
+        }
 
         if (profileImageClickListener != null) {
             viewHolder.ivProfileImage.setOnClickListener(new View.OnClickListener() {

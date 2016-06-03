@@ -13,6 +13,7 @@
         android:layout_alignParentLeft="true"
         android:layout_alignParentTop="true"
         android:layout_margin="10dp"
+        android:adjustViewBounds="true"
         android:src="@android:drawable/screen_background_light_transparent" />
 
     <TextView
@@ -41,6 +42,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_toRightOf="@+id/ivProfileImage"
+        android:adjustViewBounds="true"
         android:layout_alignBottom="@+id/tvLocation"/>
 
     <TextView

@@ -32,6 +32,12 @@ public class Tweet extends Model {
     @Column(name = "created_at")
     private String createAt;
 
+    @Column(name = "media_url")
+    private String mediaUrl;
+
+    @Column(name="media_type")
+    private String mediaType;
+
     //The types of tweets that we are caching.
     public enum Type {
         HOME, MENTIONS, PROFILE;
@@ -62,6 +68,16 @@ public class Tweet extends Model {
             tweet.user = User.fromJSON(json.getJSONObject("user"));
             tweet.type = type;
             tweet.createAt = json.getString("created_at");
+
+            JSONObject entities = json.getJSONObject("entities");
+            if (entities != null) {
+                JSONArray mediaList = entities.getJSONArray("media");
+                if (mediaList != null && mediaList.length() > 0) {
+                    JSONObject media = mediaList.getJSONObject(0);
+                    tweet.mediaUrl = media.getString("media_url");
+                    tweet.mediaType = media.getString("type");
+                }
+            }
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -121,6 +137,14 @@ public class Tweet extends Model {
 
     public Type getType() {
         return type;
+    }
+
+    public String getMediaUrl() {
+        return mediaUrl;
+    }
+
+    public String getMediaType() {
+        return mediaType;
     }
 
     public static List<Tweet> recentItems(Type type) {

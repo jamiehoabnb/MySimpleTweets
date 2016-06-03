@@ -12,8 +12,6 @@ import com.codepath.apps.mysimpletweets.fragments.HomeTimelineFragment;
 import com.codepath.apps.mysimpletweets.fragments.MentionsTimelineFragment;
 import com.codepath.apps.mysimpletweets.util.ListProgressBar;
 
-import org.parceler.Parcels;
-
 public class HomeActivity extends BaseTimeLineActivity {
 
     private static final int ACTIVITY_SEARCH_REQUEST_CODE = 1000;
