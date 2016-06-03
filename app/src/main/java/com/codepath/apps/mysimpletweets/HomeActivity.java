@@ -1,6 +1,7 @@
 package com.codepath.apps.mysimpletweets;
 
 import android.content.Intent;
+import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.MenuItemCompat;
 import android.support.v7.widget.SearchView;
@@ -17,6 +18,17 @@ public class HomeActivity extends BaseTimeLineActivity {
     private static final int ACTIVITY_SEARCH_REQUEST_CODE = 1000;
 
     @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        getSupportActionBar().setDisplayShowTitleEnabled(false);
+    }
+
+    @Override
+    public int getLayoutId() {
+        return R.layout.activity_timeline;
+    }
+
+    @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater inflater = getMenuInflater();
         inflater.inflate(R.menu.menu_timeline, menu);
@@ -25,6 +37,7 @@ public class HomeActivity extends BaseTimeLineActivity {
 
         //Set up the search manager.
         searchView = (SearchView) MenuItemCompat.getActionView(searchItem);
+        searchView.setQueryHint(getString(R.string.search_twitter));
 
         //Set up the query text listener.
         final HomeActivity homeActivity = this;

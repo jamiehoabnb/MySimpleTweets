@@ -55,6 +55,7 @@ public class TwitterClient extends OAuthBaseClient {
                 POPULARITY_SEARCH_PAGE_SIZE : PAGE_SIZE);
 		params.put("q", query);
 		params.put("result_type", resultType.name());
+		params.put("include_entities", "true");
 
 		if (maxId < Long.MAX_VALUE) {
 			params.put("max_id", maxId);
@@ -68,6 +69,7 @@ public class TwitterClient extends OAuthBaseClient {
 		String apiUrl = getApiUrl("statuses/home_timeline.json");
 		RequestParams params = new RequestParams();
 		params.put("count", PAGE_SIZE);
+		params.put("include_entities", "true");
 
         if (maxId < Long.MAX_VALUE) {
             params.put("max_id", maxId);
@@ -81,6 +83,7 @@ public class TwitterClient extends OAuthBaseClient {
 		String apiUrl = getApiUrl("statuses/mentions_timeline.json");
 		RequestParams params = new RequestParams();
 		params.put("count", PAGE_SIZE);
+		params.put("include_entities", "true");
 
         if (maxId < Long.MAX_VALUE) {
             params.put("max_id", maxId);
@@ -95,6 +98,9 @@ public class TwitterClient extends OAuthBaseClient {
 		RequestParams params = new RequestParams();
 		params.put("count", PAGE_SIZE);
 		params.put("screen_name", screenName);
+		params.put("include_entities", "true");
+		params.put("include_rts", true);
+		params.put("exclude_replies", false);
 
 		if (maxId < Long.MAX_VALUE) {
 			params.put("max_id", maxId);

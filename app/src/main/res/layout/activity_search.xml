@@ -16,13 +16,6 @@
             android:minHeight="?attr/actionBarSize"
             app:layout_scrollFlags="scroll|enterAlways"
             app:titleTextAppearance="@style/Toolbar.TitleText">
-
-            <ImageView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="left"
-                android:src="@drawable/logo"
-                android:adjustViewBounds="true"/>
         </android.support.v7.widget.Toolbar>
 
         <com.astuetz.PagerSlidingTabStrip

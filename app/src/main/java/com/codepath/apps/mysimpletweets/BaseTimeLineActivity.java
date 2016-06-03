@@ -63,10 +63,12 @@ public abstract class BaseTimeLineActivity extends AppCompatActivity implements
         context.startActivity(intent);
     }
 
+    public abstract int getLayoutId();
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_timeline);
+        setContentView(getLayoutId());
         ButterKnife.bind(this);
         setSupportActionBar(toolbar);
 

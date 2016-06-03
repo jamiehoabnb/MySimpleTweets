@@ -1,5 +1,7 @@
 package com.codepath.apps.mysimpletweets.models;
 
+import android.provider.MediaStore;
+
 import com.activeandroid.Model;
 import com.activeandroid.annotation.Column;
 import com.activeandroid.annotation.Table;
@@ -36,7 +38,7 @@ public class Tweet extends Model {
     private String mediaUrl;
 
     @Column(name="media_type")
-    private String mediaType;
+    private MediaType mediaType;
 
     //The types of tweets that we are caching.
     public enum Type {
@@ -60,6 +62,10 @@ public class Tweet extends Model {
 
     public static final int TABLE_MAX_SIZE = 500;
 
+    public enum MediaType {
+        photo, video;
+    }
+
     public static Tweet fromJSON(JSONObject json, Type type) {
         Tweet tweet = new Tweet();
         try {
@@ -74,8 +80,23 @@ public class Tweet extends Model {
                 JSONArray mediaList = entities.getJSONArray("media");
                 if (mediaList != null && mediaList.length() > 0) {
                     JSONObject media = mediaList.getJSONObject(0);
-                    tweet.mediaUrl = media.getString("media_url");
-                    tweet.mediaType = media.getString("type");
+                    tweet.mediaType = MediaType.valueOf(media.getString("type"));
+
+                    if (MediaType.video.name().equals(tweet.mediaType)) {
+                        JSONObject videoInfo = media.getJSONObject("video_info");
+
+                        if (videoInfo != null) {
+                            JSONArray variants = videoInfo.getJSONArray("variants");
+                            if (variants != null && variants.length() > 0) {
+                                JSONObject variant = variants.getJSONObject(0);
+                                if (variant != null) {
+                                    tweet.mediaUrl = variant.getString("url");
+                                }
+                            }
+                        }
+                    } else {
+                        tweet.mediaUrl = media.getString("media_url");
+                    }
                 }
             }
         } catch (Exception e) {
@@ -143,7 +164,7 @@ public class Tweet extends Model {
         return mediaUrl;
     }
 
-    public String getMediaType() {
+    public MediaType getMediaType() {
         return mediaType;
     }
 

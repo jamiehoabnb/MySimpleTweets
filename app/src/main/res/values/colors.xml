@@ -1,9 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="colorPrimary">#0084B4</color>
+    <color name="colorPrimary">#55acee</color>
     <color name="colorPrimaryDark">#0084B4</color>
-    <color name="tabsScrollColor">#FF4081</color>
-    <color name="colorAccent">#FF4081</color>
+    <color name="colorAccent">#2D99C1</color>
 
     <color name="colorPrimaryLight">#3AADF4</color>
     <color name="malibu_blue">#77C7F7</color>

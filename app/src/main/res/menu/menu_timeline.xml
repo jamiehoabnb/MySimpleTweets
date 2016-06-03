@@ -5,19 +5,19 @@
     <item android:id="@+id/action_search"
         android:title="@string/search"
         android:icon="@drawable/magnify"
-        app:showAsAction="ifRoom|collapseActionView"
+        app:showAsAction="always"
         app:actionViewClass="android.support.v7.widget.SearchView" />
 
     <item
         android:id="@+id/miCompose"
-        app:showAsAction="ifRoom"
+        app:showAsAction="always"
         android:icon="@drawable/pen"
         android:title="@string/tweet"
         android:onClick="onComposeView"
         />
     <item
         android:id="@+id/miProfile"
-        app:showAsAction="ifRoom"
+        app:showAsAction="always"
         android:icon="@drawable/ic_profile"
         android:title="@string/profile"
         android:onClick="onProfileView"

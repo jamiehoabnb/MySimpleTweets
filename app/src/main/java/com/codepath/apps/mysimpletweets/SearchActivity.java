@@ -27,17 +27,28 @@ public class SearchActivity extends BaseTimeLineActivity {
     }
 
     @Override
+    public int getLayoutId() {
+        return R.layout.activity_search;
+    }
+
+    @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater inflater = getMenuInflater();
-        inflater.inflate(R.menu.menu_timeline, menu);
+        inflater.inflate(R.menu.menu_search, menu);
 
         MenuItem searchItem = menu.findItem(R.id.action_search);
 
         //Set up the search manager.
         searchView = (SearchView) MenuItemCompat.getActionView(searchItem);
 
-        //Set up the query text listener.
+        //Put query in search box and set up the query text listener.
         final BaseTimeLineActivity searchActivity = this;
+        searchView.setQueryHint(getString(R.string.search_twitter));
+        searchView.setQuery(this.query, false);
+        searchView.setFocusable(true);
+        searchView.setIconified(false);
+        searchView.requestFocusFromTouch();
+
         searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
 
             @Override
