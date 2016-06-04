@@ -24,7 +24,7 @@ public class TopSearchedTweetsFragment extends TweetsListFragment {
 
     @Override
     protected void populateTimeLineWithREST(final boolean nextPage, long maxId, long minId) {
-        twitterClient.getSearchResults(getResponseHandler(nextPage), query,
+        twitterClient.getSearchResults(getResponseHandler(nextPage, maxId, minId), query,
                 TwitterClient.SearchResultType.popular, maxId, minId);
     }
 

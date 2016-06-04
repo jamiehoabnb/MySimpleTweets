@@ -3,6 +3,7 @@ package com.codepath.apps.mysimpletweets.fragments;
 import android.app.Activity;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -15,6 +16,7 @@ import com.codepath.apps.mysimpletweets.TwitterApplication;
 import com.codepath.apps.mysimpletweets.network.TwitterClient;
 import com.codepath.apps.mysimpletweets.models.User;
 import com.codepath.apps.mysimpletweets.util.DeviceDimensionsHelper;
+import com.codepath.apps.mysimpletweets.util.InternetCheckUtil;
 import com.codepath.apps.mysimpletweets.util.MySimpleTweetsConstants;
 import com.loopj.android.http.JsonHttpResponseHandler;
 import com.squareup.picasso.Picasso;
@@ -113,7 +115,7 @@ public class ProfileHeaderFragment extends Fragment {
                 .into(ivProfileImage);
     }
 
-    private void loadBackgroundBanner(String screenName) {
+    private void loadBackgroundBanner(final String screenName) {
         final Activity activity = getActivity();
         progressBar.setVisibility(View.VISIBLE);
         client.getUserProfileBanner(screenName, new JsonHttpResponseHandler() {
@@ -135,6 +137,7 @@ public class ProfileHeaderFragment extends Fragment {
 
                         } catch (JSONException e) {
                             e.printStackTrace();
+                            Snackbar.make(ivBanner, R.string.internal_error, Snackbar.LENGTH_LONG).show();
                         }
                     }
                 }
@@ -144,6 +147,17 @@ public class ProfileHeaderFragment extends Fragment {
             public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONObject response) {
                 super.onFailure(statusCode, headers, throwable, response);
                 progressBar.setVisibility(View.INVISIBLE);
+                int errorMsgId = InternetCheckUtil.isOnline() ?
+                        R.string.twitter_api_error : R.string.internet_connection_error;
+
+                Snackbar.make(ivBanner, errorMsgId, Snackbar.LENGTH_LONG)
+                        .setAction(getContext().getString(R.string.retry), new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                loadBackgroundBanner(screenName);
+                            }
+                        })
+                        .show();
             }
         });
     }

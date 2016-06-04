@@ -26,7 +26,7 @@ public class UserTimelineFragment extends TweetsListFragment {
     @Override
     protected void populateTimeLineWithREST(final boolean nextPage, long maxId, long minId) {
         String screenName = getArguments().getString(PARAM_SCREEN_NAME);
-        twitterClient.getUserTimeline(screenName, getResponseHandler(nextPage), maxId, minId);
+        twitterClient.getUserTimeline(screenName, getResponseHandler(nextPage, maxId, minId), maxId, minId);
     }
 
     @Override

@@ -17,5 +17,9 @@
     <string name="default_tweet_length">0</string>
     <string name="search">Search</string>
     <string name="search_twitter">Search Twitter</string>
+    <string name="internet_connection_error">Internet Connection Error</string>
+    <string name="retry">Retry</string>
+    <string name="twitter_api_error">Twitter API Error</string>
+    <string name="internal_error">Internal Error</string>
 
 </resources>

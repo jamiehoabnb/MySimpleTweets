@@ -3,6 +3,7 @@ package com.codepath.apps.mysimpletweets.fragments;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.util.Log;
@@ -17,6 +18,7 @@ import com.codepath.apps.mysimpletweets.TwitterApplication;
 import com.codepath.apps.mysimpletweets.network.TwitterClient;
 import com.codepath.apps.mysimpletweets.models.Tweet;
 import com.codepath.apps.mysimpletweets.util.EndlessScrollListener;
+import com.codepath.apps.mysimpletweets.util.InternetCheckUtil;
 import com.loopj.android.http.JsonHttpResponseHandler;
 
 import org.json.JSONArray;
@@ -121,8 +123,10 @@ public abstract class TweetsListFragment extends Fragment {
 
     protected abstract Tweet.Type getTweetType();
 
-    protected JsonHttpResponseHandler getResponseHandler(final boolean nextPage) {
+    protected JsonHttpResponseHandler getResponseHandler(final boolean nextPage, final long maxId, final long minId) {
         progressBar.setVisibility(View.VISIBLE);
+        final TweetsListFragment fragment = this;
+
         return new JsonHttpResponseHandler() {
             @Override
             public void onSuccess(int statusCode, Header[] headers, JSONArray response) {
@@ -163,6 +167,7 @@ public abstract class TweetsListFragment extends Fragment {
                     onSuccess(statusCode, headers, arrayResponse);
                 } catch (JSONException e) {
                     e.printStackTrace();
+                    Snackbar.make(lvTweets, R.string.internal_error, Snackbar.LENGTH_LONG).show();
                 }
             }
 
@@ -172,6 +177,19 @@ public abstract class TweetsListFragment extends Fragment {
                 swipeContainer.setRefreshing(false);
                 progressBar.setVisibility(View.INVISIBLE);
                 Log.e("ERROR", errorResponse.toString(), throwable);
+
+                int errorMsgId = InternetCheckUtil.isOnline() ?
+                        R.string.twitter_api_error : R.string.internet_connection_error;
+
+                Snackbar.make(lvTweets, errorMsgId, Snackbar.LENGTH_LONG)
+                        .setAction(getContext().getString(R.string.retry), new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                fragment.populateTimeLineWithREST(nextPage, maxId, minId);
+                            }
+                        })
+                        .show();
+
             }
         };
     }

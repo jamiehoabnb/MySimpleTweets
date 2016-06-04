@@ -17,7 +17,7 @@ public class HomeTimelineFragment extends TweetsListFragment {
 
     @Override
     protected void populateTimeLineWithREST(final boolean nextPage, long maxId, long minId) {
-        twitterClient.getHomeTimeLine(getResponseHandler(nextPage), maxId, minId);
+        twitterClient.getHomeTimeLine(getResponseHandler(nextPage, maxId, minId), maxId, minId);
     }
 
     @Override

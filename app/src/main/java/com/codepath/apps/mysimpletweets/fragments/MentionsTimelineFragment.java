@@ -17,7 +17,7 @@ public class MentionsTimelineFragment extends TweetsListFragment {
 
     @Override
     protected void populateTimeLineWithREST(final boolean nextPage, final long maxId, long minId) {
-        twitterClient.getMentionsTimeline(getResponseHandler(nextPage), maxId, minId);
+        twitterClient.getMentionsTimeline(getResponseHandler(nextPage, maxId, minId), maxId, minId);
     }
 
     @Override
