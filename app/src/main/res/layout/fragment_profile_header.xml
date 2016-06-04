@@ -61,13 +61,13 @@
         android:layout_toEndOf="@+id/ivProfileImage"
         android:layout_toRightOf="@+id/ivProfileImage">
         <TextView
-            android:id="@+id/tvFollowers"
+            android:id="@+id/tvFollowing"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             style="@style/ProfileCountText"/>
 
         <TextView
-            android:id="@+id/tvFollowersLabel"
+            android:id="@+id/tvFollowingLabel"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/following"
@@ -75,14 +75,14 @@
             style="@style/ProfileCountLabelText"/>
 
         <TextView
-            android:id="@+id/tvFollowing"
+            android:id="@+id/tvFollowers"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginLeft="@dimen/count_spacing"
             style="@style/ProfileCountText"/>
 
         <TextView
-            android:id="@+id/tvFollowingLabel"
+            android:id="@+id/tvFollowersLabel"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginLeft="@dimen/count_spacing"
