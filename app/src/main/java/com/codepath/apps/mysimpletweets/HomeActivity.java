@@ -1,7 +1,6 @@
 package com.codepath.apps.mysimpletweets;
 
 import android.content.Intent;
-import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.MenuItemCompat;
@@ -9,13 +8,9 @@ import android.support.v7.widget.SearchView;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
-import android.view.View;
-import android.view.ViewGroup;
-import android.widget.TextView;
 
 import com.codepath.apps.mysimpletweets.fragments.HomeTimelineFragment;
 import com.codepath.apps.mysimpletweets.fragments.MentionsTimelineFragment;
-import com.codepath.apps.mysimpletweets.util.ListProgressBar;
 
 public class HomeActivity extends BaseTimeLineActivity {
 
@@ -66,13 +61,6 @@ public class HomeActivity extends BaseTimeLineActivity {
         return true;
     }
 
-    @Override
-    public boolean onPrepareOptionsMenu(Menu menu) {
-        MenuItem actionProgressItem = menu.findItem(R.id.miActionProgress);
-        ListProgressBar.setInstance(actionProgressItem);
-        return super.onPrepareOptionsMenu(menu);
-    }
-
     private void executeSearch(String query) {
         Intent intent = new Intent(this, SearchActivity.class);
         intent.putExtra(SearchActivity.ARG_QUERY, query);
@@ -101,8 +89,8 @@ public class HomeActivity extends BaseTimeLineActivity {
             @Override
             public Fragment getItem(int position) {
                 return position == 0 ?
-                        HomeTimelineFragment.newInstance(listener) :
-                        MentionsTimelineFragment.newInstance(listener);
+                        HomeTimelineFragment.newInstance(listener, progressBar) :
+                        MentionsTimelineFragment.newInstance(listener, progressBar);
             }
         };
     }

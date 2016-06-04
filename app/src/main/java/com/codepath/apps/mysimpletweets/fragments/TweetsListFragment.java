@@ -17,13 +17,7 @@ import com.codepath.apps.mysimpletweets.TwitterApplication;
 import com.codepath.apps.mysimpletweets.TwitterClient;
 import com.codepath.apps.mysimpletweets.models.Tweet;
 import com.codepath.apps.mysimpletweets.util.EndlessScrollListener;
-import com.codepath.apps.mysimpletweets.util.ListProgressBar;
 import com.loopj.android.http.JsonHttpResponseHandler;
-import com.volokh.danylo.video_player_manager.manager.PlayerItemChangeListener;
-import com.volokh.danylo.video_player_manager.manager.SingleVideoPlayerManager;
-import com.volokh.danylo.video_player_manager.manager.VideoPlayerManager;
-import com.volokh.danylo.video_player_manager.meta.MetaData;
-import com.volokh.danylo.video_player_manager.utils.Logger;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -36,6 +30,7 @@ import java.util.List;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import cz.msebera.android.httpclient.Header;
+import fr.castorflex.android.smoothprogressbar.SmoothProgressBar;
 
 public abstract class TweetsListFragment extends Fragment {
 
@@ -57,9 +52,11 @@ public abstract class TweetsListFragment extends Fragment {
     //If we don't want the profile image to be clickable, set this to null.  Use case is profile page.
     public TweetsArrayAdapter.OnProfileImageClickListener listener;
 
+    private SmoothProgressBar progressBar;
+
     private class DBReadAsyncTask extends AsyncTask<String, Void, List<Tweet>> {
         protected void onPreExecute() {
-            ListProgressBar.showProgressBar();
+            progressBar.setVisibility(View.VISIBLE);
         }
 
         protected List<Tweet> doInBackground(String... strings) {
@@ -70,7 +67,7 @@ public abstract class TweetsListFragment extends Fragment {
         }
 
         protected void onPostExecute(List<Tweet> tweets) {
-            ListProgressBar.hideProgressBar();
+            progressBar.setVisibility(View.INVISIBLE);
             //Add old tweets cached from DB.
             adapter.addAll(tweets);
 
@@ -82,7 +79,7 @@ public abstract class TweetsListFragment extends Fragment {
 
     private class DBWriteAsyncTask extends AsyncTask<List<Tweet>, Void, Void> {
         protected void onPreExecute() {
-            ListProgressBar.showProgressBar();
+            progressBar.setVisibility(View.VISIBLE);
         }
 
         protected Void doInBackground(List<Tweet>... tweets) {
@@ -99,7 +96,7 @@ public abstract class TweetsListFragment extends Fragment {
         }
 
         protected void onPostExecute() {
-            ListProgressBar.hideProgressBar();
+            progressBar.setVisibility(View.INVISIBLE);
         }
     }
 
@@ -125,12 +122,12 @@ public abstract class TweetsListFragment extends Fragment {
     protected abstract Tweet.Type getTweetType();
 
     protected JsonHttpResponseHandler getResponseHandler(final boolean nextPage) {
-        ListProgressBar.showProgressBar();
+        progressBar.setVisibility(View.VISIBLE);
         return new JsonHttpResponseHandler() {
             @Override
             public void onSuccess(int statusCode, Header[] headers, JSONArray response) {
                 super.onSuccess(statusCode, headers, response);
-                ListProgressBar.hideProgressBar();
+                progressBar.setVisibility(View.INVISIBLE);
                 swipeContainer.setRefreshing(false);
 
                 if (nextPage) {
@@ -173,7 +170,7 @@ public abstract class TweetsListFragment extends Fragment {
             public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONObject errorResponse) {
                 super.onFailure(statusCode, headers, throwable, errorResponse);
                 swipeContainer.setRefreshing(false);
-                ListProgressBar.hideProgressBar();
+                progressBar.setVisibility(View.INVISIBLE);
                 Log.e("ERROR", errorResponse.toString(), throwable);
             }
         };
@@ -217,6 +214,10 @@ public abstract class TweetsListFragment extends Fragment {
 
     public void setListener(TweetsArrayAdapter.OnProfileImageClickListener listener) {
         this.listener = listener;
+    }
+
+    public void setProgressBar(SmoothProgressBar progressBar) {
+        this.progressBar = progressBar;
     }
 
     @Override

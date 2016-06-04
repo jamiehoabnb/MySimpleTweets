@@ -18,6 +18,9 @@ import com.codepath.apps.mysimpletweets.fragments.HomeTimelineFragment;
 import com.codepath.apps.mysimpletweets.fragments.MentionsTimelineFragment;
 import com.codepath.apps.mysimpletweets.fragments.TopSearchedTweetsFragment;
 
+import butterknife.BindView;
+import fr.castorflex.android.smoothprogressbar.SmoothProgressBar;
+
 public class SearchActivity extends BaseTimeLineActivity {
 
     private String query;
@@ -88,8 +91,8 @@ public class SearchActivity extends BaseTimeLineActivity {
             @Override
             public Fragment getItem(int position) {
                 return position == 0 ?
-                        TopSearchedTweetsFragment.newInstance(query, listener) :
-                        AllSearchedTweetsFragment.newInstance(query, listener);
+                        TopSearchedTweetsFragment.newInstance(query, listener, progressBar) :
+                        AllSearchedTweetsFragment.newInstance(query, listener, progressBar);
             }
         };
     }

@@ -3,11 +3,15 @@ package com.codepath.apps.mysimpletweets.fragments;
 import com.codepath.apps.mysimpletweets.TweetsArrayAdapter;
 import com.codepath.apps.mysimpletweets.models.Tweet;
 
+import fr.castorflex.android.smoothprogressbar.SmoothProgressBar;
+
 public class MentionsTimelineFragment extends TweetsListFragment {
 
-    public static MentionsTimelineFragment newInstance(TweetsArrayAdapter.OnProfileImageClickListener listener) {
+    public static MentionsTimelineFragment newInstance(TweetsArrayAdapter.OnProfileImageClickListener listener,
+                                                       SmoothProgressBar progressBar) {
         MentionsTimelineFragment fragment = new MentionsTimelineFragment();
         fragment.setListener(listener);
+        fragment.setProgressBar(progressBar);
         return fragment;
     }
 

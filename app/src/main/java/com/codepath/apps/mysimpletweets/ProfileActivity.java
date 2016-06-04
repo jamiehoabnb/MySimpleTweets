@@ -24,11 +24,15 @@ import org.parceler.Parcels;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import cz.msebera.android.httpclient.Header;
+import fr.castorflex.android.smoothprogressbar.SmoothProgressBar;
 
 public class ProfileActivity extends AppCompatActivity {
 
     @BindView(R.id.toolbar)
     Toolbar toolbar;
+
+    @BindView(R.id.progressBar)
+    SmoothProgressBar progressBar;
 
     public static final String ARG_USER = "user";
     public static final String ARG_DISABLE_CACHE = "disable_cache";
@@ -45,7 +49,8 @@ public class ProfileActivity extends AppCompatActivity {
         getSupportActionBar().setTitle("@" + user.getScreenName());
 
         if (savedInstanceState == null) {
-            UserTimelineFragment fragmentUserTimeline = UserTimelineFragment.newInstance(user.getScreenName(), null);
+            UserTimelineFragment fragmentUserTimeline = UserTimelineFragment.newInstance(
+                    user.getScreenName(), null, progressBar);
             ProfileHeaderFragment fragmentProfileHeader = new ProfileHeaderFragment();
 
             if (disableCache) {

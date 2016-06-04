@@ -4,15 +4,19 @@ import com.codepath.apps.mysimpletweets.TweetsArrayAdapter;
 import com.codepath.apps.mysimpletweets.TwitterClient;
 import com.codepath.apps.mysimpletweets.models.Tweet;
 
+import fr.castorflex.android.smoothprogressbar.SmoothProgressBar;
+
 public class TopSearchedTweetsFragment extends TweetsListFragment {
 
     private String query;
 
     public static TopSearchedTweetsFragment newInstance(String query,
-                                                        TweetsArrayAdapter.OnProfileImageClickListener listener) {
+                                                        TweetsArrayAdapter.OnProfileImageClickListener listener,
+                                                        SmoothProgressBar progressBar) {
         TopSearchedTweetsFragment fragment = new TopSearchedTweetsFragment();
         fragment.query = query;
         fragment.setListener(listener);
+        fragment.setProgressBar(progressBar);
         fragment.disableCache();
         fragment.disableEndlessScroll();
         return fragment;

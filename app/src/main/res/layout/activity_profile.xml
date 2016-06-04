@@ -44,6 +44,15 @@
         style="@style/DividerBorder"
         android:layout_below="@+id/divider"/>
 
+    <fr.castorflex.android.smoothprogressbar.SmoothProgressBar
+        android:id="@+id/progressBar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:minHeight="6dp"
+        style="@style/GradientProgressBar"
+        android:layout_below="@+id/dividerTopBorder"
+        android:indeterminate="true"/>
+
     <FrameLayout
         android:id="@+id/flUserTimeLineContainer"
         android:layout_width="match_parent"

@@ -6,14 +6,11 @@ import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
-import android.support.v4.view.MenuItemCompat;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.SearchView;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
-import android.view.Menu;
-import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
@@ -24,7 +21,6 @@ import com.codepath.apps.mysimpletweets.fragments.ComposeTweetFragment;
 import com.codepath.apps.mysimpletweets.fragments.HomeTimelineFragment;
 import com.codepath.apps.mysimpletweets.models.Tweet;
 import com.codepath.apps.mysimpletweets.models.User;
-import com.codepath.apps.mysimpletweets.util.ListProgressBar;
 import com.codepath.apps.mysimpletweets.util.SmartFragmentStatePagerAdapter;
 import com.loopj.android.http.JsonHttpResponseHandler;
 
@@ -34,6 +30,7 @@ import org.parceler.Parcels;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import cz.msebera.android.httpclient.Header;
+import fr.castorflex.android.smoothprogressbar.SmoothProgressBar;
 
 public abstract class BaseTimeLineActivity extends AppCompatActivity implements
         ComposeTweetFragment.ComposeTweetDialogListener,
@@ -47,6 +44,9 @@ public abstract class BaseTimeLineActivity extends AppCompatActivity implements
 
     @BindView(R.id.viewPager)
     ViewPager viewPager;
+
+    @BindView(R.id.progressBar)
+    SmoothProgressBar progressBar;
 
     TwitterClient client;
 

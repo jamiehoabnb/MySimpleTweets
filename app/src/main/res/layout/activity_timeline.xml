@@ -24,6 +24,14 @@
                 android:adjustViewBounds="true"/>
         </android.support.v7.widget.Toolbar>
 
+        <fr.castorflex.android.smoothprogressbar.SmoothProgressBar
+            android:id="@+id/progressBar"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:minHeight="6dp"
+            style="@style/GradientProgressBar"
+            android:indeterminate="true"/>
+
         <com.astuetz.PagerSlidingTabStrip
             android:id="@+id/tabs"
             app:pstsShouldExpand="true"

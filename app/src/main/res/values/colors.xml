@@ -12,4 +12,11 @@
     <color name="colorDivider">#F5F8FA</color>
     <color name="colorDividerBorder">#E1E8ED</color>
     <color name="tweetText">#43484C</color>
+
+    <integer-array name="pb_colors">
+        <item>@color/colorPrimary</item>
+        <item>@color/colorPrimaryDark</item>
+        <item>@color/colorAccent</item>
+        <item>@color/malibu_blue</item>
+    </integer-array>
 </resources>
