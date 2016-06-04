@@ -10,10 +10,6 @@
         <item name="android:dialogTheme">@style/AppDialogTheme</item>
     </style>
 
-    <style name="Toolbar.TitleText" parent="TextAppearance.Widget.AppCompat.Toolbar.Title">
-
-    </style>
-
     <!-- Define your custom dialog theme here extending from base -->
     <style name="AppDialogTheme" parent="Theme.AppCompat.Light.Dialog">
         <item name="android:windowNoTitle">true</item>

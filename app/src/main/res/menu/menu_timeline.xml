@@ -23,7 +23,6 @@
         android:onClick="onProfileView"
         />
 
-
     <item
         android:id="@+id/miActionProgress"
         android:title="Loading..."

@@ -54,12 +54,16 @@
         android:layout_marginRight="@dimen/default_margin"
         style="@style/TweetText"/>
 
-    <VideoView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+    <com.volokh.danylo.video_player_manager.ui.VideoPlayerView
+        android:layout_height="200dp"
+        android:layout_width="200dp"
+        android:layout_weight="1"
         android:id="@+id/vvTweetVideo"
         android:layout_below="@+id/tvBody"
         android:layout_toRightOf="@id/ivProfileImage"
         android:layout_alignParentBottom="true"
-        android:layout_alignParentRight="true"/>
+        android:layout_alignParentRight="true"
+        android:padding="1dp"
+        android:background="@color/malibu_blue"/>
+
 </RelativeLayout>

@@ -14,8 +14,7 @@
             android:layout_height="?attr/actionBarSize"
             android:background="?attr/colorPrimary"
             android:minHeight="?attr/actionBarSize"
-            app:layout_scrollFlags="scroll|enterAlways"
-            app:titleTextAppearance="@style/Toolbar.TitleText">
+            app:layout_scrollFlags="scroll|enterAlways">
         </android.support.v7.widget.Toolbar>
 
         <com.astuetz.PagerSlidingTabStrip

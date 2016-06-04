@@ -1,7 +1,5 @@
 package com.codepath.apps.mysimpletweets.models;
 
-import android.provider.MediaStore;
-
 import com.activeandroid.Model;
 import com.activeandroid.annotation.Column;
 import com.activeandroid.annotation.Table;
@@ -38,7 +36,7 @@ public class Tweet extends Model {
     private String mediaUrl;
 
     @Column(name="media_type")
-    private MediaType mediaType;
+    private String mediaType;
 
     //The types of tweets that we are caching.
     public enum Type {
@@ -75,26 +73,39 @@ public class Tweet extends Model {
             tweet.type = type;
             tweet.createAt = json.getString("created_at");
 
-            JSONObject entities = json.getJSONObject("entities");
-            if (entities != null) {
-                JSONArray mediaList = entities.getJSONArray("media");
+            JSONObject extendedEntitles = json.optJSONObject("extended_entities");
+            if (extendedEntitles != null) {
+                JSONArray mediaList = extendedEntitles.optJSONArray("media");
                 if (mediaList != null && mediaList.length() > 0) {
                     JSONObject media = mediaList.getJSONObject(0);
-                    tweet.mediaType = MediaType.valueOf(media.getString("type"));
 
-                    if (MediaType.video.name().equals(tweet.mediaType)) {
-                        JSONObject videoInfo = media.getJSONObject("video_info");
+                    if (MediaType.video.name().equals(media.getString("type"))) {
+                        tweet.mediaType = MediaType.video.name();
+                        JSONObject videoInfo = media.optJSONObject("video_info");
 
                         if (videoInfo != null) {
                             JSONArray variants = videoInfo.getJSONArray("variants");
                             if (variants != null && variants.length() > 0) {
-                                JSONObject variant = variants.getJSONObject(0);
-                                if (variant != null) {
-                                    tweet.mediaUrl = variant.getString("url");
+                                for (int i = 0; i < variants.length();i++) {
+                                    JSONObject variant = variants.getJSONObject(i);
+                                    if ("video/mp4".equals(variant.getString("content_type"))) {
+                                        tweet.mediaUrl = variant.getString("url");
+                                        break;
+                                    }
                                 }
                             }
                         }
-                    } else {
+                    }
+                }
+            }
+
+            if (tweet.mediaType == null) {
+                JSONObject entities = json.optJSONObject("entities");
+                if (entities != null) {
+                    JSONArray mediaList = entities.optJSONArray("media");
+                    if (mediaList != null && mediaList.length() > 0) {
+                        JSONObject media = mediaList.optJSONObject(0);
+                        tweet.mediaType = media.getString("type");
                         tweet.mediaUrl = media.getString("media_url");
                     }
                 }
@@ -164,7 +175,7 @@ public class Tweet extends Model {
         return mediaUrl;
     }
 
-    public MediaType getMediaType() {
+    public String getMediaType() {
         return mediaType;
     }
 

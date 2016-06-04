@@ -19,6 +19,11 @@ import com.codepath.apps.mysimpletweets.models.Tweet;
 import com.codepath.apps.mysimpletweets.util.EndlessScrollListener;
 import com.codepath.apps.mysimpletweets.util.ListProgressBar;
 import com.loopj.android.http.JsonHttpResponseHandler;
+import com.volokh.danylo.video_player_manager.manager.PlayerItemChangeListener;
+import com.volokh.danylo.video_player_manager.manager.SingleVideoPlayerManager;
+import com.volokh.danylo.video_player_manager.manager.VideoPlayerManager;
+import com.volokh.danylo.video_player_manager.meta.MetaData;
+import com.volokh.danylo.video_player_manager.utils.Logger;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -129,7 +134,9 @@ public abstract class TweetsListFragment extends Fragment {
                 swipeContainer.setRefreshing(false);
 
                 if (nextPage) {
-                    adapter.addAll(Tweet.fromJSONArray(response, getTweetType()));
+                    if (response.length() > 0) {
+                        adapter.addAll(Tweet.fromJSONArray(response, getTweetType()));
+                    }
                 } else {
                     //Add to top of list and save to DB
                     List<Tweet> newTweets = Tweet.fromJSONArray(response, getTweetType());

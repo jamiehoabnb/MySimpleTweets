@@ -49,7 +49,7 @@ public class User extends Model {
             user.followersCount = json.getInt("followers_count");
             user.friendsCount = json.getInt("friends_count");
         } catch (JSONException e) {
-
+            e.printStackTrace();
         }
 
         return user;

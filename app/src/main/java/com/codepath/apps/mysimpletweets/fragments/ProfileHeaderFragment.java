@@ -10,6 +10,8 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.codepath.apps.mysimpletweets.R;
+import com.codepath.apps.mysimpletweets.TwitterApplication;
+import com.codepath.apps.mysimpletweets.TwitterClient;
 import com.codepath.apps.mysimpletweets.models.User;
 import com.squareup.picasso.Picasso;
 
@@ -43,6 +45,8 @@ public class ProfileHeaderFragment extends Fragment {
 
     private static final int ROUNDED_CORNER_CONST = 3;
 
+    private TwitterClient client;
+
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup parent, @Nullable Bundle savedInstanceState) {
@@ -50,6 +54,7 @@ public class ProfileHeaderFragment extends Fragment {
         ButterKnife.bind(this, v);
 
         User user = (User) Parcels.unwrap(getArguments().getParcelable(ARG_USER));
+        client = TwitterApplication.getRestClient();
         populateProfileHeader(user);
 
         return v;
@@ -61,8 +66,10 @@ public class ProfileHeaderFragment extends Fragment {
         tvLocation.setText(user.getLocation());
         tvFollowers.setText(String.valueOf(user.getFollowersCount()));
         tvFollowing.setText(String.valueOf(user.getFriendsCount()));
+
         Picasso.with(getContext())
                 .load(user.getBiggerProfileImageUrl())
+                .resize(300,0)
                 .transform(
                         new RoundedCornersTransformation(ROUNDED_CORNER_CONST, ROUNDED_CORNER_CONST))
                 .into(ivProfileImage);

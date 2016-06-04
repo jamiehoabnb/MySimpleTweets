@@ -1,9 +1,6 @@
 package com.codepath.apps.mysimpletweets;
 
 import android.content.Context;
-import android.graphics.Movie;
-import android.media.MediaPlayer;
-import android.widget.MediaController;
 import android.support.annotation.Nullable;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -11,14 +8,16 @@ import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.VideoView;
 
 import com.codepath.apps.mysimpletweets.models.Tweet;
 import com.codepath.apps.mysimpletweets.models.User;
 import com.codepath.apps.mysimpletweets.util.DeviceDimensionsHelper;
+import com.codepath.apps.mysimpletweets.util.VideoPlayerUtil;
+import com.volokh.danylo.video_player_manager.manager.VideoPlayerManager;
+import com.volokh.danylo.video_player_manager.meta.CurrentItemMetaData;
+import com.volokh.danylo.video_player_manager.meta.MetaData;
+import com.volokh.danylo.video_player_manager.ui.VideoPlayerView;
 import com.squareup.picasso.Picasso;
-
-import org.parceler.Parcel;
 
 import java.util.List;
 
@@ -69,14 +68,16 @@ public class TweetsArrayAdapter extends ArrayAdapter<Tweet> {
 
         @Nullable
         @BindView(R.id.vvTweetVideo)
-        VideoView vvTweetVideo;
+        VideoPlayerView vvTweetVideo;
 
         public ViewHolder(View view) {
             ButterKnife.bind(this, view);
         }
     }
 
-    public TweetsArrayAdapter(Context context, List<Tweet> objects, OnProfileImageClickListener profileImageClickListener) {
+    public TweetsArrayAdapter(Context context,
+                              List<Tweet> objects,
+                              OnProfileImageClickListener profileImageClickListener) {
         super(context, android.R.layout.simple_list_item_1, objects);
         this.profileImageClickListener = profileImageClickListener;
         this.objects = objects;
@@ -86,8 +87,11 @@ public class TweetsArrayAdapter extends ArrayAdapter<Tweet> {
     public View getView(int position, View convertView, ViewGroup parent) {
         final Tweet tweet = getItem(position);
 
-        ViewHolder viewHolder;
-        if (convertView == null) {
+        ViewHolder viewHolder = convertView == null ? null : (ViewHolder) convertView.getTag();
+        if (viewHolder == null ||
+                viewHolder.ivTweetImage == null && Tweet.MediaType.photo.name().equals(tweet.getMediaType()) ||
+                        (viewHolder.vvTweetVideo == null && Tweet.MediaType.video.name().equals(tweet.getMediaType())) ||
+                ((viewHolder.ivTweetImage != null || viewHolder.vvTweetVideo != null) && tweet.getMediaType() == null)) {
             int type = getItemViewType(position);
 
             convertView = getInflatedLayoutForType(type, parent);
@@ -107,11 +111,12 @@ public class TweetsArrayAdapter extends ArrayAdapter<Tweet> {
 
         Picasso.with(getContext())
                 .load(tweet.getUser().getProfileImageUrl())
+                .resize(200, 0)
                 .transform(
                         new RoundedCornersTransformation(ROUNDED_CORNER_CONST, ROUNDED_CORNER_CONST))
                 .into(viewHolder.ivProfileImage);
 
-        if (viewHolder.ivTweetImage != null) {
+        if (Tweet.MediaType.photo.name().equals(tweet.getMediaType())) {
             viewHolder.ivTweetImage.setImageResource(android.R.color.transparent);
             int width = DeviceDimensionsHelper.getDisplayWidth(getContext());
             Picasso.with(getContext())
@@ -120,19 +125,10 @@ public class TweetsArrayAdapter extends ArrayAdapter<Tweet> {
                     .transform(
                             new RoundedCornersTransformation(ROUNDED_CORNER_CONST, ROUNDED_CORNER_CONST))
                     .into(viewHolder.ivTweetImage);
-        } else if (viewHolder.vvTweetVideo != null) {
-            viewHolder.vvTweetVideo.setVideoPath("http://techslides.com/demos/sample-videos/small.mp4");
-            MediaController mediaController = new MediaController(getContext());
-            mediaController.setAnchorView(viewHolder.vvTweetVideo);
-            viewHolder.vvTweetVideo.setMediaController(mediaController);
-            viewHolder.vvTweetVideo.requestFocus();
-            final VideoView videoView = viewHolder.vvTweetVideo;
-
-            viewHolder.vvTweetVideo.setOnPreparedListener(new MediaPlayer.OnPreparedListener() {
-                public void onPrepared(MediaPlayer mp) {
-                    videoView.start();
-                }
-            });
+        } else if (Tweet.MediaType.video.name().equals(tweet.getMediaType())) {
+            VideoPlayerManager<MetaData> videoPlayerManager = VideoPlayerUtil.getVideoPlayerManager();
+            videoPlayerManager.playNewVideo(new CurrentItemMetaData(position, parent),
+                    viewHolder.vvTweetVideo, tweet.getMediaUrl());
         }
 
         if (profileImageClickListener != null) {
@@ -160,9 +156,9 @@ public class TweetsArrayAdapter extends ArrayAdapter<Tweet> {
 
         Tweet tweet = getItem(position);
 
-        if (Tweet.MediaType.photo.equals(tweet.getMediaType())) {
+        if (Tweet.MediaType.photo.name().equals(tweet.getMediaType())) {
             return Type.TWEET_PHOTO.val;
-        } else if (Tweet.MediaType.video.equals(tweet.getMediaType())) {
+        } else if (Tweet.MediaType.video.name().equals(tweet.getMediaType())) {
             return Type.TWEET_VIDEO.val;
         } else {
             return Type.TWEET.val;
