@@ -5,9 +5,11 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.Window;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -15,6 +17,7 @@ import android.widget.TextView;
 import com.codepath.apps.mysimpletweets.R;
 import com.codepath.apps.mysimpletweets.models.Tweet;
 import com.codepath.apps.mysimpletweets.models.User;
+import com.codepath.apps.mysimpletweets.util.DeviceDimensionsHelper;
 import com.squareup.picasso.Picasso;
 
 import org.parceler.Parcels;
@@ -90,6 +93,17 @@ public class ComposeTweetFragment extends DialogFragment {
 
         Picasso.with(getActivity()).load(user.getProfileImageUrl()).into(ivProfileImage);
         return view;
+    }
+
+    @Override
+    public void onResume()
+    {
+        super.onResume();
+        int width = DeviceDimensionsHelper.getDisplayWidth(getActivity());
+        int height = DeviceDimensionsHelper.getDisplayHeight(getActivity());
+        Window window = getDialog().getWindow();
+        window.setLayout(width, height);
+        window.setGravity(Gravity.CENTER);
     }
 
     @OnClick(R.id.btTweet)
