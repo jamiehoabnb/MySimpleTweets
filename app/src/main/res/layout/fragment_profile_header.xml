@@ -27,10 +27,20 @@
         style="@style/ProfileNameText"/>
 
     <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/tvScreenName"
+        android:layout_below="@+id/tvFullName"
+        android:layout_toEndOf="@+id/ivProfileImage"
+        android:layout_toRightOf="@+id/ivProfileImage"
+        android:layout_marginBottom="@dimen/profiler_header_text_spacing"
+        style="@style/TweetScreenName"/>
+
+    <TextView
         android:id="@+id/tvTagLine"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/tvFullName"
+        android:layout_below="@+id/tvScreenName"
         android:layout_toEndOf="@+id/ivProfileImage"
         android:layout_toRightOf="@+id/ivProfileImage"
         android:layout_marginBottom="@dimen/profiler_header_text_spacing"

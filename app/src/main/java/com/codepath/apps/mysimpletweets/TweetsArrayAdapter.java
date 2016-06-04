@@ -28,7 +28,7 @@ import jp.wasabeef.picasso.transformations.RoundedCornersTransformation;
 public class TweetsArrayAdapter extends ArrayAdapter<Tweet> {
 
     private OnProfileImageClickListener profileImageClickListener;
-    private static final int ROUNDED_CORNER_CONST = 3;
+    private static final int ROUNDED_CORNER_CONST = 10;
 
     private List<Tweet> objects;
 

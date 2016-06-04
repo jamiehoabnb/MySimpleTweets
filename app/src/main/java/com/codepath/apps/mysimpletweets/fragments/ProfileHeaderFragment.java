@@ -29,6 +29,9 @@ public class ProfileHeaderFragment extends Fragment {
     @BindView(R.id.tvFullName)
     TextView tvFullName;
 
+    @BindView(R.id.tvScreenName)
+    TextView tvScreenName;
+
     @BindView(R.id.tvTagLine)
     TextView tvTagLine;
 
@@ -43,7 +46,7 @@ public class ProfileHeaderFragment extends Fragment {
 
     public static final String ARG_USER = "user";
 
-    private static final int ROUNDED_CORNER_CONST = 3;
+    private static final int ROUNDED_CORNER_CONST = 10;
 
     private TwitterClient client;
 
@@ -62,6 +65,7 @@ public class ProfileHeaderFragment extends Fragment {
 
     private void populateProfileHeader(User user) {
         tvFullName.setText(user.getName());
+        tvScreenName.setText("@" + user.getScreenName());
         tvTagLine.setText(user.getTagline());
         tvLocation.setText(user.getLocation());
         tvFollowers.setText(String.valueOf(user.getFollowersCount()));
