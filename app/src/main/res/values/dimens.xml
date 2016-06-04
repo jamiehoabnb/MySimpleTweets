@@ -15,5 +15,7 @@
     <dimen name="word_spacing">5dp</dimen>
     <dimen name="video_default_width_height">200dp</dimen>
     <dimen name="compose_underline_height">2dp</dimen>
+    <dimen name="view_border_radius">6dp</dimen>
+    <dimen name="count_spacing_large">20dp</dimen>
 
 </resources>

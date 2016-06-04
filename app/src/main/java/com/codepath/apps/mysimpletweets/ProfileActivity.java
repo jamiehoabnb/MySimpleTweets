@@ -37,9 +37,6 @@ import fr.castorflex.android.smoothprogressbar.SmoothProgressBar;
 
 public class ProfileActivity extends AppCompatActivity {
 
-    @BindView(R.id.toolbar)
-    Toolbar toolbar;
-
     @BindView(R.id.progressBar)
     SmoothProgressBar progressBar;
 
@@ -55,18 +52,15 @@ public class ProfileActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_profile);
         ButterKnife.bind(this);
-        setSupportActionBar(toolbar);
 
         this.user = Parcels.unwrap(getIntent().getParcelableExtra("user"));
         boolean disableCache = getIntent().getBooleanExtra(ARG_DISABLE_CACHE, false);
-        getSupportActionBar().setTitle("");
         twitterClient = TwitterApplication.getRestClient();
-        loadBackgroundBanner();
 
         if (savedInstanceState == null) {
             UserTimelineFragment fragmentUserTimeline = UserTimelineFragment.newInstance(
                     user.getScreenName(), null, progressBar);
-            ProfileHeaderFragment fragmentProfileHeader = new ProfileHeaderFragment();
+            ProfileHeaderFragment fragmentProfileHeader = ProfileHeaderFragment.newInstance(progressBar);
 
             if (disableCache) {
                 fragmentUserTimeline.disableCache();
@@ -83,54 +77,7 @@ public class ProfileActivity extends AppCompatActivity {
         }
     }
 
-    private void loadBackgroundBanner() {
-        final Activity activity = this;
-        progressBar.setVisibility(View.VISIBLE);
-        twitterClient.getUserProfileBanner(user.getScreenName(), new JsonHttpResponseHandler() {
-            @Override
-            public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
-                super.onSuccess(statusCode, headers, response);
-                progressBar.setVisibility(View.INVISIBLE);
-                JSONObject sizes = response.optJSONObject("sizes");
-                if (sizes != null) {
-                    JSONObject mobile = sizes.optJSONObject("600x200");
-                    if (mobile != null) {
-                        try {
-                            String url = mobile.getString("url");
-                            Target target = new Target() {
-                                @Override
-                                public void onBitmapLoaded(Bitmap bitmap, Picasso.LoadedFrom from) {
-                                    toolbar.setBackground(new BitmapDrawable(activity.getResources(), bitmap));
-                                }
 
-                                @Override
-                                public void onBitmapFailed(Drawable errorDrawable) {
-                                    Log.e("ERROR", "Failed to load banner image.");
-                                }
-
-                                @Override
-                                public void onPrepareLoad(Drawable placeHolderDrawable) {
-                                    int i = 0;
-                                }
-                            };
-                            toolbar.setTag(target);
-
-                            Picasso.with(activity).load(url).into(target);
-
-                        } catch (JSONException e) {
-                            e.printStackTrace();
-                        }
-                    }
-                }
-            }
-
-            @Override
-            public void onFailure(int statusCode, Header[] headers, String responseString, Throwable throwable) {
-                super.onFailure(statusCode, headers, responseString, throwable);
-                progressBar.setVisibility(View.INVISIBLE);
-            }
-        });
-    }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {

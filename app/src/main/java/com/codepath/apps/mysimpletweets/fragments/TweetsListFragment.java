@@ -43,16 +43,16 @@ public abstract class TweetsListFragment extends Fragment {
     @BindView(R.id.swipeContainer)
     SwipeRefreshLayout swipeContainer;
 
-    protected TwitterClient twitterClient;
-
     private boolean cacheTweets = true;
 
     private boolean endlessScroll = true;
 
     //If we don't want the profile image to be clickable, set this to null.  Use case is profile page.
-    public TweetsArrayAdapter.OnProfileImageClickListener listener;
+    protected TweetsArrayAdapter.OnProfileImageClickListener listener;
 
     private SmoothProgressBar progressBar;
+
+    protected TwitterClient twitterClient = TwitterApplication.getRestClient();
 
     private class DBReadAsyncTask extends AsyncTask<String, Void, List<Tweet>> {
         protected void onPreExecute() {
@@ -226,7 +226,6 @@ public abstract class TweetsListFragment extends Fragment {
 
         list = new ArrayList<>();
         adapter = new TweetsArrayAdapter(getActivity(), list, listener);
-        twitterClient = TwitterApplication.getRestClient();
         populateTimeLine(false, Long.MAX_VALUE, 1);
     }
 
