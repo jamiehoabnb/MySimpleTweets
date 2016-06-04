@@ -23,4 +23,23 @@
     <dimen name="tab_padding">14dp</dimen>
     <dimen name="underline_margin_top">2dp</dimen>
 
+    <dimen name="profile_name">14sp</dimen>
+    <dimen name="profile_tagline">14sp</dimen>
+    <dimen name="profile_location">12sp</dimen>
+    <dimen name="profile_count">12sp</dimen>
+
+    <dimen name="tweet_user_name">14sp</dimen>
+    <dimen name="tweet_screen_name">12sp</dimen>
+    <dimen name="tweet_created_at">12sp</dimen>
+    <dimen name="tweet_text">14sp</dimen>
+    <dimen name="tweet_divider_height2">3dp</dimen>
+    <dimen name="tweet_button_min_height">30dp</dimen>
+    <dimen name="tweet_button_min_width">70dp</dimen>
+
+    <dimen name="gradient_stroke_length">0dp</dimen>
+    <dimen name="gradient_stroke_width">6dp</dimen>
+
+
+    <dimen name="divider_border_height">1dp</dimen>
+
 </resources>
