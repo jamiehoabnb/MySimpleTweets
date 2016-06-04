@@ -17,5 +17,10 @@
     <dimen name="compose_underline_height">2dp</dimen>
     <dimen name="view_border_radius">6dp</dimen>
     <dimen name="count_spacing_large">20dp</dimen>
+    <dimen name="pb_min_height">6dp</dimen>
+    <dimen name="tab_height">48dp</dimen>
+    <dimen name="tab_text_size">14sp</dimen>
+    <dimen name="tab_padding">14dp</dimen>
+    <dimen name="underline_margin_top">2dp</dimen>
 
 </resources>

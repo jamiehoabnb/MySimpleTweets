@@ -1,4 +1,4 @@
-package com.codepath.apps.mysimpletweets;
+package com.codepath.apps.mysimpletweets.adapters;
 
 import android.content.Context;
 import android.support.annotation.Nullable;
@@ -9,9 +9,11 @@ import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.codepath.apps.mysimpletweets.R;
 import com.codepath.apps.mysimpletweets.models.Tweet;
 import com.codepath.apps.mysimpletweets.models.User;
 import com.codepath.apps.mysimpletweets.util.DeviceDimensionsHelper;
+import com.codepath.apps.mysimpletweets.util.MySimpleTweetsConstants;
 import com.codepath.apps.mysimpletweets.util.VideoPlayerUtil;
 import com.volokh.danylo.video_player_manager.manager.VideoPlayerManager;
 import com.volokh.danylo.video_player_manager.meta.CurrentItemMetaData;
@@ -28,7 +30,6 @@ import jp.wasabeef.picasso.transformations.RoundedCornersTransformation;
 public class TweetsArrayAdapter extends ArrayAdapter<Tweet> {
 
     private OnProfileImageClickListener profileImageClickListener;
-    private static final int ROUNDED_CORNER_CONST = 10;
 
     private List<Tweet> objects;
 
@@ -108,22 +109,24 @@ public class TweetsArrayAdapter extends ArrayAdapter<Tweet> {
 
         //Clear our recycled image.
         viewHolder.ivProfileImage.setImageResource(android.R.color.transparent);
+        int width = DeviceDimensionsHelper.getDisplayWidth(getContext());
 
         Picasso.with(getContext())
                 .load(tweet.getUser().getProfileImageUrl())
-                .resize(200, 0)
+                .resize((int) (width* MySimpleTweetsConstants.PROFILE_PHOTO_WIDTH_FACTOR), 0)
                 .transform(
-                        new RoundedCornersTransformation(ROUNDED_CORNER_CONST, ROUNDED_CORNER_CONST))
+                        new RoundedCornersTransformation(MySimpleTweetsConstants.ROUNDED_CORNER_CONST,
+                                MySimpleTweetsConstants.ROUNDED_CORNER_CONST))
                 .into(viewHolder.ivProfileImage);
 
         if (Tweet.MediaType.photo.name().equals(tweet.getMediaType())) {
             viewHolder.ivTweetImage.setImageResource(android.R.color.transparent);
-            int width = DeviceDimensionsHelper.getDisplayWidth(getContext());
             Picasso.with(getContext())
                     .load(tweet.getMediaUrl())
                     .resize(width, 0)
                     .transform(
-                            new RoundedCornersTransformation(ROUNDED_CORNER_CONST, ROUNDED_CORNER_CONST))
+                            new RoundedCornersTransformation(MySimpleTweetsConstants.ROUNDED_CORNER_CONST,
+                                    MySimpleTweetsConstants.ROUNDED_CORNER_CONST))
                     .into(viewHolder.ivTweetImage);
         } else if (Tweet.MediaType.video.name().equals(tweet.getMediaType())) {
             VideoPlayerManager<MetaData> videoPlayerManager = VideoPlayerUtil.getVideoPlayerManager();

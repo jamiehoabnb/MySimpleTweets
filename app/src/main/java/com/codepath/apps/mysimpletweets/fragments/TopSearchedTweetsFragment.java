@@ -1,6 +1,6 @@
 package com.codepath.apps.mysimpletweets.fragments;
 
-import com.codepath.apps.mysimpletweets.TweetsArrayAdapter;
+import com.codepath.apps.mysimpletweets.adapters.TweetsArrayAdapter;
 import com.codepath.apps.mysimpletweets.TwitterClient;
 import com.codepath.apps.mysimpletweets.models.Tweet;
 

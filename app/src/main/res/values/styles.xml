@@ -114,5 +114,10 @@
         <item name="spb_gradients">true</item>
     </style>
 
+    <style name="TabStyle">
+        <item name="android:textSize">@dimen/tab_text_size</item>
+        <item name="android:textColor">@color/colorPrimaryLight</item>
+        <item name="android:background">@color/white</item>
+    </style>
 
 </resources>

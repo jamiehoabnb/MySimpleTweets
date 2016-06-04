@@ -2,7 +2,7 @@ package com.codepath.apps.mysimpletweets.fragments;
 
 import android.os.Bundle;
 
-import com.codepath.apps.mysimpletweets.TweetsArrayAdapter;
+import com.codepath.apps.mysimpletweets.adapters.TweetsArrayAdapter;
 import com.codepath.apps.mysimpletweets.models.Tweet;
 
 import fr.castorflex.android.smoothprogressbar.SmoothProgressBar;

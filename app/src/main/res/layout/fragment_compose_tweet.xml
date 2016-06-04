@@ -67,7 +67,7 @@
         android:layout_height="@dimen/compose_underline_height"
         android:layout_below="@+id/etTweet"
         android:layout_centerHorizontal="true"
-        android:layout_marginTop="2dp"
+        android:layout_marginTop="@dimen/underline_margin_top"
         android:layout_marginRight="@dimen/word_spacing"
         android:layout_marginLeft="@dimen/word_spacing"
         android:background="@color/gull_grey" />

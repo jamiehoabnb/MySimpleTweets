@@ -28,7 +28,7 @@
             android:id="@+id/progressBar"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:minHeight="6dp"
+            android:minHeight="@dimen/pb_min_height"
             style="@style/GradientProgressBar"
             android:indeterminate="true"/>
 
@@ -37,13 +37,11 @@
             app:pstsShouldExpand="true"
             app:pstsTextAllCaps="true"
             android:layout_width="match_parent"
-            android:layout_height="48dp"
-            android:textSize="14sp"
-            android:textColor="@color/colorPrimaryLight"
-            android:background="@color/white"
+            android:layout_height="@dimen/tab_height"
             app:pstsDividerColor="@color/white"
             app:pstsIndicatorColor="@color/colorPrimaryLight"
-            app:pstsTabPaddingLeftRight="14dp" />
+            app:pstsTabPaddingLeftRight="@dimen/tab_padding"
+            style="@style/TabStyle" />
 
     </android.support.design.widget.AppBarLayout>
 

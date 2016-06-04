@@ -15,6 +15,7 @@ import com.codepath.apps.mysimpletweets.TwitterApplication;
 import com.codepath.apps.mysimpletweets.TwitterClient;
 import com.codepath.apps.mysimpletweets.models.User;
 import com.codepath.apps.mysimpletweets.util.DeviceDimensionsHelper;
+import com.codepath.apps.mysimpletweets.util.MySimpleTweetsConstants;
 import com.loopj.android.http.JsonHttpResponseHandler;
 import com.squareup.picasso.Picasso;
 
@@ -57,8 +58,6 @@ public class ProfileHeaderFragment extends Fragment {
     private SmoothProgressBar progressBar;
 
     public static final String ARG_USER = "user";
-
-    private static final int ROUNDED_CORNER_CONST = 10;
 
     private TwitterClient client;
 
@@ -103,12 +102,14 @@ public class ProfileHeaderFragment extends Fragment {
         tvLocation.setText(user.getLocation());
         tvFollowers.setText(abbreviateCount(user.getFollowersCount()));
         tvFollowing.setText(abbreviateCount(user.getFriendsCount()));
+        int width = DeviceDimensionsHelper.getDisplayWidth(getContext());
 
         Picasso.with(getContext())
                 .load(user.getBiggerProfileImageUrl())
-                .resize(300,0)
+                .resize((int) (width* MySimpleTweetsConstants.PROFILE_LARGE_PHOTO_WIDTH_FACTOR), 0)
                 .transform(
-                        new RoundedCornersTransformation(ROUNDED_CORNER_CONST, ROUNDED_CORNER_CONST))
+                        new RoundedCornersTransformation(MySimpleTweetsConstants.ROUNDED_CORNER_CONST,
+                                MySimpleTweetsConstants.ROUNDED_CORNER_CONST))
                 .into(ivProfileImage);
     }
 
@@ -122,10 +123,10 @@ public class ProfileHeaderFragment extends Fragment {
                 progressBar.setVisibility(View.INVISIBLE);
                 JSONObject sizes = response.optJSONObject("sizes");
                 if (sizes != null) {
-                    JSONObject mobile = sizes.optJSONObject("600x200");
-                    if (mobile != null) {
+                    JSONObject banner = sizes.optJSONObject(MySimpleTweetsConstants.BANNER_SIZE);
+                    if (banner != null) {
                         try {
-                            String url = mobile.getString("url");
+                            String url = banner.getString("url");
                             int width = DeviceDimensionsHelper.getDisplayWidth(getContext());
                             Picasso.with(activity)
                                     .load(url)

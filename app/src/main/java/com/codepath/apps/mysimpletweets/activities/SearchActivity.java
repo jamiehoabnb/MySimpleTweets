@@ -1,7 +1,6 @@
-package com.codepath.apps.mysimpletweets;
+package com.codepath.apps.mysimpletweets.activities;
 
 import android.content.Intent;
-import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.MenuItemCompat;
@@ -9,17 +8,11 @@ import android.support.v7.widget.SearchView;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
-import android.view.View;
-import android.view.ViewGroup;
-import android.widget.TextView;
 
+import com.codepath.apps.mysimpletweets.R;
+import com.codepath.apps.mysimpletweets.adapters.TweetsArrayAdapter;
 import com.codepath.apps.mysimpletweets.fragments.AllSearchedTweetsFragment;
-import com.codepath.apps.mysimpletweets.fragments.HomeTimelineFragment;
-import com.codepath.apps.mysimpletweets.fragments.MentionsTimelineFragment;
 import com.codepath.apps.mysimpletweets.fragments.TopSearchedTweetsFragment;
-
-import butterknife.BindView;
-import fr.castorflex.android.smoothprogressbar.SmoothProgressBar;
 
 public class SearchActivity extends BaseTimeLineActivity {
 
