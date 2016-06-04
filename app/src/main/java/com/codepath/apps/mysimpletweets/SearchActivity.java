@@ -1,6 +1,7 @@
 package com.codepath.apps.mysimpletweets;
 
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.MenuItemCompat;
@@ -8,6 +9,9 @@ import android.support.v7.widget.SearchView;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.TextView;
 
 import com.codepath.apps.mysimpletweets.fragments.AllSearchedTweetsFragment;
 import com.codepath.apps.mysimpletweets.fragments.HomeTimelineFragment;
@@ -24,6 +28,7 @@ public class SearchActivity extends BaseTimeLineActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         this.query = getIntent().getStringExtra(ARG_QUERY);
+        getSupportActionBar().setTitle("");
     }
 
     @Override
@@ -67,6 +72,7 @@ public class SearchActivity extends BaseTimeLineActivity {
                 return true;
             }
         });
+        changeSearchViewTextColor(searchView);
 
         return true;
     }

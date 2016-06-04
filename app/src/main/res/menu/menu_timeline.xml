@@ -6,7 +6,7 @@
         android:title="@string/search"
         android:icon="@drawable/magnify"
         app:showAsAction="always"
-        app:actionViewClass="android.support.v7.widget.SearchView" />
+        app:actionLayout="@layout/searchview_layout" />
 
     <item
         android:id="@+id/miCompose"
