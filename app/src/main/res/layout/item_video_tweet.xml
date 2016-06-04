@@ -55,8 +55,8 @@
         style="@style/TweetText"/>
 
     <com.volokh.danylo.video_player_manager.ui.VideoPlayerView
-        android:layout_height="200dp"
-        android:layout_width="200dp"
+        android:layout_height="@dimen/video_default_width_height"
+        android:layout_width="@dimen/video_default_width_height"
         android:layout_weight="1"
         android:id="@+id/vvTweetVideo"
         android:layout_below="@+id/tvBody"

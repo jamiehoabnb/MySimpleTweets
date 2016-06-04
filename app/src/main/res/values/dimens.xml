@@ -13,5 +13,6 @@
     <dimen name="profile_tweet_image_height_width">25dp</dimen>
     <dimen name="default_margin">10dp</dimen>
     <dimen name="word_spacing">5dp</dimen>
+    <dimen name="video_default_width_height">200dp</dimen>
 
 </resources>
