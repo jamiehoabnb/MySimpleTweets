@@ -10,7 +10,7 @@ import fr.castorflex.android.smoothprogressbar.SmoothProgressBar;
 
 public class UserTimelineFragment extends BaseTweetsListFragment {
 
-    //The screen name for the time line being viewed.
+    //The screen name for the user whose time line being viewed.  NOT always the same as logged in user.
     public static final String PARAM_SCREEN_NAME = "screenName";
 
     public static UserTimelineFragment newInstance(String screenName,

@@ -22,6 +22,7 @@ public class ProfileActivity extends AppCompatActivity {
     @BindView(R.id.progressBar)
     SmoothProgressBar progressBar;
     public static final String ARG_USER = "user";
+    public static final String ARG_LOGGED_IN_USER = "loggedInUser";
     public static final String ARG_DISABLE_CACHE = "disable_cache";
 
     @Override
@@ -31,12 +32,14 @@ public class ProfileActivity extends AppCompatActivity {
         ButterKnife.bind(this);
 
         User user = Parcels.unwrap(getIntent().getParcelableExtra(ARG_USER));
+        User loggedInUser = Parcels.unwrap(getIntent().getParcelableExtra(ARG_LOGGED_IN_USER));
         boolean disableCache = getIntent().getBooleanExtra(ARG_DISABLE_CACHE, false);
 
         if (savedInstanceState == null) {
             UserTimelineFragment fragmentUserTimeline = UserTimelineFragment.newInstance(
-                    user.getScreenName(), progressBar, user);
-            ProfileHeaderFragment fragmentProfileHeader = ProfileHeaderFragment.newInstance(progressBar, user);
+                    user.getScreenName(), progressBar, loggedInUser);
+            ProfileHeaderFragment fragmentProfileHeader = ProfileHeaderFragment.newInstance(
+                    progressBar, user, loggedInUser);
 
             if (disableCache) {
                 fragmentUserTimeline.disableCache();

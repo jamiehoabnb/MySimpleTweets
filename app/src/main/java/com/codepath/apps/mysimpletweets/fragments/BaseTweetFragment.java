@@ -87,6 +87,7 @@ public abstract class BaseTweetFragment
     public void onClickProfileImage(User profileUser) {
         Intent intent = new Intent(getContext(), ProfileActivity.class);
         intent.putExtra(ProfileActivity.ARG_USER, Parcels.wrap(profileUser));
+        intent.putExtra(ProfileActivity.ARG_LOGGED_IN_USER, Parcels.wrap(user));
         //We don't cache tweet's for profile page of other users.
         intent.putExtra(ProfileActivity.ARG_DISABLE_CACHE, true);
         getContext().startActivity(intent);

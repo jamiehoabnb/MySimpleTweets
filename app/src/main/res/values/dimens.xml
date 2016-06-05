@@ -6,6 +6,7 @@
     <dimen name="fab_margin">16dp</dimen>
     <dimen name="count_spacing">5dp</dimen>
     <dimen name="tweet_divider_height">1dp</dimen>
+    <dimen name="user_divider_height">3dp</dimen>
     <dimen name="profiler_header_text_spacing">5dp</dimen>
     <dimen name="login_button_layout_margin">20dp</dimen>
     <dimen name="profile_image_height_width">50dp</dimen>
@@ -42,5 +43,7 @@
 
     <dimen name="divider_border_height">1dp</dimen>
     <dimen name="tweet_action_spacing">50dp</dimen>
+
+    <dimen name="user_list_heading_text">16sp</dimen>
 
 </resources>

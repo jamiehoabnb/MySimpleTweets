@@ -120,4 +120,10 @@
         <item name="android:background">@color/white</item>
     </style>
 
+    <style name="UserListHeading">
+        <item name="android:textSize">@dimen/user_list_heading_text</item>
+        <item name="android:textColor">@color/black</item>
+        <item name="android:textStyle">bold</item>
+    </style>
+
 </resources>

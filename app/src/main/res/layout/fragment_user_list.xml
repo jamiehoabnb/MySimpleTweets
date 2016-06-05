@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:descendantFocusability="blocksDescendants">
+
+    <View
+        android:id="@+id/dividerTopBorder"
+        style="@style/DividerBorder"
+        android:layout_below="@+id/tvFollowersListHeading"/>
+
+    <View
+        android:id="@+id/divider"
+        style="@style/Divider"
+        android:layout_below="@+id/dividerTopBorder"/>
+
+    <View
+        android:id="@+id/dividerBottomBorder"
+        style="@style/DividerBorder"
+        android:layout_below="@+id/divider"/>
+
+    <fr.castorflex.android.smoothprogressbar.SmoothProgressBar
+        android:id="@+id/progressBar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:minHeight="6dp"
+        style="@style/GradientProgressBar"
+        android:layout_below="@+id/dividerTopBorder"
+        android:indeterminate="true"/>
+
+    <android.support.v4.widget.SwipeRefreshLayout
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        android:id="@+id/swipeContainer"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:layout_below="@+id/divider">
+
+        <ListView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/lvUsers"
+            android:divider="@color/colorDivider"
+            android:dividerHeight="@dimen/user_divider_height"/>
+
+    </android.support.v4.widget.SwipeRefreshLayout>
+
+</RelativeLayout>

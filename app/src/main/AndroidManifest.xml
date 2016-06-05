@@ -60,6 +60,10 @@
             android:theme="@style/AppTheme"/>
         <activity android:name=".activities.TweetDetailActivity"
             android:theme="@style/AppTheme"/>
+        <activity android:name=".activities.FriendsListActivity"
+            android:theme="@style/AppTheme"/>
+        <activity android:name=".activities.FollowersListActivity"
+            android:theme="@style/AppTheme"/>
     </application>
 
 </manifest>

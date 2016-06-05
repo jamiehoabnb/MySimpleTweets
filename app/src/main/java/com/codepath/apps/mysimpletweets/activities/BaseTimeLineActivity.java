@@ -113,6 +113,7 @@ public abstract class BaseTimeLineActivity
 
         Intent intent = new Intent(this, ProfileActivity.class);
         intent.putExtra(ProfileActivity.ARG_USER, Parcels.wrap(user));
+        intent.putExtra(ProfileActivity.ARG_LOGGED_IN_USER, Parcels.wrap(user));
         startActivity(intent);
     }
 
