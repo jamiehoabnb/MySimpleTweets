@@ -108,17 +108,6 @@ public abstract class BaseTweetFragment
             @Override
             public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
                 progressBar.setVisibility(View.INVISIBLE);
-
-                if (! tweet.isRetweeted()) {
-                    tweet.setRetweetCount(tweet.getRetweetCount() + 1);
-                    tweet.setRetweeted(true);
-                } else {
-                    tweet.setRetweetCount(tweet.getRetweetCount() - 1);
-                    tweet.setRetweeted(false);
-                }
-                List<Tweet> tweets = new LinkedList<Tweet>();
-                tweets.add(tweet);
-                DBWriteAsyncTask.newInstance(progressBar).execute(tweets);
             }
 
             @Override
@@ -140,6 +129,16 @@ public abstract class BaseTweetFragment
                         .show();
             }
         });
+        if (! tweet.isRetweeted()) {
+            tweet.setRetweetCount(tweet.getRetweetCount() + 1);
+            tweet.setRetweeted(true);
+        } else {
+            tweet.setRetweetCount(tweet.getRetweetCount() - 1);
+            tweet.setRetweeted(false);
+        }
+        List<Tweet> tweets = new LinkedList<Tweet>();
+        tweets.add(tweet);
+        DBWriteAsyncTask.newInstance(progressBar).execute(tweets);
     }
 
     @Override
@@ -150,17 +149,6 @@ public abstract class BaseTweetFragment
             @Override
             public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
                 progressBar.setVisibility(View.INVISIBLE);
-
-                if (! tweet.isFavorited()) {
-                    tweet.setFavoriteCount(tweet.getFavoriteCount() + 1);
-                    tweet.setFavorited(true);
-                } else {
-                    tweet.setFavoriteCount(tweet.getFavoriteCount() - 1);
-                    tweet.setFavorited(false);
-                }
-                List<Tweet> tweets = new LinkedList<Tweet>();
-                tweets.add(tweet);
-                DBWriteAsyncTask.newInstance(progressBar).execute(tweets);
             }
 
             @Override
@@ -182,6 +170,16 @@ public abstract class BaseTweetFragment
                         .show();
             }
         });
+        if (! tweet.isFavorited()) {
+            tweet.setFavoriteCount(tweet.getFavoriteCount() + 1);
+            tweet.setFavorited(true);
+        } else {
+            tweet.setFavoriteCount(tweet.getFavoriteCount() - 1);
+            tweet.setFavorited(false);
+        }
+        List<Tweet> tweets = new LinkedList<Tweet>();
+        tweets.add(tweet);
+        DBWriteAsyncTask.newInstance(progressBar).execute(tweets);
     }
 
     @Override

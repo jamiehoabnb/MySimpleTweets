@@ -167,13 +167,9 @@ public class TweetsArrayAdapter extends ArrayAdapter<Tweet> {
             public void onClick(View v) {
                 tweetListener.onClickRetweet(tweet);
                 Tweet newTweet = Tweet.clone(tweet);
-
-                newTweet.setRetweetCount(newTweet.getRetweetCount() +
-                        (newTweet.isRetweeted() ? -1 : 1));
                 tvRetweetCount.setText(String.valueOf(newTweet.getRetweetCount()));
                 ivRetweet.setImageDrawable(getContext().getDrawable(
-                        tweet.isRetweeted() ? R.drawable.retweet_highlight : R.drawable.retweet));
-                newTweet.setRetweeted(! newTweet.isRetweeted());
+                        newTweet.isRetweeted() ? R.drawable.retweet_highlight : R.drawable.retweet));
                 objects.set(position, newTweet);
                 adapter.notifyDataSetChanged();
             }
@@ -186,13 +182,9 @@ public class TweetsArrayAdapter extends ArrayAdapter<Tweet> {
             public void onClick(View v) {
                 tweetListener.onClickFavorite(tweet);
                 Tweet newTweet = Tweet.clone(tweet);
-
-                newTweet.setFavoriteCount(newTweet.getFavoriteCount() +
-                        (newTweet.isFavorited() ? -1 : 1));
                 tvFavoriteCount.setText(String.valueOf(newTweet.getFavoriteCount()));
                 ivFavorite.setImageDrawable(getContext().getDrawable(
-                        tweet.isFavorited() ? R.drawable.favorite_highlight : R.drawable.favorite));
-                newTweet.setFavorited(! newTweet.isFavorited());
+                        newTweet.isFavorited() ? R.drawable.favorite_highlight : R.drawable.favorite));
                 objects.set(position, newTweet);
                 adapter.notifyDataSetChanged();
             }

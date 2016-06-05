@@ -33,7 +33,6 @@ import jp.wasabeef.picasso.transformations.RoundedCornersTransformation;
 public class TweetDetailFragment extends BaseTweetFragment {
 
     public static final String ARG_TWEET = "tweet";
-    public static final String ARG_USER = "user";
 
     private Tweet tweet;
 
@@ -81,9 +80,9 @@ public class TweetDetailFragment extends BaseTweetFragment {
     public static TweetDetailFragment newInstance(User user, Tweet tweet) {
         TweetDetailFragment fragment = new TweetDetailFragment();
         Bundle args = new Bundle();
-        args.putParcelable(ARG_USER, Parcels.wrap(user));
         args.putParcelable(ARG_TWEET, Parcels.wrap(tweet));
         fragment.setArguments(args);
+        fragment.setUser(user);
         return fragment;
     }
 
@@ -92,6 +91,7 @@ public class TweetDetailFragment extends BaseTweetFragment {
         View v = inflater.inflate(R.layout.fragment_tweet_detail, parent, false);
         ButterKnife.bind(this, v);
 
+        setProgressBar(progressBar);
         tvUserName.setText(tweet.getUser().getName());
         tvScreenName.setText("@" + tweet.getUser().getScreenName());
         tvCreatedAt.setText(tweet.getFullCreateAt());
@@ -159,6 +159,9 @@ public class TweetDetailFragment extends BaseTweetFragment {
             @Override
             public void onClick(View v) {
                 tweetDetailFragment.onClickRetweet(tweet);
+                tvRetweetCount.setText(String.valueOf(tweet.getRetweetCount()));
+                ivRetweet.setImageDrawable(getContext().getDrawable(
+                        tweet.isRetweeted() ? R.drawable.retweet_highlight : R.drawable.retweet));
             }
         });
 
@@ -166,6 +169,9 @@ public class TweetDetailFragment extends BaseTweetFragment {
             @Override
             public void onClick(View v) {
                 tweetDetailFragment.onClickFavorite(tweet);
+                tvFavoriteCount.setText(String.valueOf(tweet.getFavoriteCount()));
+                ivFavorite.setImageDrawable(getContext().getDrawable(
+                        tweet.isFavorited() ? R.drawable.favorite_highlight : R.drawable.favorite));
             }
         });
 
@@ -184,7 +190,6 @@ public class TweetDetailFragment extends BaseTweetFragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         Bundle args = getArguments();
-        user = (User) Parcels.unwrap(getArguments().getParcelable(ARG_USER));
         tweet = (Tweet) Parcels.unwrap(getArguments().getParcelable(ARG_TWEET));
     }
 

@@ -10,16 +10,17 @@ import fr.castorflex.android.smoothprogressbar.SmoothProgressBar;
 
 public class UserTimelineFragment extends BaseTweetsListFragment {
 
+    //The screen name for the time line being viewed.
     public static final String PARAM_SCREEN_NAME = "screenName";
 
     public static UserTimelineFragment newInstance(String screenName,
                                                    SmoothProgressBar progressBar,
-                                                   User user) {
+                                                   User loggedInUser) {
         UserTimelineFragment fragment = new UserTimelineFragment();
         Bundle args = new Bundle();
         args.putString(PARAM_SCREEN_NAME, screenName);
         fragment.setArguments(args);
-        fragment.setUser(user);
+        fragment.setUser(loggedInUser);
         fragment.setProgressBar(progressBar);
         return fragment;
     }
