@@ -74,16 +74,33 @@ public abstract class BaseTimeLineActivity
         setSupportActionBar(toolbar);
 
         adapter = new TweetsPagerAdapter(getSupportFragmentManager(), getOnFragmentCreateListener(), getTabTitles());
-        viewPager.setAdapter(adapter);
-        tabs.setViewPager(viewPager);
 
         client = TwitterApplication.getRestClient();
-        client.getUserInfo(new JsonHttpResponseHandler() {
-            @Override
-            public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
-                user = User.fromJSON(response);
-            }
-        });
+
+        if (InternetCheckUtil.isOnline()) {
+            progressBar.setVisibility(View.VISIBLE);
+            client.getUserInfo(new JsonHttpResponseHandler() {
+                @Override
+                public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
+                    progressBar.setVisibility(View.INVISIBLE);
+                    user = User.fromJSON(response);
+                    viewPager.setAdapter(adapter);
+                    tabs.setViewPager(viewPager);
+                }
+
+                @Override
+                public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONObject errorResponse) {
+                    super.onFailure(statusCode, headers, throwable, errorResponse);
+                    progressBar.setVisibility(View.INVISIBLE);
+                    Log.e("ERROR", errorResponse == null ? "" : errorResponse.toString(), throwable);
+                }
+            });
+        } else {
+            //Don't bother querying for logged in user since we are offline.  Just launch with cached
+            //data.
+            viewPager.setAdapter(adapter);
+            tabs.setViewPager(viewPager);
+        }
     }
 
     public void onProfileView(MenuItem mi) {
