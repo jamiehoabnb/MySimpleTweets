@@ -91,8 +91,8 @@ public class HomeActivity extends BaseTimeLineActivity {
             @Override
             public Fragment getItem(int position) {
                 return position == 0 ?
-                        HomeTimelineFragment.newInstance(listener, progressBar) :
-                        MentionsTimelineFragment.newInstance(listener, progressBar);
+                        HomeTimelineFragment.newInstance(listener, progressBar, user) :
+                        MentionsTimelineFragment.newInstance(listener, progressBar, user);
             }
         };
     }

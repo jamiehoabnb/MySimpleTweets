@@ -9,6 +9,7 @@ import com.activeandroid.query.Select;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
+import org.parceler.Parcel;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -18,6 +19,7 @@ import java.util.List;
 import java.util.Locale;
 
 @Table(name = "tweets")
+@Parcel(analyze={Tweet.class})
 public class Tweet extends Model {
 
     @Column(name = "text")
@@ -64,6 +66,8 @@ public class Tweet extends Model {
     }
 
     private static final SimpleDateFormat outputFormat = new SimpleDateFormat("dd MMM yy");
+
+    private static final SimpleDateFormat longOutputFormat = new SimpleDateFormat("hh:mm aa dd MMM yy");
 
     private static final double SECOND = 1000;
     private static final double MINUTE = 60*SECOND;
@@ -193,6 +197,16 @@ public class Tweet extends Model {
 
     public boolean isFavorited() {
         return favorited;
+    }
+
+    public String getFullCreateAt() {
+        try {
+            Date createDate = inputFormat.parse(createAt);
+            return longOutputFormat.format(createDate);
+        } catch (ParseException e) {
+            e.printStackTrace();
+            return null;
+        }
     }
 
     public String getRelativeCreateAt() {

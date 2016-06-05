@@ -1,6 +1,7 @@
 package com.codepath.apps.mysimpletweets.adapters;
 
 import android.content.Context;
+import android.content.Intent;
 import android.support.annotation.Nullable;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -10,6 +11,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.codepath.apps.mysimpletweets.R;
+import com.codepath.apps.mysimpletweets.activities.TweetDetailActivity;
 import com.codepath.apps.mysimpletweets.models.Tweet;
 import com.codepath.apps.mysimpletweets.models.User;
 import com.codepath.apps.mysimpletweets.util.DeviceDimensionsHelper;
@@ -20,6 +22,8 @@ import com.volokh.danylo.video_player_manager.manager.VideoPlayerManager;
 import com.volokh.danylo.video_player_manager.meta.CurrentItemMetaData;
 import com.volokh.danylo.video_player_manager.meta.MetaData;
 import com.volokh.danylo.video_player_manager.ui.VideoPlayerView;
+
+import org.parceler.Parcels;
 
 import java.util.List;
 
@@ -51,6 +55,8 @@ public class TweetsArrayAdapter extends ArrayAdapter<Tweet> {
         public void onClickRetweet(Tweet tweet);
 
         public void onClickFavorite(Tweet tweet);
+
+        public void onClickTweetDetails(Tweet tweet);
     }
 
     static class ViewHolder {
@@ -215,6 +221,14 @@ public class TweetsArrayAdapter extends ArrayAdapter<Tweet> {
                 tweet.isRetweeted() ? R.drawable.retweet_highlight : R.drawable.retweet));
         viewHolder.ivFavorite.setImageDrawable(getContext().getDrawable(
                 tweet.isFavorited() ? R.drawable.favorite_highlight : R.drawable.favorite));
+
+        //Workaround for listview item click not working
+        viewHolder.tvUserName.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                tweetListener.onClickTweetDetails(tweet);
+            }
+        });
         return convertView;
     }
 

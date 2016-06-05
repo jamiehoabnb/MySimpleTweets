@@ -1,5 +1,6 @@
 package com.codepath.apps.mysimpletweets.fragments;
 
+import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -10,11 +11,15 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ListView;
 
 import com.codepath.apps.mysimpletweets.R;
+import com.codepath.apps.mysimpletweets.activities.ProfileActivity;
+import com.codepath.apps.mysimpletweets.activities.TweetDetailActivity;
 import com.codepath.apps.mysimpletweets.adapters.TweetsArrayAdapter;
 import com.codepath.apps.mysimpletweets.TwitterApplication;
+import com.codepath.apps.mysimpletweets.models.User;
 import com.codepath.apps.mysimpletweets.network.TwitterClient;
 import com.codepath.apps.mysimpletweets.models.Tweet;
 import com.codepath.apps.mysimpletweets.storage.DBWriteAsyncTask;
@@ -25,6 +30,7 @@ import com.loopj.android.http.JsonHttpResponseHandler;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
+import org.parceler.Parcels;
 
 import java.util.ArrayList;
 import java.util.LinkedList;
@@ -54,6 +60,9 @@ public abstract class TweetsListFragment extends Fragment {
     protected TweetsArrayAdapter.TweetListener listener;
 
     private SmoothProgressBar progressBar;
+
+    //The current logged in user.
+    private User user;
 
     protected TwitterClient twitterClient = TwitterApplication.getRestClient();
 
@@ -205,6 +214,18 @@ public abstract class TweetsListFragment extends Fragment {
             });
         }
 
+        final Fragment fragment = this;
+        lvTweets.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                Tweet tweet = list.get(position);
+
+                Intent intent = new Intent(fragment.getActivity(), TweetDetailActivity.class);
+                intent.putExtra(TweetDetailActivity.ARG_TWEET, Parcels.wrap(tweet));
+                intent.putExtra(TweetDetailActivity.ARG_USER, Parcels.wrap(user));
+                startActivity(intent);
+            }
+        });
         return v;
     }
 
@@ -215,6 +236,8 @@ public abstract class TweetsListFragment extends Fragment {
     public void setProgressBar(SmoothProgressBar progressBar) {
         this.progressBar = progressBar;
     }
+
+    public void setUser(User user) { this.user = user;}
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {

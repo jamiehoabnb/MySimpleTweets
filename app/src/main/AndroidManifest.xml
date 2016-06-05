@@ -58,6 +58,8 @@
         <activity android:name=".activities.ProfileActivity"
             android:label="@string/profile"
             android:theme="@style/AppTheme"/>
+        <activity android:name=".activities.TweetDetailActivity"
+            android:theme="@style/AppTheme"/>
     </application>
 
 </manifest>

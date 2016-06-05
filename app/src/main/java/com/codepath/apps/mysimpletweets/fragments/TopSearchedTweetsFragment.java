@@ -1,6 +1,7 @@
 package com.codepath.apps.mysimpletweets.fragments;
 
 import com.codepath.apps.mysimpletweets.adapters.TweetsArrayAdapter;
+import com.codepath.apps.mysimpletweets.models.User;
 import com.codepath.apps.mysimpletweets.network.TwitterClient;
 import com.codepath.apps.mysimpletweets.models.Tweet;
 
@@ -12,11 +13,13 @@ public class TopSearchedTweetsFragment extends TweetsListFragment {
 
     public static TopSearchedTweetsFragment newInstance(String query,
                                                         TweetsArrayAdapter.TweetListener listener,
-                                                        SmoothProgressBar progressBar) {
+                                                        SmoothProgressBar progressBar,
+                                                        User user) {
         TopSearchedTweetsFragment fragment = new TopSearchedTweetsFragment();
         fragment.query = query;
         fragment.setListener(listener);
         fragment.setProgressBar(progressBar);
+        fragment.setUser(user);
         fragment.disableCache();
         fragment.disableEndlessScroll();
         return fragment;

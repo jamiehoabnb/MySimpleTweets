@@ -1,5 +1,6 @@
 package com.codepath.apps.mysimpletweets.activities;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.FragmentTransaction;
@@ -49,21 +50,19 @@ public class ProfileActivity extends AppCompatActivity implements
 
     private Tweet replyTweet;
 
-    private TwitterClient client = TwitterApplication.getRestClient();
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_profile);
         ButterKnife.bind(this);
 
-        this.user = Parcels.unwrap(getIntent().getParcelableExtra("user"));
+        this.user = Parcels.unwrap(getIntent().getParcelableExtra(ARG_USER));
         boolean disableCache = getIntent().getBooleanExtra(ARG_DISABLE_CACHE, false);
         twitterClient = TwitterApplication.getRestClient();
 
         if (savedInstanceState == null) {
             UserTimelineFragment fragmentUserTimeline = UserTimelineFragment.newInstance(
-                    user.getScreenName(), this, progressBar);
+                    user.getScreenName(), this, progressBar, user);
             ProfileHeaderFragment fragmentProfileHeader = ProfileHeaderFragment.newInstance(progressBar);
 
             if (disableCache) {
@@ -108,7 +107,7 @@ public class ProfileActivity extends AppCompatActivity implements
     public void onClickRetweet(final Tweet tweet) {
         progressBar.setVisibility(View.VISIBLE);
         final ProfileActivity activity = this;
-        client.postStatusRetweet(tweet, new JsonHttpResponseHandler() {
+        twitterClient.postStatusRetweet(tweet, new JsonHttpResponseHandler() {
             @Override
             public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
                 progressBar.setVisibility(View.INVISIBLE);
@@ -147,10 +146,18 @@ public class ProfileActivity extends AppCompatActivity implements
     }
 
     @Override
+    public void onClickTweetDetails(Tweet tweet) {
+        Intent intent = new Intent(this, TweetDetailActivity.class);
+        intent.putExtra(TweetDetailActivity.ARG_TWEET, Parcels.wrap(tweet));
+        intent.putExtra(TweetDetailActivity.ARG_USER, Parcels.wrap(user));
+        startActivity(intent);
+    }
+
+    @Override
     public void onClickFavorite(final Tweet tweet) {
         progressBar.setVisibility(View.VISIBLE);
         final ProfileActivity activity = this;
-        client.postFavoritesCreate(tweet, new JsonHttpResponseHandler() {
+        twitterClient.postFavoritesCreate(tweet, new JsonHttpResponseHandler() {
             @Override
             public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
                 progressBar.setVisibility(View.INVISIBLE);
@@ -190,7 +197,7 @@ public class ProfileActivity extends AppCompatActivity implements
 
     @Override
     public void onFinishComposeTweetDialog(String tweet) {
-        client.postStatusUpdate(tweet,
+        twitterClient.postStatusUpdate(tweet,
                 this.replyTweet == null ? null : this.replyTweet.getUid(),
                 new JsonHttpResponseHandler() {
                     @Override

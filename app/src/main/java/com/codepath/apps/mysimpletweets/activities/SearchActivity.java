@@ -84,8 +84,8 @@ public class SearchActivity extends BaseTimeLineActivity {
             @Override
             public Fragment getItem(int position) {
                 return position == 0 ?
-                        TopSearchedTweetsFragment.newInstance(query, listener, progressBar) :
-                        AllSearchedTweetsFragment.newInstance(query, listener, progressBar);
+                        TopSearchedTweetsFragment.newInstance(query, listener, progressBar, user) :
+                        AllSearchedTweetsFragment.newInstance(query, listener, progressBar, user);
             }
         };
     }

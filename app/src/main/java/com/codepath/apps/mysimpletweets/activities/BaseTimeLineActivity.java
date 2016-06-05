@@ -131,6 +131,14 @@ public abstract class BaseTimeLineActivity extends AppCompatActivity implements
     }
 
     @Override
+    public void onClickTweetDetails(Tweet tweet) {
+        Intent intent = new Intent(this, TweetDetailActivity.class);
+        intent.putExtra(TweetDetailActivity.ARG_TWEET, Parcels.wrap(tweet));
+        intent.putExtra(TweetDetailActivity.ARG_USER, Parcels.wrap(user));
+        startActivity(intent);
+    }
+
+    @Override
     public void onClickFavorite(final Tweet tweet) {
         progressBar.setVisibility(View.VISIBLE);
         final BaseTimeLineActivity activity = this;
