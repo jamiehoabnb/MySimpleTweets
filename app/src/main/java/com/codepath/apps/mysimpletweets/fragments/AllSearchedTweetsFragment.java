@@ -7,17 +7,15 @@ import com.codepath.apps.mysimpletweets.models.Tweet;
 
 import fr.castorflex.android.smoothprogressbar.SmoothProgressBar;
 
-public class AllSearchedTweetsFragment extends TweetsListFragment {
+public class AllSearchedTweetsFragment extends BaseTweetsListFragment {
 
     private String query;
 
     public static AllSearchedTweetsFragment newInstance(String query,
-                                                        TweetsArrayAdapter.TweetListener listener,
                                                         SmoothProgressBar progressBar,
                                                         User user) {
         AllSearchedTweetsFragment fragment = new AllSearchedTweetsFragment();
         fragment.query = query;
-        fragment.setListener(listener);
         fragment.setProgressBar(progressBar);
         fragment.setUser(user);
         fragment.disableCache();
@@ -33,5 +31,10 @@ public class AllSearchedTweetsFragment extends TweetsListFragment {
     @Override
     protected Tweet.Type getTweetType() {
         return Tweet.Type.HOME;
+    }
+
+    @Override
+    public void onFinishComposeTweetDialogSuccess(Tweet newTweet) {
+        //No op
     }
 }

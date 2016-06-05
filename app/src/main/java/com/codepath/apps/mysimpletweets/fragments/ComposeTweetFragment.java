@@ -15,6 +15,8 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.codepath.apps.mysimpletweets.R;
+import com.codepath.apps.mysimpletweets.listeners.ComposeTweetDialogListener;
+import com.codepath.apps.mysimpletweets.models.Tweet;
 import com.codepath.apps.mysimpletweets.models.User;
 import com.codepath.apps.mysimpletweets.util.DeviceDimensionsHelper;
 import com.squareup.picasso.Picasso;
@@ -28,12 +30,10 @@ import butterknife.OnClick;
 public class ComposeTweetFragment extends DialogFragment {
 
     public static final String ARG_USER = "user";
-    public static final String ARG_REPLY_SCREEN_NAME = "replyScreenName";
-    public static final String ARG_REPLY_FULL_NAME = "replyFullName";
+    public static final String ARG_REPLY_TWEET = "replyTweet";
 
     private User user;
-    private String replyScreenName;
-    private String replyFullName;
+    private Tweet replyTweet;
 
     @BindView(R.id.ivProfileImage)
     ImageView ivProfileImage;
@@ -48,21 +48,16 @@ public class ComposeTweetFragment extends DialogFragment {
 
     private static final int TWEET_MAX_LENGTH = 140;
 
-    public interface ComposeTweetDialogListener {
-        void onFinishComposeTweetDialog(String tweet);
-    }
-
     public ComposeTweetFragment() {
         // Required empty public constructor
     }
 
     public static ComposeTweetFragment newInstance(ComposeTweetDialogListener listener,
-                                                   User user, String screenName, String fullName) {
+                                                   User user, Tweet replyTweet) {
         ComposeTweetFragment fragment = new ComposeTweetFragment();
         Bundle args = new Bundle();
         args.putParcelable(ARG_USER, Parcels.wrap(user));
-        args.putString(ARG_REPLY_SCREEN_NAME, screenName);
-        args.putString(ARG_REPLY_FULL_NAME, fullName);
+        args.putParcelable(ARG_REPLY_TWEET, Parcels.wrap(replyTweet));
         fragment.setArguments(args);
         fragment.listener = listener;
         return fragment;
@@ -73,15 +68,14 @@ public class ComposeTweetFragment extends DialogFragment {
         super.onCreate(savedInstanceState);
         Bundle args = getArguments();
         user = (User) Parcels.unwrap(getArguments().getParcelable(ARG_USER));
-        replyFullName = args.getString(ARG_REPLY_FULL_NAME);
-        replyScreenName = args.getString(ARG_REPLY_FULL_NAME);
+        replyTweet = (Tweet) Parcels.unwrap(getArguments().getParcelable(ARG_REPLY_TWEET));
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View view = inflater.inflate(
-                replyFullName == null ?
+                replyTweet == null ?
                         R.layout.fragment_compose_tweet : R.layout.fragment_compose_tweet_reply,
                 container, false);
         ButterKnife.bind(this, view);
@@ -104,16 +98,16 @@ public class ComposeTweetFragment extends DialogFragment {
             }
         });
 
-        if (replyFullName != null) {
+        if (replyTweet != null) {
             etTweet.clearFocus();
-            etTweet.setHint(getString(R.string.reply_to) + " " + replyFullName);
+            etTweet.setHint(getString(R.string.reply_to) + " " + replyTweet.getUser().getName());
 
             //Initialize the reply with the users screen name when clicked.
             etTweet.setOnFocusChangeListener(new View.OnFocusChangeListener() {
                 @Override
                 public void onFocusChange(View v, boolean hasFocus) {
                     if (hasFocus && etTweet.getText().length() == 0) {
-                        etTweet.setText("@" + replyScreenName);
+                        etTweet.setText("@" + replyTweet.getUser().getScreenName());
                     }
                 }
             });
@@ -136,7 +130,7 @@ public class ComposeTweetFragment extends DialogFragment {
 
     @OnClick(R.id.btTweet)
     public void save(View view) {
-        listener.onFinishComposeTweetDialog(etTweet.getText().toString());
+        listener.onFinishComposeTweetDialog(etTweet.getText().toString(), replyTweet);
         dismiss();
     }
 

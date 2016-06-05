@@ -23,34 +23,34 @@ import java.util.Locale;
 public class Tweet extends Model {
 
     @Column(name = "text")
-    private String text;
+    String text;
 
     @Column(name = "uid")
-    private long uid;
+    long uid;
 
     @Column(name = "user", onUpdate = Column.ForeignKeyAction.CASCADE, onDelete = Column.ForeignKeyAction.CASCADE)
-    private User user;
+    User user;
 
     @Column(name = "created_at")
-    private String createAt;
+    String createAt;
 
     @Column(name = "media_url")
-    private String mediaUrl;
+    String mediaUrl;
 
     @Column(name="media_type")
-    private String mediaType;
+    String mediaType;
 
     @Column(name="retweet_count")
-    private int retweetCount;
+    int retweetCount;
 
     @Column(name="favorite_count")
-    private int favoriteCount;
+    int favoriteCount;
 
     @Column(name="retweeted")
-    private boolean retweeted;
+    boolean retweeted;
 
     @Column(name="favorited")
-    private boolean favorited;
+    boolean favorited;
 
     //The types of tweets that we are caching.
     public enum Type {
@@ -58,7 +58,7 @@ public class Tweet extends Model {
     }
 
     @Column(name = "type")
-    private Type type;
+    Type type;
 
     private static final SimpleDateFormat inputFormat = new SimpleDateFormat("EEE MMM dd HH:mm:ss ZZZZZ yyyy", Locale.ENGLISH);
     static {
@@ -80,6 +80,11 @@ public class Tweet extends Model {
         photo, video;
     }
 
+    /**
+     * Found very strange issue where changes to a tweet within a array adapter do not stick when
+     * the changes are made within a listener method.  The changes do stick if you clone the tweet,
+     * make the changes and overwrite the tweet object within the adapter.
+     */
     public static Tweet clone(Tweet orig) {
         Tweet copy = new Tweet();
         copy.text = orig.text;

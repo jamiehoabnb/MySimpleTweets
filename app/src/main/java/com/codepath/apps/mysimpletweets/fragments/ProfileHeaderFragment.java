@@ -63,9 +63,12 @@ public class ProfileHeaderFragment extends Fragment {
 
     private TwitterClient client;
 
-    public static ProfileHeaderFragment newInstance(SmoothProgressBar progressBar) {
+    public static ProfileHeaderFragment newInstance(SmoothProgressBar progressBar, User user) {
         ProfileHeaderFragment fragment = new ProfileHeaderFragment();
         fragment.setProgressBar(progressBar);
+        Bundle args = new Bundle();
+        args.putParcelable(ProfileHeaderFragment.ARG_USER, Parcels.wrap(user));
+        fragment.setArguments(args);
         return fragment;
     }
 

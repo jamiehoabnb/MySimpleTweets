@@ -85,14 +85,13 @@ public class HomeActivity extends BaseTimeLineActivity {
     }
 
     public OnFragmentCreateListener getOnFragmentCreateListener() {
-        final TweetsArrayAdapter.TweetListener listener = this;
         return new OnFragmentCreateListener() {
 
             @Override
             public Fragment getItem(int position) {
                 return position == 0 ?
-                        HomeTimelineFragment.newInstance(listener, progressBar, user) :
-                        MentionsTimelineFragment.newInstance(listener, progressBar, user);
+                        HomeTimelineFragment.newInstance(progressBar, user) :
+                        MentionsTimelineFragment.newInstance(progressBar, user);
             }
         };
     }

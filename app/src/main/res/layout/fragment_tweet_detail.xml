@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:padding="@dimen/default_margin">
+
+    <fr.castorflex.android.smoothprogressbar.SmoothProgressBar
+        android:id="@+id/progressBar"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:minHeight="@dimen/pb_min_height"
+        style="@style/GradientProgressBar"
+        android:layout_alignParentTop="true"
+        android:indeterminate="true"/>
+
+    <ImageView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/profile_image_margin"
+        android:layout_marginRight="@dimen/profile_image_margin"
+        android:layout_marginBottom="@dimen/profile_image_margin"
+        android:id="@+id/ivProfileImage"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:adjustViewBounds="true"/>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/tvUserName"
+        android:layout_alignTop="@+id/ivProfileImage"
+        android:layout_toRightOf="@+id/ivProfileImage"
+        android:layout_toEndOf="@+id/ivProfileImage"
+        android:layout_marginBottom="@dimen/profiler_header_text_spacing"
+        style="@style/TweetUserNameText"/>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/tvScreenName"
+        android:layout_below="@+id/tvUserName"
+        android:layout_toRightOf="@+id/ivProfileImage"
+        style="@style/TweetScreenName"/>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/tvBody"
+        android:autoLink="all"
+        android:layout_below="@+id/ivProfileImage"
+        android:layout_alignParentLeft="true"
+        android:layout_marginTop="@dimen/default_margin"
+        style="@style/TweetText"/>
+
+    <RelativeLayout
+        android:id="@+id/rlMedia"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/tvBody"
+        android:layout_alignParentLeft="true">
+        <com.volokh.danylo.video_player_manager.ui.VideoPlayerView
+            android:layout_height="200dp"
+            android:layout_width="match_parent"
+            android:layout_weight="1"
+            android:id="@+id/vvTweetVideo"
+            android:layout_marginTop="@dimen/default_margin"/>
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/ivTweetImage"
+            android:layout_marginTop="@dimen/default_margin"
+            android:adjustViewBounds="true"/>
+    </RelativeLayout>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/tvCreatedAt"
+        android:layout_below="@+id/rlMedia"
+        android:layout_alignParentLeft="true"
+        android:layout_marginTop="@dimen/default_margin"
+        style="@style/TweetCreatedAt"/>
+
+    <include layout="@layout/tweet_actions_layout"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/tvCreatedAt"
+        android:layout_alignParentLeft="true"
+        android:layout_marginTop="@dimen/default_margin"
+        android:layout_marginLeft="@dimen/default_margin"/>
+
+</RelativeLayout>

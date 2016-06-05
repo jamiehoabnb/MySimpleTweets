@@ -19,14 +19,13 @@ import android.widget.TextView;
 
 import com.astuetz.PagerSlidingTabStrip;
 import com.codepath.apps.mysimpletweets.R;
-import com.codepath.apps.mysimpletweets.adapters.TweetsArrayAdapter;
 import com.codepath.apps.mysimpletweets.TwitterApplication;
-import com.codepath.apps.mysimpletweets.network.TwitterClient;
 import com.codepath.apps.mysimpletweets.fragments.ComposeTweetFragment;
 import com.codepath.apps.mysimpletweets.fragments.HomeTimelineFragment;
+import com.codepath.apps.mysimpletweets.listeners.ComposeTweetDialogListener;
 import com.codepath.apps.mysimpletweets.models.Tweet;
 import com.codepath.apps.mysimpletweets.models.User;
-import com.codepath.apps.mysimpletweets.storage.DBWriteAsyncTask;
+import com.codepath.apps.mysimpletweets.network.TwitterClient;
 import com.codepath.apps.mysimpletweets.util.InternetCheckUtil;
 import com.codepath.apps.mysimpletweets.util.SmartFragmentStatePagerAdapter;
 import com.loopj.android.http.JsonHttpResponseHandler;
@@ -34,17 +33,14 @@ import com.loopj.android.http.JsonHttpResponseHandler;
 import org.json.JSONObject;
 import org.parceler.Parcels;
 
-import java.util.LinkedList;
-import java.util.List;
-
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import cz.msebera.android.httpclient.Header;
 import fr.castorflex.android.smoothprogressbar.SmoothProgressBar;
 
-public abstract class BaseTimeLineActivity extends AppCompatActivity implements
-        ComposeTweetFragment.ComposeTweetDialogListener,
-        TweetsArrayAdapter.TweetListener {
+public abstract class BaseTimeLineActivity
+        extends AppCompatActivity
+        implements ComposeTweetDialogListener {
 
     @BindView(R.id.toolbar)
     Toolbar toolbar;
@@ -66,119 +62,7 @@ public abstract class BaseTimeLineActivity extends AppCompatActivity implements
 
     TweetsPagerAdapter adapter;
 
-    Tweet replyTweet;
-
     private Context context = this;
-
-    @Override
-    public void onClickProfileImage(User profileUser) {
-        Intent intent = new Intent(context, ProfileActivity.class);
-        intent.putExtra(ProfileActivity.ARG_USER, Parcels.wrap(profileUser));
-        //We don't cache tweet's for profile page of other users.
-        intent.putExtra(ProfileActivity.ARG_DISABLE_CACHE, true);
-        context.startActivity(intent);
-    }
-
-    @Override
-    public void onClickReply(Tweet tweet) {
-        android.app.FragmentManager fm = getFragmentManager();
-        ComposeTweetFragment fragment = ComposeTweetFragment.newInstance(this, user,
-                tweet.getUser().getScreenName(), tweet.getUser().getName());
-        this.replyTweet = tweet;
-        fragment.show(fm, "fragment_compose_tweet_reply");
-    }
-
-    @Override
-    public void onClickRetweet(final Tweet tweet) {
-        progressBar.setVisibility(View.VISIBLE);
-        final BaseTimeLineActivity activity = this;
-        client.postStatusRetweet(tweet, new JsonHttpResponseHandler() {
-            @Override
-            public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
-                progressBar.setVisibility(View.INVISIBLE);
-
-                if (! tweet.isRetweeted()) {
-                    tweet.setRetweetCount(tweet.getRetweetCount() + 1);
-                    tweet.setRetweeted(true);
-                } else {
-                    tweet.setRetweetCount(tweet.getRetweetCount() - 1);
-                    tweet.setRetweeted(false);
-                }
-                List<Tweet> tweets = new LinkedList<Tweet>();
-                tweets.add(tweet);
-                DBWriteAsyncTask.newInstance(progressBar).execute(tweets);
-            }
-
-            @Override
-            public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONObject errorResponse) {
-                progressBar.setVisibility(View.INVISIBLE);
-                super.onFailure(statusCode, headers, throwable, errorResponse);
-                Log.e("ERROR", errorResponse.toString(), throwable);
-
-                int errorMsgId = InternetCheckUtil.isOnline() ?
-                        R.string.twitter_api_error : R.string.internet_connection_error;
-
-                Snackbar.make(toolbar, errorMsgId, Snackbar.LENGTH_LONG)
-                        .setAction(activity.getString(R.string.retry), new View.OnClickListener() {
-                            @Override
-                            public void onClick(View v) {
-                                activity.onClickRetweet(tweet);
-                            }
-                        })
-                        .show();
-            }
-        });
-    }
-
-    @Override
-    public void onClickTweetDetails(Tweet tweet) {
-        Intent intent = new Intent(this, TweetDetailActivity.class);
-        intent.putExtra(TweetDetailActivity.ARG_TWEET, Parcels.wrap(tweet));
-        intent.putExtra(TweetDetailActivity.ARG_USER, Parcels.wrap(user));
-        startActivity(intent);
-    }
-
-    @Override
-    public void onClickFavorite(final Tweet tweet) {
-        progressBar.setVisibility(View.VISIBLE);
-        final BaseTimeLineActivity activity = this;
-        client.postFavoritesCreate(tweet, new JsonHttpResponseHandler() {
-            @Override
-            public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
-                progressBar.setVisibility(View.INVISIBLE);
-
-                if (! tweet.isFavorited()) {
-                    tweet.setFavoriteCount(tweet.getFavoriteCount() + 1);
-                    tweet.setFavorited(true);
-                } else {
-                    tweet.setFavoriteCount(tweet.getFavoriteCount() - 1);
-                    tweet.setFavorited(false);
-                }
-                List<Tweet> tweets = new LinkedList<Tweet>();
-                tweets.add(tweet);
-                DBWriteAsyncTask.newInstance(progressBar).execute(tweets);
-            }
-
-            @Override
-            public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONObject errorResponse) {
-                progressBar.setVisibility(View.INVISIBLE);
-                super.onFailure(statusCode, headers, throwable, errorResponse);
-                Log.e("ERROR", errorResponse.toString(), throwable);
-
-                int errorMsgId = InternetCheckUtil.isOnline() ?
-                        R.string.twitter_api_error : R.string.internet_connection_error;
-
-                Snackbar.make(toolbar, errorMsgId, Snackbar.LENGTH_LONG)
-                        .setAction(activity.getString(R.string.retry), new View.OnClickListener() {
-                            @Override
-                            public void onClick(View v) {
-                                activity.onClickFavorite(tweet);
-                            }
-                        })
-                        .show();
-            }
-        });
-    }
 
     public abstract int getLayoutId();
 
@@ -203,22 +87,35 @@ public abstract class BaseTimeLineActivity extends AppCompatActivity implements
     }
 
     public void onProfileView(MenuItem mi) {
+        if (user == null) {
+            //Logged in user will be null if there is no internet connection.
+            Snackbar.make(getWindow().getDecorView(), R.string.internet_connection_error, Snackbar.LENGTH_LONG)
+                    .show();
+            return;
+        }
+
         Intent intent = new Intent(this, ProfileActivity.class);
         intent.putExtra(ProfileActivity.ARG_USER, Parcels.wrap(user));
         startActivity(intent);
     }
 
     public void onComposeView(MenuItem mi) {
+        if (user == null) {
+            //Logged in user will be null if there is no internet connection.
+            Snackbar.make(getWindow().getDecorView(), R.string.internet_connection_error, Snackbar.LENGTH_LONG)
+                    .show();
+            return;
+        }
+
         android.app.FragmentManager fm = getFragmentManager();
-        ComposeTweetFragment fragment = ComposeTweetFragment.newInstance(this, user, null, null);
-        this.replyTweet = null;
+        ComposeTweetFragment fragment = ComposeTweetFragment.newInstance(this, user, null);
         fragment.show(fm, "fragment_compose_tweet");
     }
 
     @Override
-    public void onFinishComposeTweetDialog(String tweet) {
+    public void onFinishComposeTweetDialog(String tweet, Tweet replyTweet) {
         client.postStatusUpdate(tweet,
-                this.replyTweet == null ? null : this.replyTweet.getUid(),
+                replyTweet == null ? null : replyTweet.getUid(),
                 new JsonHttpResponseHandler() {
                     @Override
                     public void onSuccess(int statusCode, Header[] headers, JSONObject response) {

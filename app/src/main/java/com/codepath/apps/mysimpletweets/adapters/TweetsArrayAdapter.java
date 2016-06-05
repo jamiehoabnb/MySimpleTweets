@@ -1,7 +1,6 @@
 package com.codepath.apps.mysimpletweets.adapters;
 
 import android.content.Context;
-import android.content.Intent;
 import android.support.annotation.Nullable;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -11,9 +10,8 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.codepath.apps.mysimpletweets.R;
-import com.codepath.apps.mysimpletweets.activities.TweetDetailActivity;
+import com.codepath.apps.mysimpletweets.listeners.TweetListener;
 import com.codepath.apps.mysimpletweets.models.Tweet;
-import com.codepath.apps.mysimpletweets.models.User;
 import com.codepath.apps.mysimpletweets.util.DeviceDimensionsHelper;
 import com.codepath.apps.mysimpletweets.util.MySimpleTweetsConstants;
 import com.codepath.apps.mysimpletweets.util.VideoPlayerUtil;
@@ -22,8 +20,6 @@ import com.volokh.danylo.video_player_manager.manager.VideoPlayerManager;
 import com.volokh.danylo.video_player_manager.meta.CurrentItemMetaData;
 import com.volokh.danylo.video_player_manager.meta.MetaData;
 import com.volokh.danylo.video_player_manager.ui.VideoPlayerView;
-
-import org.parceler.Parcels;
 
 import java.util.List;
 
@@ -45,18 +41,6 @@ public class TweetsArrayAdapter extends ArrayAdapter<Tweet> {
         Type(int val) {
             this.val = val;
         }
-    }
-
-    public interface TweetListener {
-        public void onClickProfileImage(User user);
-
-        public void onClickReply(Tweet tweet);
-
-        public void onClickRetweet(Tweet tweet);
-
-        public void onClickFavorite(Tweet tweet);
-
-        public void onClickTweetDetails(Tweet tweet);
     }
 
     static class ViewHolder {

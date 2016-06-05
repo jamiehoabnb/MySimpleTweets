@@ -8,19 +8,17 @@ import com.codepath.apps.mysimpletweets.models.User;
 
 import fr.castorflex.android.smoothprogressbar.SmoothProgressBar;
 
-public class UserTimelineFragment extends TweetsListFragment {
+public class UserTimelineFragment extends BaseTweetsListFragment {
 
     public static final String PARAM_SCREEN_NAME = "screenName";
 
     public static UserTimelineFragment newInstance(String screenName,
-                                                   TweetsArrayAdapter.TweetListener listener,
                                                    SmoothProgressBar progressBar,
                                                    User user) {
         UserTimelineFragment fragment = new UserTimelineFragment();
         Bundle args = new Bundle();
         args.putString(PARAM_SCREEN_NAME, screenName);
         fragment.setArguments(args);
-        fragment.setListener(listener);
         fragment.setUser(user);
         fragment.setProgressBar(progressBar);
         return fragment;
@@ -35,5 +33,14 @@ public class UserTimelineFragment extends TweetsListFragment {
     @Override
     protected Tweet.Type getTweetType() {
         return Tweet.Type.PROFILE;
+    }
+
+    @Override
+    public void onFinishComposeTweetDialogSuccess(Tweet newTweet) {
+        add(newTweet);
+    }
+    @Override
+    public void onClickProfileImage(User user) {
+        //No Op since we don't want to jump from one profile to another.
     }
 }

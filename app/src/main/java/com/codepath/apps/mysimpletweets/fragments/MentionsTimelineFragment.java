@@ -6,13 +6,11 @@ import com.codepath.apps.mysimpletweets.models.User;
 
 import fr.castorflex.android.smoothprogressbar.SmoothProgressBar;
 
-public class MentionsTimelineFragment extends TweetsListFragment {
+public class MentionsTimelineFragment extends BaseTweetsListFragment {
 
-    public static MentionsTimelineFragment newInstance(TweetsArrayAdapter.TweetListener listener,
-                                                       SmoothProgressBar progressBar,
+    public static MentionsTimelineFragment newInstance(SmoothProgressBar progressBar,
                                                        User user) {
         MentionsTimelineFragment fragment = new MentionsTimelineFragment();
-        fragment.setListener(listener);
         fragment.setProgressBar(progressBar);
         fragment.setUser(user);
         return fragment;
@@ -26,5 +24,10 @@ public class MentionsTimelineFragment extends TweetsListFragment {
     @Override
     protected Tweet.Type getTweetType() {
         return Tweet.Type.MENTIONS;
+    }
+
+    @Override
+    public void onFinishComposeTweetDialogSuccess(Tweet newTweet) {
+        //No op
     }
 }

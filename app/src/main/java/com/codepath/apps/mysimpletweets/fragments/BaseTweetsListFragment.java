@@ -15,13 +15,11 @@ import android.widget.AdapterView;
 import android.widget.ListView;
 
 import com.codepath.apps.mysimpletweets.R;
-import com.codepath.apps.mysimpletweets.activities.ProfileActivity;
+import com.codepath.apps.mysimpletweets.TwitterApplication;
 import com.codepath.apps.mysimpletweets.activities.TweetDetailActivity;
 import com.codepath.apps.mysimpletweets.adapters.TweetsArrayAdapter;
-import com.codepath.apps.mysimpletweets.TwitterApplication;
-import com.codepath.apps.mysimpletweets.models.User;
-import com.codepath.apps.mysimpletweets.network.TwitterClient;
 import com.codepath.apps.mysimpletweets.models.Tweet;
+import com.codepath.apps.mysimpletweets.network.TwitterClient;
 import com.codepath.apps.mysimpletweets.storage.DBWriteAsyncTask;
 import com.codepath.apps.mysimpletweets.util.EndlessScrollListener;
 import com.codepath.apps.mysimpletweets.util.InternetCheckUtil;
@@ -39,9 +37,8 @@ import java.util.List;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import cz.msebera.android.httpclient.Header;
-import fr.castorflex.android.smoothprogressbar.SmoothProgressBar;
 
-public abstract class TweetsListFragment extends Fragment {
+public abstract class BaseTweetsListFragment extends BaseTweetFragment {
 
     List<Tweet> list;
     TweetsArrayAdapter adapter;
@@ -55,14 +52,6 @@ public abstract class TweetsListFragment extends Fragment {
     private boolean cacheTweets = true;
 
     private boolean endlessScroll = true;
-
-    //If we don't want the profile image to be clickable, set this to null.  Use case is profile page.
-    protected TweetsArrayAdapter.TweetListener listener;
-
-    private SmoothProgressBar progressBar;
-
-    //The current logged in user.
-    private User user;
 
     protected TwitterClient twitterClient = TwitterApplication.getRestClient();
 
@@ -112,7 +101,7 @@ public abstract class TweetsListFragment extends Fragment {
 
     protected JsonHttpResponseHandler getResponseHandler(final boolean nextPage, final long maxId, final long minId) {
         progressBar.setVisibility(View.VISIBLE);
-        final TweetsListFragment fragment = this;
+        final BaseTweetsListFragment fragment = this;
 
         return new JsonHttpResponseHandler() {
             @Override
@@ -163,7 +152,7 @@ public abstract class TweetsListFragment extends Fragment {
                 super.onFailure(statusCode, headers, throwable, errorResponse);
                 swipeContainer.setRefreshing(false);
                 progressBar.setVisibility(View.INVISIBLE);
-                Log.e("ERROR", errorResponse.toString(), throwable);
+                Log.e("ERROR", errorResponse == null ? "" : errorResponse.toString(), throwable);
 
                 int errorMsgId = InternetCheckUtil.isOnline() ?
                         R.string.twitter_api_error : R.string.internet_connection_error;
@@ -229,22 +218,12 @@ public abstract class TweetsListFragment extends Fragment {
         return v;
     }
 
-    public void setListener(TweetsArrayAdapter.TweetListener listener) {
-        this.listener = listener;
-    }
-
-    public void setProgressBar(SmoothProgressBar progressBar) {
-        this.progressBar = progressBar;
-    }
-
-    public void setUser(User user) { this.user = user;}
-
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
         list = new ArrayList<>();
-        adapter = new TweetsArrayAdapter(getActivity(), list, listener);
+        adapter = new TweetsArrayAdapter(getActivity(), list, this);
         populateTimeLine(false, Long.MAX_VALUE, 1);
     }
 

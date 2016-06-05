@@ -10,7 +10,6 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 
 import com.codepath.apps.mysimpletweets.R;
-import com.codepath.apps.mysimpletweets.adapters.TweetsArrayAdapter;
 import com.codepath.apps.mysimpletweets.fragments.AllSearchedTweetsFragment;
 import com.codepath.apps.mysimpletweets.fragments.TopSearchedTweetsFragment;
 
@@ -78,14 +77,13 @@ public class SearchActivity extends BaseTimeLineActivity {
     }
 
     public OnFragmentCreateListener getOnFragmentCreateListener() {
-        final TweetsArrayAdapter.TweetListener listener = this;
         return new OnFragmentCreateListener() {
 
             @Override
             public Fragment getItem(int position) {
                 return position == 0 ?
-                        TopSearchedTweetsFragment.newInstance(query, listener, progressBar, user) :
-                        AllSearchedTweetsFragment.newInstance(query, listener, progressBar, user);
+                        TopSearchedTweetsFragment.newInstance(query, progressBar, user) :
+                        AllSearchedTweetsFragment.newInstance(query, progressBar, user);
             }
         };
     }
