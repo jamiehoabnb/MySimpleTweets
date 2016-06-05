@@ -8,7 +8,6 @@ import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.codepath.apps.mysimpletweets.R;
 import com.codepath.apps.mysimpletweets.models.Tweet;
@@ -16,11 +15,11 @@ import com.codepath.apps.mysimpletweets.models.User;
 import com.codepath.apps.mysimpletweets.util.DeviceDimensionsHelper;
 import com.codepath.apps.mysimpletweets.util.MySimpleTweetsConstants;
 import com.codepath.apps.mysimpletweets.util.VideoPlayerUtil;
+import com.squareup.picasso.Picasso;
 import com.volokh.danylo.video_player_manager.manager.VideoPlayerManager;
 import com.volokh.danylo.video_player_manager.meta.CurrentItemMetaData;
 import com.volokh.danylo.video_player_manager.meta.MetaData;
 import com.volokh.danylo.video_player_manager.ui.VideoPlayerView;
-import com.squareup.picasso.Picasso;
 
 import java.util.List;
 
@@ -48,6 +47,10 @@ public class TweetsArrayAdapter extends ArrayAdapter<Tweet> {
         public void onClickProfileImage(User user);
 
         public void onClickReply(Tweet tweet);
+
+        public void onClickRetweet(Tweet tweet);
+
+        public void onClickFavorite(Tweet tweet);
     }
 
     static class ViewHolder {
@@ -74,9 +77,20 @@ public class TweetsArrayAdapter extends ArrayAdapter<Tweet> {
         @BindView(R.id.vvTweetVideo)
         VideoPlayerView vvTweetVideo;
 
-        @Nullable
         @BindView(R.id.ivReply)
         ImageView ivReply;
+
+        @BindView(R.id.ivRetweet)
+        ImageView ivRetweet;
+
+        @BindView(R.id.tvRetweetCount)
+        TextView tvRetweetCount;
+
+        @BindView(R.id.ivFavorite)
+        ImageView ivFavorite;
+
+        @BindView(R.id.tvFavoriteCount)
+        TextView tvFavoriteCount;
 
         public ViewHolder(View view) {
             ButterKnife.bind(this, view);
@@ -92,7 +106,7 @@ public class TweetsArrayAdapter extends ArrayAdapter<Tweet> {
     }
 
     @Override
-    public View getView(int position, View convertView, ViewGroup parent) {
+    public View getView(final int position, View convertView, ViewGroup parent) {
         final Tweet tweet = getItem(position);
 
         ViewHolder viewHolder = convertView == null ? null : (ViewHolder) convertView.getTag();
@@ -148,15 +162,59 @@ public class TweetsArrayAdapter extends ArrayAdapter<Tweet> {
                 }
             });
 
-        if (viewHolder.ivReply != null) {
-            viewHolder.ivReply.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    tweetListener.onClickReply(tweet);
-                }
-            });
-        }
+        viewHolder.ivReply.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                tweetListener.onClickReply(tweet);
+            }
+        });
 
+        final TextView tvRetweetCount = viewHolder.tvRetweetCount;
+        final ImageView ivRetweet = viewHolder.ivRetweet;
+        final TweetsArrayAdapter adapter = this;
+        viewHolder.ivRetweet.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                tweetListener.onClickRetweet(tweet);
+                Tweet newTweet = Tweet.clone(tweet);
+
+                newTweet.setRetweetCount(newTweet.getRetweetCount() +
+                        (newTweet.isRetweeted() ? -1 : 1));
+                tvRetweetCount.setText(String.valueOf(newTweet.getRetweetCount()));
+                ivRetweet.setImageDrawable(getContext().getDrawable(
+                        tweet.isRetweeted() ? R.drawable.retweet_highlight : R.drawable.retweet));
+                newTweet.setRetweeted(! newTweet.isRetweeted());
+                objects.set(position, newTweet);
+                adapter.notifyDataSetChanged();
+            }
+        });
+
+        final TextView tvFavoriteCount = viewHolder.tvFavoriteCount;
+        final ImageView ivFavorite = viewHolder.ivFavorite;
+        viewHolder.ivFavorite.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                tweetListener.onClickFavorite(tweet);
+                Tweet newTweet = Tweet.clone(tweet);
+
+                newTweet.setFavoriteCount(newTweet.getFavoriteCount() +
+                        (newTweet.isFavorited() ? -1 : 1));
+                tvFavoriteCount.setText(String.valueOf(newTweet.getFavoriteCount()));
+                ivFavorite.setImageDrawable(getContext().getDrawable(
+                        tweet.isFavorited() ? R.drawable.favorite_highlight : R.drawable.favorite));
+                newTweet.setFavorited(! newTweet.isFavorited());
+                objects.set(position, newTweet);
+                adapter.notifyDataSetChanged();
+            }
+        });
+
+        viewHolder.tvRetweetCount.setText(String.valueOf(tweet.getRetweetCount()));
+        viewHolder.tvFavoriteCount.setText(String.valueOf(tweet.getFavoriteCount()));
+
+        viewHolder.ivRetweet.setImageDrawable(getContext().getDrawable(
+                tweet.isRetweeted() ? R.drawable.retweet_highlight : R.drawable.retweet));
+        viewHolder.ivFavorite.setImageDrawable(getContext().getDrawable(
+                tweet.isFavorited() ? R.drawable.favorite_highlight : R.drawable.favorite));
         return convertView;
     }
 

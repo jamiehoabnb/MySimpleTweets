@@ -38,6 +38,18 @@ public class Tweet extends Model {
     @Column(name="media_type")
     private String mediaType;
 
+    @Column(name="retweet_count")
+    private int retweetCount;
+
+    @Column(name="favorite_count")
+    private int favoriteCount;
+
+    @Column(name="retweeted")
+    private boolean retweeted;
+
+    @Column(name="favorited")
+    private boolean favorited;
+
     //The types of tweets that we are caching.
     public enum Type {
         HOME, MENTIONS, PROFILE;
@@ -64,6 +76,22 @@ public class Tweet extends Model {
         photo, video;
     }
 
+    public static Tweet clone(Tweet orig) {
+        Tweet copy = new Tweet();
+        copy.text = orig.text;
+        copy.uid = orig.uid;
+        copy.user = orig.user;
+        copy.type = orig.type;
+        copy.createAt = orig.createAt;
+        copy.retweetCount = orig.retweetCount;
+        copy.retweeted = orig.retweeted;
+        copy.favoriteCount = orig.favoriteCount;
+        copy.favorited = orig.favorited;
+        copy.mediaType = orig.mediaType;
+        copy.mediaUrl = orig.mediaUrl;
+        return copy;
+    }
+
     public static Tweet fromJSON(JSONObject json, Type type) {
         Tweet tweet = new Tweet();
         try {
@@ -72,6 +100,10 @@ public class Tweet extends Model {
             tweet.user = User.fromJSON(json.getJSONObject("user"));
             tweet.type = type;
             tweet.createAt = json.getString("created_at");
+            tweet.retweetCount = json.getInt("retweet_count");
+            tweet.favoriteCount = json.getInt("favorite_count");
+            tweet.retweeted = json.getBoolean("retweeted");
+            tweet.favorited = json.getBoolean("favorited");
 
             JSONObject extendedEntitles = json.optJSONObject("extended_entities");
             if (extendedEntitles != null) {
@@ -147,6 +179,22 @@ public class Tweet extends Model {
         return createAt;
     }
 
+    public int getRetweetCount() {
+        return retweetCount;
+    }
+
+    public int getFavoriteCount() {
+        return favoriteCount;
+    }
+
+    public boolean isRetweeted() {
+        return retweeted;
+    }
+
+    public boolean isFavorited() {
+        return favorited;
+    }
+
     public String getRelativeCreateAt() {
         try {
             Date createDate = inputFormat.parse(createAt);
@@ -177,6 +225,22 @@ public class Tweet extends Model {
 
     public String getMediaType() {
         return mediaType;
+    }
+
+    public void setRetweetCount(int retweetCount) {
+        this.retweetCount = retweetCount;
+    }
+
+    public void setFavoriteCount(int favoriteCount) {
+        this.favoriteCount = favoriteCount;
+    }
+
+    public void setRetweeted(boolean retweeted) {
+        this.retweeted = retweeted;
+    }
+
+    public void setFavorited(boolean favorited) {
+        this.favorited = favorited;
     }
 
     public static List<Tweet> recentItems(Type type) {

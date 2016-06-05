@@ -12,6 +12,8 @@
     <color name="colorDivider">#F5F8FA</color>
     <color name="colorDividerBorder">#E1E8ED</color>
     <color name="tweetText">#43484C</color>
+    <color name="favoriteHighlight">#E2264D</color>
+    <color name="retweetHighlight">#19CF86</color>
 
     <integer-array name="pb_colors">
         <item>@color/colorPrimary</item>

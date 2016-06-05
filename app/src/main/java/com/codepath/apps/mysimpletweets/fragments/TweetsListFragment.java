@@ -17,6 +17,7 @@ import com.codepath.apps.mysimpletweets.adapters.TweetsArrayAdapter;
 import com.codepath.apps.mysimpletweets.TwitterApplication;
 import com.codepath.apps.mysimpletweets.network.TwitterClient;
 import com.codepath.apps.mysimpletweets.models.Tweet;
+import com.codepath.apps.mysimpletweets.storage.DBWriteAsyncTask;
 import com.codepath.apps.mysimpletweets.util.EndlessScrollListener;
 import com.codepath.apps.mysimpletweets.util.InternetCheckUtil;
 import com.loopj.android.http.JsonHttpResponseHandler;
@@ -79,29 +80,6 @@ public abstract class TweetsListFragment extends Fragment {
         }
     }
 
-    private class DBWriteAsyncTask extends AsyncTask<List<Tweet>, Void, Void> {
-        protected void onPreExecute() {
-            progressBar.setVisibility(View.VISIBLE);
-        }
-
-        protected Void doInBackground(List<Tweet>... tweets) {
-            for (List<Tweet> tweetList: tweets) {
-                for (Tweet tweet: tweetList) {
-                    tweet.getUser().save();
-                    tweet.save();
-                }
-            }
-            return null;
-        }
-
-        protected void onProgressUpdate() {
-        }
-
-        protected void onPostExecute() {
-            progressBar.setVisibility(View.INVISIBLE);
-        }
-    }
-
     protected void populateTimeLine(final boolean nextPage, final long maxId, long minId) {
 
         if (cacheTweets) {
@@ -149,7 +127,7 @@ public abstract class TweetsListFragment extends Fragment {
                     }
 
                     if (cacheTweets && ! newTweets.isEmpty()) {
-                        new DBWriteAsyncTask().execute(newTweets);
+                        DBWriteAsyncTask.newInstance(progressBar).execute(newTweets);
                     }
 
                     //Delete old tweets if table is too big.
@@ -253,6 +231,6 @@ public abstract class TweetsListFragment extends Fragment {
 
         //Save the new tweet that was just composed.
         List<Tweet> newTweets = new LinkedList<>();
-        new DBWriteAsyncTask().execute(newTweets);
+        DBWriteAsyncTask.newInstance(progressBar).execute(newTweets);
     }
 }

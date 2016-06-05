@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.view.ViewPager;
@@ -25,11 +26,16 @@ import com.codepath.apps.mysimpletweets.fragments.ComposeTweetFragment;
 import com.codepath.apps.mysimpletweets.fragments.HomeTimelineFragment;
 import com.codepath.apps.mysimpletweets.models.Tweet;
 import com.codepath.apps.mysimpletweets.models.User;
+import com.codepath.apps.mysimpletweets.storage.DBWriteAsyncTask;
+import com.codepath.apps.mysimpletweets.util.InternetCheckUtil;
 import com.codepath.apps.mysimpletweets.util.SmartFragmentStatePagerAdapter;
 import com.loopj.android.http.JsonHttpResponseHandler;
 
 import org.json.JSONObject;
 import org.parceler.Parcels;
+
+import java.util.LinkedList;
+import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -80,6 +86,90 @@ public abstract class BaseTimeLineActivity extends AppCompatActivity implements
                 tweet.getUser().getScreenName(), tweet.getUser().getName());
         this.replyTweet = tweet;
         fragment.show(fm, "fragment_compose_tweet_reply");
+    }
+
+    @Override
+    public void onClickRetweet(final Tweet tweet) {
+        progressBar.setVisibility(View.VISIBLE);
+        final BaseTimeLineActivity activity = this;
+        client.postStatusRetweet(tweet, new JsonHttpResponseHandler() {
+            @Override
+            public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
+                progressBar.setVisibility(View.INVISIBLE);
+
+                if (! tweet.isRetweeted()) {
+                    tweet.setRetweetCount(tweet.getRetweetCount() + 1);
+                    tweet.setRetweeted(true);
+                } else {
+                    tweet.setRetweetCount(tweet.getRetweetCount() - 1);
+                    tweet.setRetweeted(false);
+                }
+                List<Tweet> tweets = new LinkedList<Tweet>();
+                tweets.add(tweet);
+                DBWriteAsyncTask.newInstance(progressBar).execute(tweets);
+            }
+
+            @Override
+            public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONObject errorResponse) {
+                progressBar.setVisibility(View.INVISIBLE);
+                super.onFailure(statusCode, headers, throwable, errorResponse);
+                Log.e("ERROR", errorResponse.toString(), throwable);
+
+                int errorMsgId = InternetCheckUtil.isOnline() ?
+                        R.string.twitter_api_error : R.string.internet_connection_error;
+
+                Snackbar.make(toolbar, errorMsgId, Snackbar.LENGTH_LONG)
+                        .setAction(activity.getString(R.string.retry), new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                activity.onClickRetweet(tweet);
+                            }
+                        })
+                        .show();
+            }
+        });
+    }
+
+    @Override
+    public void onClickFavorite(final Tweet tweet) {
+        progressBar.setVisibility(View.VISIBLE);
+        final BaseTimeLineActivity activity = this;
+        client.postFavoritesCreate(tweet, new JsonHttpResponseHandler() {
+            @Override
+            public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
+                progressBar.setVisibility(View.INVISIBLE);
+
+                if (! tweet.isFavorited()) {
+                    tweet.setFavoriteCount(tweet.getFavoriteCount() + 1);
+                    tweet.setFavorited(true);
+                } else {
+                    tweet.setFavoriteCount(tweet.getFavoriteCount() - 1);
+                    tweet.setFavorited(false);
+                }
+                List<Tweet> tweets = new LinkedList<Tweet>();
+                tweets.add(tweet);
+                DBWriteAsyncTask.newInstance(progressBar).execute(tweets);
+            }
+
+            @Override
+            public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONObject errorResponse) {
+                progressBar.setVisibility(View.INVISIBLE);
+                super.onFailure(statusCode, headers, throwable, errorResponse);
+                Log.e("ERROR", errorResponse.toString(), throwable);
+
+                int errorMsgId = InternetCheckUtil.isOnline() ?
+                        R.string.twitter_api_error : R.string.internet_connection_error;
+
+                Snackbar.make(toolbar, errorMsgId, Snackbar.LENGTH_LONG)
+                        .setAction(activity.getString(R.string.retry), new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                activity.onClickFavorite(tweet);
+                            }
+                        })
+                        .show();
+            }
+        });
     }
 
     public abstract int getLayoutId();

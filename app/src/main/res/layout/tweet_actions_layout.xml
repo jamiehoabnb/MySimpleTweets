@@ -1,13 +1,47 @@
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:orientation="horizontal">
+    android:layout_height="wrap_content">
 
     <ImageView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id="@+id/ivReply"
         android:src="@drawable/reply"
+        android:layout_alignParentLeft="true"
         android:adjustViewBounds="true"/>
 
-</LinearLayout>
+    <ImageView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/ivRetweet"
+        android:src="@drawable/retweet"
+        android:layout_toRightOf="@+id/ivReply"
+        android:layout_marginLeft="@dimen/tweet_action_spacing"
+        android:adjustViewBounds="true"/>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="@dimen/word_spacing"
+        android:layout_toRightOf="@+id/ivRetweet"
+        android:layout_alignBaseline="@+id/ivRetweet"
+        android:id="@+id/tvRetweetCount"/>
+
+    <ImageView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/ivFavorite"
+        android:src="@drawable/favorite"
+        android:layout_marginLeft="@dimen/tweet_action_spacing"
+        android:layout_toRightOf="@+id/tvRetweetCount"
+        android:adjustViewBounds="true"/>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="@dimen/word_spacing"
+        android:layout_toRightOf="@+id/ivFavorite"
+        android:layout_alignBaseline="@+id/ivFavorite"
+        android:id="@+id/tvFavoriteCount"/>
+
+</RelativeLayout>
