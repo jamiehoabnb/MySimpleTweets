@@ -21,5 +21,6 @@
     <string name="retry">Retry</string>
     <string name="twitter_api_error">Twitter API Error</string>
     <string name="internal_error">Internal Error</string>
+    <string name="reply_to">Reply to</string>
 
 </resources>

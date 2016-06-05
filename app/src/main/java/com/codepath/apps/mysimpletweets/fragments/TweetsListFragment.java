@@ -50,7 +50,7 @@ public abstract class TweetsListFragment extends Fragment {
     private boolean endlessScroll = true;
 
     //If we don't want the profile image to be clickable, set this to null.  Use case is profile page.
-    protected TweetsArrayAdapter.OnProfileImageClickListener listener;
+    protected TweetsArrayAdapter.TweetListener listener;
 
     private SmoothProgressBar progressBar;
 
@@ -230,7 +230,7 @@ public abstract class TweetsListFragment extends Fragment {
         return v;
     }
 
-    public void setListener(TweetsArrayAdapter.OnProfileImageClickListener listener) {
+    public void setListener(TweetsArrayAdapter.TweetListener listener) {
         this.listener = listener;
     }
 

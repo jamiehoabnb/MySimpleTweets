@@ -1,0 +1,77 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:focusable="true"
+    android:focusableInTouchMode="true">
+
+    <ImageButton
+        android:id="@+id/btCancel"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="@dimen/profile_image_margin"
+        android:src="@drawable/close"
+        android:background="@color/white"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentTop="true"/>
+
+    <ImageView
+        android:layout_width="@dimen/profile_tweet_image_height_width"
+        android:layout_height="@dimen/profile_tweet_image_height_width"
+        android:layout_margin="@dimen/profile_image_margin"
+        android:id="@+id/ivProfileImage"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentRight="true" />
+
+    <Button
+        android:id="@+id/btTweet"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentRight="true"
+        android:layout_margin="@dimen/default_margin"
+        android:text="@string/tweet"
+        style="@style/TweetButton"/>
+
+    <TextView
+        android:id="@+id/tvTweetLength"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_toLeftOf="@+id/btTweet"
+        android:layout_marginRight="@dimen/word_spacing"
+        android:layout_alignBaseline="@+id/btTweet"
+        android:text="@string/default_tweet_length"
+        style="@style/TweetCountText"/>
+
+    <EditText
+        android:id="@+id/etTweet"
+        android:layout_width="match_parent"
+        android:layout_height="fill_parent"
+        android:hint="@string/tweet_hint"
+        android:textColorHint="@color/gull_grey"
+        android:background="@null"
+        android:textCursorDrawable="@null"
+        android:inputType="text|textMultiLine"
+        android:gravity="top"
+        android:layout_below="@id/ivProfileImage"
+        android:layout_above="@id/btTweet"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentRight="true"
+        android:layout_marginRight="@dimen/word_spacing"
+        android:layout_marginLeft="@dimen/word_spacing"
+        android:maxLength="140">
+        <requestFocus />
+    </EditText>
+
+    <View
+        android:id="@+id/UnderLine"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/compose_underline_height"
+        android:layout_below="@+id/etTweet"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="@dimen/underline_margin_top"
+        android:layout_marginRight="@dimen/word_spacing"
+        android:layout_marginLeft="@dimen/word_spacing"
+        android:background="@color/gull_grey" />
+
+</RelativeLayout>

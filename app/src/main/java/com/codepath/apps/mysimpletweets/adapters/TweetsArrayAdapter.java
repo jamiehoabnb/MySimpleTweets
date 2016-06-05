@@ -8,6 +8,7 @@ import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.codepath.apps.mysimpletweets.R;
 import com.codepath.apps.mysimpletweets.models.Tweet;
@@ -29,7 +30,7 @@ import jp.wasabeef.picasso.transformations.RoundedCornersTransformation;
 
 public class TweetsArrayAdapter extends ArrayAdapter<Tweet> {
 
-    private OnProfileImageClickListener profileImageClickListener;
+    private TweetListener tweetListener;
 
     private List<Tweet> objects;
 
@@ -43,8 +44,10 @@ public class TweetsArrayAdapter extends ArrayAdapter<Tweet> {
         }
     }
 
-    public interface OnProfileImageClickListener {
+    public interface TweetListener {
         public void onClickProfileImage(User user);
+
+        public void onClickReply(Tweet tweet);
     }
 
     static class ViewHolder {
@@ -71,6 +74,10 @@ public class TweetsArrayAdapter extends ArrayAdapter<Tweet> {
         @BindView(R.id.vvTweetVideo)
         VideoPlayerView vvTweetVideo;
 
+        @Nullable
+        @BindView(R.id.ivReply)
+        ImageView ivReply;
+
         public ViewHolder(View view) {
             ButterKnife.bind(this, view);
         }
@@ -78,9 +85,9 @@ public class TweetsArrayAdapter extends ArrayAdapter<Tweet> {
 
     public TweetsArrayAdapter(Context context,
                               List<Tweet> objects,
-                              OnProfileImageClickListener profileImageClickListener) {
+                              TweetListener tweetListener) {
         super(context, android.R.layout.simple_list_item_1, objects);
-        this.profileImageClickListener = profileImageClickListener;
+        this.tweetListener = tweetListener;
         this.objects = objects;
     }
 
@@ -134,11 +141,18 @@ public class TweetsArrayAdapter extends ArrayAdapter<Tweet> {
                     viewHolder.vvTweetVideo, tweet.getMediaUrl());
         }
 
-        if (profileImageClickListener != null) {
-            viewHolder.ivProfileImage.setOnClickListener(new View.OnClickListener() {
+        viewHolder.ivProfileImage.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    profileImageClickListener.onClickProfileImage(tweet.getUser());
+                    tweetListener.onClickProfileImage(tweet.getUser());
+                }
+            });
+
+        if (viewHolder.ivReply != null) {
+            viewHolder.ivReply.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    tweetListener.onClickReply(tweet);
                 }
             });
         }

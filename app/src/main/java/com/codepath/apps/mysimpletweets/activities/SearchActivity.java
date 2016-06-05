@@ -78,7 +78,7 @@ public class SearchActivity extends BaseTimeLineActivity {
     }
 
     public OnFragmentCreateListener getOnFragmentCreateListener() {
-        final TweetsArrayAdapter.OnProfileImageClickListener listener = this;
+        final TweetsArrayAdapter.TweetListener listener = this;
         return new OnFragmentCreateListener() {
 
             @Override

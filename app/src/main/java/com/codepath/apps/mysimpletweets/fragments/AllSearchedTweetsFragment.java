@@ -11,7 +11,7 @@ public class AllSearchedTweetsFragment extends TweetsListFragment {
     private String query;
 
     public static AllSearchedTweetsFragment newInstance(String query,
-                                                        TweetsArrayAdapter.OnProfileImageClickListener listener,
+                                                        TweetsArrayAdapter.TweetListener listener,
                                                         SmoothProgressBar progressBar) {
         AllSearchedTweetsFragment fragment = new AllSearchedTweetsFragment();
         fragment.query = query;

@@ -7,7 +7,7 @@ import fr.castorflex.android.smoothprogressbar.SmoothProgressBar;
 
 public class HomeTimelineFragment extends TweetsListFragment {
 
-    public static HomeTimelineFragment newInstance(TweetsArrayAdapter.OnProfileImageClickListener listener,
+    public static HomeTimelineFragment newInstance(TweetsArrayAdapter.TweetListener listener,
                                                    SmoothProgressBar progressBar) {
         HomeTimelineFragment fragment = new HomeTimelineFragment();
         fragment.setListener(listener);

@@ -12,7 +12,7 @@ public class UserTimelineFragment extends TweetsListFragment {
     public static final String PARAM_SCREEN_NAME = "screenName";
 
     public static UserTimelineFragment newInstance(String screenName,
-                                                   TweetsArrayAdapter.OnProfileImageClickListener listener,
+                                                   TweetsArrayAdapter.TweetListener listener,
                                                    SmoothProgressBar progressBar) {
         UserTimelineFragment fragment = new UserTimelineFragment();
         Bundle args = new Bundle();

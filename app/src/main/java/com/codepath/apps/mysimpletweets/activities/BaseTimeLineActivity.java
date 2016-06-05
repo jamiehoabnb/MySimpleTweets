@@ -38,7 +38,7 @@ import fr.castorflex.android.smoothprogressbar.SmoothProgressBar;
 
 public abstract class BaseTimeLineActivity extends AppCompatActivity implements
         ComposeTweetFragment.ComposeTweetDialogListener,
-        TweetsArrayAdapter.OnProfileImageClickListener {
+        TweetsArrayAdapter.TweetListener {
 
     @BindView(R.id.toolbar)
     Toolbar toolbar;
@@ -60,6 +60,8 @@ public abstract class BaseTimeLineActivity extends AppCompatActivity implements
 
     TweetsPagerAdapter adapter;
 
+    Tweet replyTweet;
+
     private Context context = this;
 
     @Override
@@ -69,6 +71,15 @@ public abstract class BaseTimeLineActivity extends AppCompatActivity implements
         //We don't cache tweet's for profile page of other users.
         intent.putExtra(ProfileActivity.ARG_DISABLE_CACHE, true);
         context.startActivity(intent);
+    }
+
+    @Override
+    public void onClickReply(Tweet tweet) {
+        android.app.FragmentManager fm = getFragmentManager();
+        ComposeTweetFragment fragment = ComposeTweetFragment.newInstance(this, user,
+                tweet.getUser().getScreenName(), tweet.getUser().getName());
+        this.replyTweet = tweet;
+        fragment.show(fm, "fragment_compose_tweet_reply");
     }
 
     public abstract int getLayoutId();
@@ -101,30 +112,30 @@ public abstract class BaseTimeLineActivity extends AppCompatActivity implements
 
     public void onComposeView(MenuItem mi) {
         android.app.FragmentManager fm = getFragmentManager();
-        ComposeTweetFragment fragment = new ComposeTweetFragment();
-        Bundle args = new Bundle();
-        args.putParcelable(ComposeTweetFragment.ARG_USER, Parcels.wrap(user));
-        fragment.setArguments(args);
+        ComposeTweetFragment fragment = ComposeTweetFragment.newInstance(this, user, null, null);
+        this.replyTweet = null;
         fragment.show(fm, "fragment_compose_tweet");
     }
 
     @Override
-    public void onFinishDialog(String tweet) {
-        client.postStatusUpdate(tweet, new JsonHttpResponseHandler() {
-            @Override
-            public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
-                super.onSuccess(statusCode, headers, response);
-                Tweet newTweet = Tweet.fromJSON(response, Tweet.Type.HOME);
-                HomeTimelineFragment fragment = (HomeTimelineFragment) adapter.getRegisteredFragment(0);
-                fragment.add(newTweet);
-            }
+    public void onFinishComposeTweetDialog(String tweet) {
+        client.postStatusUpdate(tweet,
+                this.replyTweet == null ? null : this.replyTweet.getUid(),
+                new JsonHttpResponseHandler() {
+                    @Override
+                    public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
+                        super.onSuccess(statusCode, headers, response);
+                        Tweet newTweet = Tweet.fromJSON(response, Tweet.Type.HOME);
+                        HomeTimelineFragment fragment = (HomeTimelineFragment) adapter.getRegisteredFragment(0);
+                        fragment.add(newTweet);
+                    }
 
-            @Override
-            public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONObject errorResponse) {
-                super.onFailure(statusCode, headers, throwable, errorResponse);
-                Log.e("ERROR", errorResponse.toString(), throwable);
-            }
-        });
+                    @Override
+                    public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONObject errorResponse) {
+                        super.onFailure(statusCode, headers, throwable, errorResponse);
+                        Log.e("ERROR", errorResponse.toString(), throwable);
+                    }
+                });
     }
 
     public abstract String[] getTabTitles();
