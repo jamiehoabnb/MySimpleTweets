@@ -48,7 +48,7 @@ The following **bonus** features are implemented:
 
 The following **additional** features are implemented:
 
-* 
+* [x] Implemented activity shared element transition from tweet in list to detailed tweet view.
 
 ## Video Walkthrough
 
