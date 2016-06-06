@@ -22,5 +22,9 @@
     <string name="twitter_api_error">Twitter API Error</string>
     <string name="internal_error">Internal Error</string>
     <string name="reply_to">Reply to</string>
+    <string name="done">Done</string>
+    <string name="send">Send</string>
+    <string name="start_a_new_message">Start a new message</string>
+    <string name="messages">Messages</string>
 
 </resources>

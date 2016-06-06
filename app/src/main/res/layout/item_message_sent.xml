@@ -7,32 +7,41 @@
     <ImageView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:id="@+id/ivProfileImage"
+        android:id="@+id/ivOtherProfileImage"
         android:layout_alignParentTop="true"
         android:layout_alignParentLeft="true"
         android:layout_alignParentBottom="true"
         android:layout_alignParentStart="true"
         android:adjustViewBounds="true"/>
 
+    <ImageView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/ivMyProfileImage"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentBottom="true"
+        android:adjustViewBounds="true"/>
+
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:id="@+id/tvMessageReceived"
-        android:layout_alignTop="@+id/ivProfileImage"
-        android:layout_toRightOf="@+id/ivProfileImage"
-        android:layout_toEndOf="@+id/ivProfileImage"
+        android:id="@+id/tvMessage"
+        android:layout_alignParentTop="true"
+        android:layout_toLeftOf="@+id/ivMyProfileImage"
         android:layout_marginLeft="@dimen/profiler_header_text_spacing"
+        android:layout_marginRight="@dimen/profiler_header_text_spacing"
         android:layout_marginBottom="@dimen/profiler_header_text_spacing"
-        android:background="@drawable/message_received"
         style="@style/MessageReceived"/>
 
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id="@+id/tvDate"
-        android:layout_below="@+id/tvMessageReceived"
-        android:layout_toRightOf="@+id/ivProfileImage"
+        android:layout_below="@+id/tvMessage"
+        android:layout_toLeftOf="@+id/ivMyProfileImage"
         android:layout_marginLeft="@dimen/profiler_header_text_spacing"
+        android:layout_marginRight="@dimen/profiler_header_text_spacing"
         style="@style/MessageDate"/>
 
 </RelativeLayout>

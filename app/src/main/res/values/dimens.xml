@@ -46,4 +46,11 @@
 
     <dimen name="user_list_heading_text">16sp</dimen>
 
+    <dimen name="message_text_padding">8dp</dimen>
+
+    <dimen name="message_date">8dp</dimen>
+    <dimen name="message">14sp</dimen>
+    <dimen name="spinner_padding">5dip</dimen>
+    <dimen name="spinnerText">12sp</dimen>
+
 </resources>

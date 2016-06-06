@@ -1,22 +1,99 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical" android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:descendantFocusability="blocksDescendants">
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/tvMessageHeading"
+        android:text="@string/messages"
+        android:layout_gravity="center"
+        android:gravity="center"
+        android:layout_marginBottom="@dimen/profiler_header_text_spacing"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentLeft="true"
+        style="@style/MessageHeading"/>
+
+    <RelativeLayout
+        android:id="@+id/rlPb"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/tvMessageHeading">
+        <View
+            android:id="@+id/dividerTopBorder"
+            android:layout_alignParentTop="true"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentRight="true"
+            style="@style/DividerBorder"/>
+
+        <View
+            android:id="@+id/divider"
+            style="@style/Divider"
+            android:layout_below="@+id/dividerTopBorder"/>
+
+        <View
+            android:id="@+id/dividerBottomBorder"
+            style="@style/DividerBorder"
+            android:layout_below="@+id/divider"/>
+
+        <fr.castorflex.android.smoothprogressbar.SmoothProgressBar
+            android:id="@+id/progressBar"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:minHeight="6dp"
+            style="@style/GradientProgressBar"
+            android:layout_below="@+id/dividerTopBorder"
+            android:indeterminate="true"/>
+    </RelativeLayout>
 
     <android.support.v4.widget.SwipeRefreshLayout
         xmlns:android="http://schemas.android.com/apk/res/android"
         android:id="@+id/swipeContainer"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="fill_parent"
+        android:layout_below="@+id/rlPb"
+        android:layout_above="@+id/dividerBottom">
 
         <ListView
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:id="@+id/lvTweets"
-            android:divider="@color/colorDivider"
-            android:dividerHeight="@dimen/tweet_divider_height"/>
+            android:layout_height="fill_parent"
+            android:id="@+id/lvMessages"/>
 
     </android.support.v4.widget.SwipeRefreshLayout>
 
-</LinearLayout>
+    <View
+        android:id="@+id/dividerBottom"
+        android:layout_above="@+id/llInputControls"
+        style="@style/Divider"/>
+
+    <LinearLayout
+        android:id="@+id/llInputControls"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:gravity="center"
+        android:layout_alignParentBottom="true">
+
+        <Spinner
+            android:id="@+id/spRecipient"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"/>
+
+
+        <EditText
+            android:id="@+id/etMessage"
+            android:hint="@string/start_a_new_message"
+            style="@style/MessageInput"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/tvSend"
+            android:layout_margin="5dp"
+            style="@style/MessageButtonText"
+            android:text="@string/send"/>
+    </LinearLayout>
+
+</RelativeLayout>

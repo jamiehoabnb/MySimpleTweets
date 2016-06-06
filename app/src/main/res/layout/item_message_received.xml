@@ -7,7 +7,7 @@
     <ImageView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:id="@+id/ivProfileImage"
+        android:id="@+id/ivOtherProfileImage"
         android:layout_alignParentTop="true"
         android:layout_alignParentLeft="true"
         android:layout_alignParentBottom="true"
@@ -17,31 +17,30 @@
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:id="@+id/tvUserName"
-        android:layout_alignTop="@+id/ivProfileImage"
-        android:layout_toRightOf="@+id/ivProfileImage"
-        android:layout_toEndOf="@+id/ivProfileImage"
+        android:id="@+id/tvMessage"
+        android:layout_alignTop="@+id/ivOtherProfileImage"
+        android:layout_toRightOf="@+id/ivOtherProfileImage"
+        android:layout_toEndOf="@+id/ivOtherProfileImage"
         android:layout_marginLeft="@dimen/profiler_header_text_spacing"
         android:layout_marginBottom="@dimen/profiler_header_text_spacing"
-        style="@style/TweetUserNameText"/>
+        style="@style/MessageReceived"/>
 
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:id="@+id/tvScreenName"
-        android:layout_below="@+id/tvUserName"
-        android:layout_toRightOf="@+id/ivProfileImage"
+        android:id="@+id/tvDate"
+        android:layout_below="@+id/tvMessage"
+        android:layout_toRightOf="@+id/ivOtherProfileImage"
         android:layout_marginLeft="@dimen/profiler_header_text_spacing"
-        style="@style/TweetScreenName"/>
+        style="@style/MessageDate"/>
 
     <ImageView
-        android:layout_width="48dp"
-        android:layout_height="48dp"
-        android:id="@+id/ivMessage"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/ivMyProfileImage"
         android:layout_alignParentTop="true"
         android:layout_alignParentRight="true"
         android:layout_alignParentBottom="true"
-        android:src="@drawable/message"
         android:adjustViewBounds="true"/>
 
 </RelativeLayout>
