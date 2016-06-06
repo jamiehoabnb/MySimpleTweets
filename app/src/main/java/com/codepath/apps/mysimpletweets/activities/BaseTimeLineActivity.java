@@ -103,6 +103,19 @@ public abstract class BaseTimeLineActivity
         }
     }
 
+    public void onMessageView(MenuItem mi) {
+        if (user == null) {
+            //Logged in user will be null if there is no internet connection.
+            Snackbar.make(getWindow().getDecorView(), R.string.internet_connection_error, Snackbar.LENGTH_LONG)
+                    .show();
+            return;
+        }
+
+        Intent intent = new Intent(this, MessageListActivity.class);
+        intent.putExtra(MessageListActivity.ARG_USER, Parcels.wrap(user));
+        startActivity(intent);
+    }
+
     public void onProfileView(MenuItem mi) {
         if (user == null) {
             //Logged in user will be null if there is no internet connection.

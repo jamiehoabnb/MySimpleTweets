@@ -28,8 +28,8 @@ import com.loopj.android.http.RequestParams;
 public class TwitterClient extends OAuthBaseClient {
 	public static final Class<? extends Api> REST_API_CLASS = TwitterApi.class;
 	public static final String REST_URL = "https://api.twitter.com/1.1";
-	public static final String REST_CONSUMER_KEY = "ga2BV8XfvSgfZsQtWDLjLqoxn";
-	public static final String REST_CONSUMER_SECRET = "q6jwEKEYkwBTnElz7s2QG53E5zIoMgCW8Km7PiknTfnXK9hnX4";
+	public static final String REST_CONSUMER_KEY = "yAcneeL7ryK9DSRxMDe0bUIYe";
+	public static final String REST_CONSUMER_SECRET = "QWNAwxNrgGHyzuxhvNu24ptb4B73SmLDqKvb8ZYYawrLMMUJ4n";
 	public static final String REST_CALLBACK_URL = "oauth://cpsimpletweets";
 
 	private int PAGE_SIZE = 25;
@@ -78,6 +78,22 @@ public class TwitterClient extends OAuthBaseClient {
         }
 		getClient().get(apiUrl, params, handler);
 	}
+
+	public void getMessagesReceived(long minId, JsonHttpResponseHandler handler) {
+		String apiUrl = getApiUrl("direct_messages.json");
+		RequestParams params = new RequestParams();
+		params.put("count", PAGE_SIZE);
+		params.put("since_id", minId);
+		getClient().get(apiUrl, params, handler);
+	}
+
+    public void getMessagesSent(long minId, JsonHttpResponseHandler handler) {
+        String apiUrl = getApiUrl("direct_messages/sent.json");
+        RequestParams params = new RequestParams();
+        params.put("count", PAGE_SIZE);
+        params.put("since_id", minId);
+        getClient().get(apiUrl, params, handler);
+    }
 
 	public void getFriendsList(String screenName, Long cursor, JsonHttpResponseHandler handler) {
 		String apiUrl = getApiUrl("friends/list.json");
@@ -140,9 +156,17 @@ public class TwitterClient extends OAuthBaseClient {
 		params.put("status", status);
 
 		if (replyUid != null) {
-            params.put("in_reply_to_status_id", replyUid);
-        }
+			params.put("in_reply_to_status_id", replyUid);
+		}
 
+		getClient().post(apiUrl, params, handler);
+	}
+
+	public void postDirectMessage(String screenName, String text, JsonHttpResponseHandler handler) {
+		String apiUrl = getApiUrl("direct_messages/new.json");
+		RequestParams params = new RequestParams();
+		params.put("screen_name", screenName);
+		params.put("text", text);
 		getClient().post(apiUrl, params, handler);
 	}
 

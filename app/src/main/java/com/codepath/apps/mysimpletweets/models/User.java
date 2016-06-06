@@ -40,7 +40,6 @@ public class User extends Model {
     @Column(name = "friends_count")
     int friendsCount;
 
-
     public static List<User> fromJSONArray(JSONArray response) {
         List<User> list = new ArrayList<>();
         for (int i = 0; i < response.length(); i++) {

@@ -5,6 +5,7 @@ import com.activeandroid.annotation.Column;
 import com.activeandroid.annotation.Table;
 import com.activeandroid.query.Delete;
 import com.activeandroid.query.Select;
+import com.codepath.apps.mysimpletweets.util.MySimpleTweetsConstants;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -59,15 +60,6 @@ public class Tweet extends Model {
 
     @Column(name = "type")
     Type type;
-
-    private static final SimpleDateFormat inputFormat = new SimpleDateFormat("EEE MMM dd HH:mm:ss ZZZZZ yyyy", Locale.ENGLISH);
-    static {
-        inputFormat.setLenient(true);
-    }
-
-    private static final SimpleDateFormat outputFormat = new SimpleDateFormat("dd MMM yy");
-
-    private static final SimpleDateFormat longOutputFormat = new SimpleDateFormat("hh:mm aa dd MMM yy");
 
     private static final double SECOND = 1000;
     private static final double MINUTE = 60*SECOND;
@@ -206,8 +198,8 @@ public class Tweet extends Model {
 
     public String getFullCreateAt() {
         try {
-            Date createDate = inputFormat.parse(createAt);
-            return longOutputFormat.format(createDate);
+            Date createDate = MySimpleTweetsConstants.inputDateFormat.parse(createAt);
+            return MySimpleTweetsConstants.longDateOutputFormat.format(createDate);
         } catch (ParseException e) {
             e.printStackTrace();
             return null;
@@ -216,7 +208,7 @@ public class Tweet extends Model {
 
     public String getRelativeCreateAt() {
         try {
-            Date createDate = inputFormat.parse(createAt);
+            Date createDate = MySimpleTweetsConstants.inputDateFormat.parse(createAt);
             long diff = System.currentTimeMillis() - createDate.getTime();
 
             if (diff < MINUTE) {
@@ -226,7 +218,7 @@ public class Tweet extends Model {
             } else if (diff < DAY) {
                 return String.valueOf(Math.round(diff / HOUR)) + "h";
             } else {
-                return outputFormat.format(createDate);
+                return MySimpleTweetsConstants.outputDateFormat.format(createDate);
             }
         } catch (ParseException e) {
             e.printStackTrace();

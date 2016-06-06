@@ -64,6 +64,8 @@
             android:theme="@style/AppTheme"/>
         <activity android:name=".activities.FollowersListActivity"
             android:theme="@style/AppTheme"/>
+        <activity android:name=".activities.MessageListActivity"
+            android:theme="@style/AppTheme"/>
     </application>
 
 </manifest>
