@@ -64,8 +64,14 @@ Describe any challenges encountered while building the app.
 
 ## Open-source libraries used
 
+- [Active Android] (https://github.com/pardom/ActiveAndroid) - ActiveAndroid is an active record style ORM (object relational mapper).
 - [Android Async HTTP](https://github.com/loopj/android-async-http) - Simple asynchronous HTTP requests with JSON parsing
+- [Butter Knife] (http://jakewharton.github.io/butterknife/) - Annotate fields with @Bind and a view ID for Butter Knife to find and automatically cast the corresponding view in your layout.
+- [PagerSlidingTabStrip] (https://github.com/astuetz/PagerSlidingTabStrip) - Interactive paging indicator widget, compatible with the ViewPager from the Android Support Library.
+- [Parceler](https://github.com/johncarl81/parceler) - Parceler is a code generation library that generates the Android Parcelable boilerplate source code.
 - [Picasso](http://square.github.io/picasso/) - Image loading and caching library for Android
+- [SmoothProgressBar] (https://github.com/castorflex/SmoothProgressBar) - Small library allowing you to make a smooth indeterminate progress bar.
+- [VideoPlayerManager] (https://github.com/danylovolokh/VideoPlayerManager) - This is a project designed to help controlling Android MediaPlayer class.
 
 ## License
 
