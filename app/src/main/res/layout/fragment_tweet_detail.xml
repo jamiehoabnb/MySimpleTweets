@@ -23,6 +23,7 @@
         android:layout_alignParentTop="true"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
+        android:transitionName="tweet"
         android:adjustViewBounds="true"/>
 
     <TextView
@@ -33,6 +34,7 @@
         android:layout_toRightOf="@+id/ivProfileImage"
         android:layout_toEndOf="@+id/ivProfileImage"
         android:layout_marginBottom="@dimen/profiler_header_text_spacing"
+        android:transitionName="tweet"
         style="@style/TweetUserNameText"/>
 
     <TextView
@@ -41,6 +43,7 @@
         android:id="@+id/tvScreenName"
         android:layout_below="@+id/tvUserName"
         android:layout_toRightOf="@+id/ivProfileImage"
+        android:transitionName="tweet"
         style="@style/TweetScreenName"/>
 
     <TextView
@@ -51,6 +54,7 @@
         android:layout_below="@+id/ivProfileImage"
         android:layout_alignParentLeft="true"
         android:layout_marginTop="@dimen/default_margin"
+        android:transitionName="tweet"
         style="@style/TweetText"/>
 
     <RelativeLayout
@@ -64,6 +68,7 @@
             android:layout_width="match_parent"
             android:layout_weight="1"
             android:id="@+id/vvTweetVideo"
+            android:transitionName="tweet"
             android:layout_marginTop="@dimen/default_margin"/>
 
         <ImageView
@@ -71,6 +76,7 @@
             android:layout_height="wrap_content"
             android:id="@+id/ivTweetImage"
             android:layout_marginTop="@dimen/default_margin"
+            android:transitionName="tweet"
             android:adjustViewBounds="true"/>
     </RelativeLayout>
 
@@ -81,6 +87,7 @@
         android:layout_below="@+id/rlMedia"
         android:layout_alignParentLeft="true"
         android:layout_marginTop="@dimen/default_margin"
+        android:transitionName="tweet"
         style="@style/TweetCreatedAt"/>
 
     <include layout="@layout/tweet_actions_layout"

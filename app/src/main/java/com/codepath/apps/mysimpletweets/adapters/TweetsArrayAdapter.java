@@ -2,6 +2,8 @@ package com.codepath.apps.mysimpletweets.adapters;
 
 import android.content.Context;
 import android.support.annotation.Nullable;
+import android.support.v4.app.ActivityOptionsCompat;
+import android.support.v4.util.Pair;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -21,6 +23,7 @@ import com.volokh.danylo.video_player_manager.meta.CurrentItemMetaData;
 import com.volokh.danylo.video_player_manager.meta.MetaData;
 import com.volokh.danylo.video_player_manager.ui.VideoPlayerView;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.BindView;
@@ -199,10 +202,25 @@ public class TweetsArrayAdapter extends ArrayAdapter<Tweet> {
                 tweet.isFavorited() ? R.drawable.favorite_highlight : R.drawable.favorite));
 
         //Workaround for listview item click not working
+        final ViewHolder vh = viewHolder;
         viewHolder.tvUserName.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                tweetListener.onClickTweetDetails(tweet);
+                List<Pair<View, String>> options = new ArrayList<Pair<View, String>>();
+                options.add(Pair.create((View) vh.tvUserName, "tweet"));
+                options.add(Pair.create((View) vh.tvScreenName, "tweet"));
+                options.add(Pair.create((View) vh.tvBody, "tweet"));
+                options.add(Pair.create((View) vh.tvCreatedAt, "tweet"));
+
+                if (vh.ivProfileImage != null) {
+                    options.add(Pair.create((View) vh.ivProfileImage, "tweet"));
+                }
+
+                if (vh.vvTweetVideo != null) {
+                    options.add(Pair.create((View) vh.vvTweetVideo, "tweet"));
+                }
+
+                tweetListener.onClickTweetDetails(tweet, options);
             }
         });
         return convertView;

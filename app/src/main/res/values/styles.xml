@@ -9,6 +9,7 @@
         <item name="colorAccent">@color/colorAccent</item>
         <item name="android:dialogTheme">@style/AppDialogTheme</item>
         <item name="searchViewStyle">@style/AppTheme.SearchView</item>
+        <item name="android:windowContentTransitions">true</item>
     </style>
 
     <style name="AppTheme.SearchView" parent="Widget.AppCompat.SearchView">

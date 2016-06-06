@@ -3,7 +3,9 @@ package com.codepath.apps.mysimpletweets.fragments;
 import android.app.Activity;
 import android.content.Intent;
 import android.support.design.widget.Snackbar;
+import android.support.v4.app.ActivityOptionsCompat;
 import android.support.v4.app.Fragment;
+import android.support.v4.util.Pair;
 import android.util.Log;
 import android.view.View;
 
@@ -184,11 +186,14 @@ public abstract class BaseTweetFragment
     }
 
     @Override
-    public void onClickTweetDetails(Tweet tweet) {
+    public void onClickTweetDetails(Tweet tweet, List<Pair<View, String>> pairs) {
         Intent intent = new Intent(getActivity(), TweetDetailActivity.class);
         intent.putExtra(TweetDetailActivity.ARG_TWEET, Parcels.wrap(tweet));
         intent.putExtra(TweetDetailActivity.ARG_USER, Parcels.wrap(user));
-        startActivity(intent);
+        ActivityOptionsCompat options = ActivityOptionsCompat.
+                makeSceneTransitionAnimation(getActivity(), (Pair<View, String>[]) pairs.toArray(new Pair[]{}));
+
+        startActivity(intent, options.toBundle());
     }
 
     public void setProgressBar(SmoothProgressBar progressBar) {
