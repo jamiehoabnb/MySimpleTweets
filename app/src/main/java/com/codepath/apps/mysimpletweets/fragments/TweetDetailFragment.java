@@ -119,9 +119,7 @@ public class TweetDetailFragment extends BaseTweetFragment {
                     .into(ivTweetImage);
 
         } else {
-            ivTweetImage.setVisibility(View.INVISIBLE);
-            ivTweetImage.setMaxHeight(0);
-            ivTweetImage.setMaxWidth(0);
+            ivTweetImage.setVisibility(View.GONE);
         }
 
         if (Tweet.MediaType.video.name().equals(tweet.getMediaType())) {
@@ -129,7 +127,7 @@ public class TweetDetailFragment extends BaseTweetFragment {
             videoPlayerManager.playNewVideo(new CurrentItemMetaData(0, parent),
                     vvTweetVideo, tweet.getMediaUrl());
         } else {
-            vvTweetVideo.setVisibility(View.INVISIBLE);
+            vvTweetVideo.setVisibility(View.GONE);
         }
 
         final Activity activity = getActivity();
